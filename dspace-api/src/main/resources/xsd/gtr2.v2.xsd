@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://gtr.rcuk.ac.uk/gtr/api"
+    targetNamespace="http://gtr.rcuk.ac.uk/gtr/api" xmlns:gtr="http://gtr.rcuk.ac.uk/gtr/api"
+    attributeFormDefault="qualified" elementFormDefault="qualified">
+
+    <xs:complexType name="link">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A link to a resource. A relationship (rel) must be
+                specified in order to define the relationship that the link represents.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="href" type="xs:string" use="required"/>
+        <xs:attribute name="rel" type="xs:string" use="required"/>
+        <xs:attribute name="start" type="xs:dateTime" use="optional"/>
+        <xs:attribute name="end" type="xs:dateTime" use="optional"/>
+        <xs:anyAttribute processContents="lax"/>
+    </xs:complexType>
+
+    <xs:complexType name="links">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A collection of link </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="link" type="gtr:link" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ext">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Default extension point. </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="resource">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Abstract representation of a resource. Resources must
+                have a unique identifier and can have a related endpoint </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="links" type="gtr:links" minOccurs="0"/>
+            <xs:element name="ext" minOccurs="0" type="gtr:ext"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="href" type="xs:string" use="optional"/>
+        <xs:attribute name="created" type="xs:dateTime" use="required"/>
+        <xs:attribute name="updated" type="xs:dateTime" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="endpointConfig" type="endpointConfig"/>
+    <xs:complexType name="endpointConfig">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Usage configuration and examples for endpoints </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="endpoints" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="endpoint" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="name" type="xs:string"/>
+                                    <xs:element name="description" type="xs:string"/>
+                                    <xs:element name="link" type="gtr:link"/>
+                                    <xs:element name="example" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:all>
+                                                <xs:element name="description" type="xs:string"/>
+                                                <xs:element name="link" type="gtr:link"/>
+                                            </xs:all>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="resourceConfig" type="resourceConfig"/>
+    <xs:complexType name="resourceConfig">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Usage configuration for a specific resource
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="parameters" minOccurs="0" maxOccurs="1"> 
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="parameter" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="value" type="xs:string"/>
+                                    <xs:element name="description" type="xs:string"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fields" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="field" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="code" type="xs:string"/>
+                                    <xs:element name="description" type="xs:string"/>
+                                    <xs:element name="searchable" type="xs:boolean"/>
+                                    <xs:element name="sortable" type="xs:boolean"/>
+                                    <xs:element name="searchedByDefault" type="xs:boolean"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="bulk" abstract="true">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Abstract bulk collection of a resource
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="links" type="gtr:links" minOccurs="0"/>
+            <xs:element name="ext" minOccurs="0" type="gtr:ext"/>
+        </xs:sequence>
+        <xs:attribute name="page" type="xs:int" use="required"/>
+        <xs:attribute name="size" type="xs:int" use="required"/>
+        <xs:attribute name="totalPages" type="xs:int" use="required"/>
+        <xs:attribute name="totalSize" type="xs:int" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="failure">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation xml:lang="en"> failure resposne </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="text" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="timestamp" type="xs:dateTime" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="strList">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A collection of strings </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="address">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Standard representation of a postal address.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gtr:resource">
+                <xs:sequence>
+                    <xs:element name="line1" type="xs:string" minOccurs="0"/>
+                    <xs:element name="line2" type="xs:string" minOccurs="0"/>
+                    <xs:element name="line3" type="xs:string" minOccurs="0"/>
+                    <xs:element name="line4" type="xs:string" minOccurs="0"/>
+                    <xs:element name="line5" type="xs:string" minOccurs="0"/>
+                    <xs:element name="city" type="xs:string" minOccurs="0"/>
+                    <xs:element name="county" type="xs:string" minOccurs="0"/>
+                    <xs:element name="postCode" type="xs:string" minOccurs="0"/>
+                    <xs:element name="region" type="xs:string" minOccurs="0"/>
+                    <xs:element name="country" type="xs:string" minOccurs="0"/>
+                    <xs:element name="type" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="addresses">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Collection of Address </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="address" type="gtr:address" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="money">
+        <xs:annotation>
+            <xs:documentation>Type representing a payment amount (e.g. price or
+                total)</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="currencyCode" type="currencyCode" use="optional" default="GBP"/>
+        <xs:attribute name="amount" type="amount" use="optional" default="0"/>
+    </xs:complexType>
+
+    <xs:simpleType name="amount">
+        <xs:restriction base="xs:decimal">
+            <xs:fractionDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="currencyCode">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="3"/>
+            <xs:maxLength value="3"/>
+            <xs:pattern value="[A-Z]{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

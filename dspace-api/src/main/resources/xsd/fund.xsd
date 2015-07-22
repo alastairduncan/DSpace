@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://gtr.rcuk.ac.uk/gtr/api/fund"
+    targetNamespace="http://gtr.rcuk.ac.uk/gtr/api/fund" xmlns:gtr="http://gtr.rcuk.ac.uk/gtr/api"
+    xmlns:gtr-fun="http://gtr.rcuk.ac.uk/gtr/api/fund" attributeFormDefault="qualified"
+    elementFormDefault="qualified">
+
+    <xs:import schemaLocation="gtr2.v2.xsd" namespace="http://gtr.rcuk.ac.uk/gtr/api"/>
+    
+    <xs:element name="fund" type="gtr-fun:fund"/>
+    <xs:element name="funds" type="gtr-fun:funds"/>
+
+    <xs:complexType name="fund">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A research fund </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gtr:resource">
+                <xs:sequence>
+                    <xs:element name="start" type="xs:date" minOccurs="0"/>
+                    <xs:element name="end" type="xs:date" minOccurs="0"/>
+                    <xs:element name="valuePounds" type="gtr:money"/>
+                    <xs:element name="category" type="xs:string" minOccurs="0"/>
+                    <xs:element name="type" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="funds">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A bulk collection of funds </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gtr:bulk">
+                <xs:sequence>
+                    <xs:element name="fund" type="gtr-fun:fund" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
