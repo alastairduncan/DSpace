@@ -10,6 +10,54 @@
  * You can put your own style in this file.
  * It will be included in all color schemes
  */
+ 
+ 
+header .navbar-default{
+    height: 100px;
+    background: -webkit-linear-gradient(0deg, #022e67, #114a8d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(0deg, #022e67, #114a8d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(0deg, #022e67, #114a8d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(0deg, #022e67, #114a8d); /* Standard syntax (must be last) */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#114a8d', endColorstr='#022e67',GradientType=0 ); /* IE6-9 */
+}
+
+header .navbar-brand img{
+	height: 70px;
+	padding: 0px 0px;
+}
+
+.trail-wrapper{
+	color: white;
+	height:50px;
+	background: -webkit-linear-gradient(0deg, #245793, #3771b5); /* For Safari 5.1 to 6.0 */
+  	background: -o-linear-gradient(0deg, #245793, #3771b5); /* For Opera 11.1 to 12.0 */
+  	background: -moz-linear-gradient(0deg, #245793, #3771b5); /* For Firefox 3.6 to 15 */
+  	background: linear-gradient(0deg, #245793, #3771b5); /* Standard syntax (must be last) */
+  	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3771b5', endColorstr='#245793',GradientType=0 ); /* IE6-9 */
+  }
+  
+.trail-wrapper .breadcrumb a{
+	color: #999;
+
+}
+
+.trail-wrapper .breadcrumb>li+li:before{
+color: white;
+}
+  
+.trail-wrapper .breadcrumb>.active{
+	color: white;
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus, .list-group-item-heading{
+	color: #555;
+	background: -webkit-linear-gradient(0deg, #d1d1d1, #f0f0f0); /* For Safari 5.1 to 6.0 */
+  	background: -o-linear-gradient(0deg, #d1d1d1, #f0f0f0); /*For Opera 11.1 to 12.0 */
+  	background: -moz-linear-gradient(0deg, #d1d1d1, #f0f0f0); /* For Firefox 3.6 to 15 */
+  	background: linear-gradient(0deg, #d1d1d1, #f0f0f0); /* Standard syntax (must be last) */
+  	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#d1d1d1',GradientType=0 ); /* IE6-9 */
+}
+
 
 //example mixin to set the text-selection style
 @mixin selection {
