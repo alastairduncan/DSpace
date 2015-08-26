@@ -398,6 +398,9 @@ function DSpaceChoicesAcceptOnClick() {
                 alert('Sanity check: Cannot find button named "submit_' + valueInput + '_add"');
         }
     }
+
+    $("[data-dismiss=modal]").trigger({ type: "click" });
+
     return false;
 }
 
