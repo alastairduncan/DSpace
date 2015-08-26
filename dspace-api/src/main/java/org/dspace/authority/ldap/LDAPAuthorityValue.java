@@ -175,64 +175,7 @@ public class LDAPAuthorityValue extends PersonAuthorityValue {
 	        
 	        map.put("ldap-person", getId());
 
-	        /*if (StringUtils.isNotBlank(getFirstName())) {
-	            map.put("first-name", getFirstName());
-	        } else {
-	            map.put("first-name", "/");
-	        }
-
-	        if (StringUtils.isNotBlank(getLastName())) {
-	            map.put("last-name", getLastName());
-	        } else {
-	            map.put("last-name", "/");
-	        }
-
-	        if (!getEmails().isEmpty()) {
-	            boolean added = false;
-	            for (String email : getEmails()) {
-	                if (!added && StringUtils.isNotBlank(email)) {
-	                    map.put("email",email);
-	                    added = true;
-	                }
-	            }
-	        }
-	        if (StringUtils.isNotBlank(getInstitution())) {
-	            map.put("institution", getInstitution());
-	        }
-	        
-	        if (StringUtils.isNotBlank(title)) {
-	            map.put("title", title);
-	        } else {
-	            map.put("title", "/");
-	        }
-	        
-	        if (StringUtils.isNotBlank(getId())) {
-	            map.put("id", getId());
-	        } else {
-	            map.put("id", "/");
-	        }
-	        if (isActive) {
-	            map.put("isActive", "true");
-	        } else {
-	        	map.put("isActive", "false");
-	        }
-	        
-	        if (StringUtils.isNotBlank(department)) {
-	            map.put("department", department);
-	        } else {
-	            map.put("department", "/");
-	        }
-	       
-	        
-	        
-	        
-	        if (StringUtils.isNotBlank(pid)) {
-	            map.put("pid", pid);
-	        } else {
-	            map.put("pid", "/");
-	        }*/
-
-	        return map;
+	       return map;
 	    }
 
 	    @Override
@@ -242,11 +185,9 @@ public class LDAPAuthorityValue extends PersonAuthorityValue {
 
 	    @Override
 	    public String generateString() {
-		
-		
-		return getId();
-		
-	        //return AuthorityValueGenerator.GENERATE + getAuthorityType() + AuthorityValueGenerator.SPLIT + getId();
+	    
+	    	return getId();
+	    //return AuthorityValueGenerator.GENERATE + getAuthorityType() + AuthorityValueGenerator.SPLIT + getId();
 	        
 	        // the part after "AuthorityValueGenerator.GENERATE + getAuthorityType() + AuthorityValueGenerator.SPLIT" is the value of the "info" parameter in public AuthorityValue newInstance(String info)
 	    }

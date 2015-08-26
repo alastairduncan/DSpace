@@ -35,7 +35,6 @@ public class GtrAuthority extends ProxyRestSource {
     }
 
     public AuthorityValue getProject(String id) {
-
 	InputStreamReader isr = new InputStreamReader(restConnector.getIS("gtr/api/projects?q=" + id));
 	BufferedReader reader = new BufferedReader(isr);
 
@@ -60,7 +59,6 @@ public class GtrAuthority extends ProxyRestSource {
 
     @Override
     public List<AuthorityValue> queryAuthorities(String text, int max) {
-	LOG.debug("queryAuthorities: " + text);
 	List<AuthorityValue> values = new ArrayList<AuthorityValue>();
 	values.add(queryAuthorityID(text));
 	return values;

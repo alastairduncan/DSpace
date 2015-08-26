@@ -7,7 +7,9 @@
  */
 package org.dspace.authority;
 
+import org.dspace.authority.gtr.GtrAuthorityValue;
 import org.dspace.authority.indexer.AuthorityIndexingService;
+import org.dspace.authority.ldap.LDAPAuthorityValue;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -58,7 +60,16 @@ public class AuthoritySolrServiceImpl implements AuthorityIndexingService, Autho
     }
 
     public void indexContent(AuthorityValue value, boolean force) {
-        SolrInputDocument doc = value.getSolrInputDocument();
+    	log.debug("indexContent: " + value.getClass().getName());
+        SolrInputDocument doc = null;
+        
+        if(value instanceof GtrAuthorityValue ){
+        	doc = ((GtrAuthorityValue)value).getSolrInputDocument();
+        }else if(value instanceof LDAPAuthorityValue ){
+        	doc = ((LDAPAuthorityValue)value).getSolrInputDocument();
+        }else{
+        	doc = value.getSolrInputDocument();
+        }
 
         try{
             writeDocument(doc);

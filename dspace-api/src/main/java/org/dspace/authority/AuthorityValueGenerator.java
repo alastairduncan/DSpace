@@ -8,6 +8,7 @@
 package org.dspace.authority;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.dspace.core.Context;
 
 import java.util.Date;
@@ -32,6 +33,7 @@ public class AuthorityValueGenerator {
     public static final String SPLIT = "::";
     public static final String GENERATE = "will be generated" + SPLIT;
 
+    private static Logger LOG = Logger.getLogger(AuthorityValueGenerator.class);
 
     public static AuthorityValue generate(Context context, String authorityKey, String content, String field) {
         AuthorityValue nextValue = null;
@@ -65,8 +67,12 @@ public class AuthorityValueGenerator {
     }
 
     protected static AuthorityValue generateRaw(String authorityKey, String content, String field) {
+    	LOG.debug("generateRaw: key: " + authorityKey);
+    	LOG.debug("generateRaw: content: " + content);
+    	LOG.debug("generateRaw: field: " + field);
         AuthorityValue nextValue;
         if (authorityKey != null && authorityKey.startsWith(AuthorityValueGenerator.GENERATE)) {
+        	
             String[] split = StringUtils.split(authorityKey, SPLIT);
             String type = null, info = null;
             if (split.length > 0) {
@@ -76,6 +82,8 @@ public class AuthorityValueGenerator {
                 }
             }
             AuthorityValue authorityType = AuthorityValue.getAuthorityTypes().getEmptyAuthorityValue(type);
+            LOG.debug("generateRaw: type: " + authorityType);
+            LOG.debug("generateRaw: info: " + info);
             nextValue = authorityType.newInstance(info);
         } else {
             Map<String, AuthorityValue> fieldDefaults = AuthorityValue.getAuthorityTypes().getFieldDefaults();
@@ -83,6 +91,7 @@ public class AuthorityValueGenerator {
             if (nextValue == null) {
                 nextValue = new AuthorityValue();
             }
+            LOG.debug("generateRaw: content: " + content);
             nextValue.setValue(content);
         }
         return nextValue;
