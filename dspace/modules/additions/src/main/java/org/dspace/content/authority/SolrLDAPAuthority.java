@@ -9,8 +9,8 @@ package org.dspace.content.authority;
 
 import org.dspace.authority.AuthoritySearchService;
 import org.dspace.authority.AuthorityValue;
-import org.dspace.authority.gtr.GtrAuthority;
-import org.dspace.authority.rest.RestSource;
+import org.dspace.authority.ldap.LDAPAuthorityValue;
+import org.dspace.authority.ldap.LDAPSource;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -27,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 
 
-public class SolrGtrAuthority implements ChoiceAuthority {
+public class SolrLDAPAuthority implements ChoiceAuthority {
 
-    private static final Logger log = Logger.getLogger(SolrGtrAuthority.class);
-    private RestSource source = new DSpace().getServiceManager().getServiceByName("GtrAuthoritySource", RestSource.class);
+    private static final Logger log = Logger.getLogger(SolrLDAPAuthority.class);
+    private LDAPSource source = new DSpace().getServiceManager().getServiceByName("LDAPAuthoritySource", LDAPSource.class);
     private boolean externalResults = false;
 
     public Choices getMatches(String field, String text, int collection, int start, int limit, String locale, boolean bestMatch) {
@@ -137,8 +137,7 @@ public class SolrGtrAuthority implements ChoiceAuthority {
         if(source != null){
             try {
                 List<AuthorityValue> values = source.queryAuthorities(text, max * 2); // max*2 because results get filtered
-                log.debug("addExternalResults Gtr: authority query returned " + values.size() + " results");
-                
+                log.debug("addExternalResults LDAP: authority query returned " + values.size() + " results");
                 // filtering loop
                 Iterator<AuthorityValue> iterator = values.iterator();
                 while (iterator.hasNext()) {
@@ -153,6 +152,9 @@ public class SolrGtrAuthority implements ChoiceAuthority {
                 iterator = values.iterator();
                 while (iterator.hasNext() && added < max) {
                     AuthorityValue val = iterator.next();
+                    if(val instanceof LDAPAuthorityValue){
+                    	val = (LDAPAuthorityValue)val;
+                    }
                     Map<String, String> extras = val.choiceSelectMap();
                     extras.put("insolr", "false");
                     choices.add(new Choice(val.generateString(), val.getValue(), val.getValue(), extras));

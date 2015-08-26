@@ -9,7 +9,8 @@ package org.dspace.content.authority;
 
 import org.dspace.authority.AuthoritySearchService;
 import org.dspace.authority.AuthorityValue;
-import org.dspace.authority.ldap.LDAPSource;
+import org.dspace.authority.gtr.GtrAuthorityValue;
+import org.dspace.authority.rest.RestSource;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -26,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 
 
-public class SolrLDAPAuthority implements ChoiceAuthority {
+public class SolrGtrAuthority implements ChoiceAuthority {
 
-    private static final Logger log = Logger.getLogger(SolrLDAPAuthority.class);
-    private LDAPSource source = new DSpace().getServiceManager().getServiceByName("LDAPAuthoritySource", LDAPSource.class);
+    private static final Logger log = Logger.getLogger(SolrGtrAuthority.class);
+    private RestSource source = new DSpace().getServiceManager().getServiceByName("GtrAuthoritySource", RestSource.class);
     private boolean externalResults = false;
 
     public Choices getMatches(String field, String text, int collection, int start, int limit, String locale, boolean bestMatch) {
@@ -136,7 +137,8 @@ public class SolrLDAPAuthority implements ChoiceAuthority {
         if(source != null){
             try {
                 List<AuthorityValue> values = source.queryAuthorities(text, max * 2); // max*2 because results get filtered
-                log.debug("addExternalResults LDAP: authority query returned " + values.size() + " results");
+                log.debug("addExternalResults Gtr: authority query returned " + values.size() + " results");
+                
                 // filtering loop
                 Iterator<AuthorityValue> iterator = values.iterator();
                 while (iterator.hasNext()) {
@@ -151,8 +153,20 @@ public class SolrLDAPAuthority implements ChoiceAuthority {
                 iterator = values.iterator();
                 while (iterator.hasNext() && added < max) {
                     AuthorityValue val = iterator.next();
+                    log.debug("addExternalResults AuthVal class type: " + val.getClass().getName());
+                    if(val instanceof GtrAuthorityValue){
+                    	val = (GtrAuthorityValue)val;
+                    	log.debug("addExternalResults adding val auth type " + val.getAuthorityType());
+                    	log.debug("addExternalResults adding val " + val.getValue());
+                    	log.debug("addExternalResults adding field " + val.getField());
+                    	
+                    	for(AuthorityValue type: GtrAuthorityValue.getAuthorityTypes().getTypes()){
+                    		log.debug("addExternalResults adding get auth type " + type.getAuthorityType());
+                    	}
+                    	
+                    }
                     Map<String, String> extras = val.choiceSelectMap();
-                    extras.put("insolr", "false");
+                    extras.put("insolr", "true");
                     choices.add(new Choice(val.generateString(), val.getValue(), val.getValue(), extras));
                     added++;
                 }
