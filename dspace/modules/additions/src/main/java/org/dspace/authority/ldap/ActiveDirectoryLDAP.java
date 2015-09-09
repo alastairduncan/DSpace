@@ -54,8 +54,8 @@ public class ActiveDirectoryLDAP {
 		URI provider = new URI(provider_url);
 		host = provider.getHost();
 		port = provider.getPort();
-		LOG.info("setup: host: " + host);
-		LOG.info("setup: port: " + port);
+		LOG.debug("setup: host: " + host);
+		LOG.debug("setup: port: " + port);
 
 	    } catch (URISyntaxException e) {
 		LOG.error("setup: ", e);
@@ -64,7 +64,6 @@ public class ActiveDirectoryLDAP {
     }
 
     public List<LDAPAuthorityValue> searchForUsers(String term) {
-	LOG.info("searchForUsers");
 	setup();
 
 	term = term.trim();
@@ -72,26 +71,31 @@ public class ActiveDirectoryLDAP {
 	String lastName = "";
 	// assume that the format is surname, firstname or surname, initial
 	if (term.contains(",")) {
-	    int index = term.indexOf(",");
-	    lastName = term.substring(0, index);
-	    // just take the first letter as it may be just an initial
-	    if (firstName != null && !firstName.equals("")) {
-		firstName = term.substring(index + 1).trim();
-		if (firstName.length() > 0) {
-		    firstName = firstName.substring(0, 1) + "*";
-		}
+	    
+	    String[] names = term.split(",");
+	    if(names.length >= 2){
+	       	lastName = names[0].trim();
+	    	firstName = names[1].trim();
+	    }else{
+	    	lastName = names[1];
 	    }
+	   
 	} else if (term.contains(" ")) {
-	    // assume that the format is firstname surname
-	    int index = term.indexOf(" ");
-	    firstName = term.substring(0, index);
-	    lastName = term.substring(index + 1).trim();
+	    // assume that the format is surname firstname
+		
+		 String[] names = term.split(" ");
+		    if(names.length >= 2){
+		    	lastName = names[0].trim();
+		    	firstName = names[1].trim();
+		    }else{
+		    	lastName = names[0];
+		    }
 
 	} else {
 	    // just the surname
 	    lastName = term;
 	}
-
+	
 	String filter = "(sn=" + lastName + ")";
 	if (!firstName.equals("")) {
 	    filter = "(&" + filter + "(givenname=" + firstName + "))";
@@ -106,13 +110,11 @@ public class ActiveDirectoryLDAP {
 
 	    String[] attributes = null;
 	    result = conn.search(searchContext, SearchScope.SUB, filter, attributes);
-
 	    for (SearchResultEntry entry : result.getSearchEntries()) {
-
-		LDAPAuthorityValue person = populatePerson(entry);
-		if (person != null) {
-		    results.add(person);
-		}
+			LDAPAuthorityValue person = populatePerson(entry);
+			if (person != null) {
+			    results.add(person);
+			}
 	    }
 
 	} catch (LDAPSearchException e) {
