@@ -341,6 +341,83 @@ public class BitstreamStorageManager
         return bitstreamId;
     }
 
+    // For storing big files
+    public static int storeBig(Context context, String id)
+            throws SQLException, IOException
+    {
+        // Create a deleted bitstream row, using a separate DB connection
+        TableRow bitstream;
+
+        String intermediatePath = getIntermediatePath(id);
+
+        String path = intermediatePath + id;
+        long fileSize = 0L;
+
+        String assetStore = assetStores[incoming].getAbsolutePath();
+
+        if(!assetStore.endsWith(File.separator)){
+            assetStore += File.separator;
+        }
+
+        File file = new File(assetStore + path);
+        if (file.exists()){
+            fileSize = file.length();
+        }
+        log.debug("store: file: " + file.getAbsolutePath() + " size: " + fileSize );
+
+        Context tempContext = null;
+
+        try
+        {
+            tempContext = new Context();
+
+            bitstream = DatabaseManager.row("Bitstream");
+            bitstream.setColumn("deleted", true);
+            bitstream.setColumn("internal_id", id);
+
+            /*
+             * Set the store number of the new bitstream If you want to use some
+             * other method of working out where to put a new bitstream, here's
+             * where it should go
+             */
+            bitstream.setColumn("store_number", incoming);
+
+            DatabaseManager.insert(tempContext, bitstream);
+
+            tempContext.complete();
+        }
+        catch (SQLException sqle)
+        {
+            if (tempContext != null)
+            {
+                tempContext.abort();
+            }
+
+            throw sqle;
+        }
+
+        //TODO sort out the checksum of the file;
+        // if everything has completed correctly then write out the metadata to
+        // the database
+
+        // //MessageDigest d = out.getChecksum();
+        // bitstream.setColumn("checksum", DatatypeConverter.printHexBinary(d.digest()));
+        // bitstream.setColumn("checksum_algorithm", d.getAlgorithm());
+        bitstream.setColumn("size_bytes", fileSize);
+        bitstream.setColumn("deleted", false);
+        DatabaseManager.update(context, bitstream);
+
+        int bitstreamId = bitstream.getIntColumn("bitstream_id");
+
+        if (log.isDebugEnabled())
+        {
+            log.debug("Stored bitstream " + bitstreamId + " in file "
+                    + file.getAbsolutePath());
+        }
+
+        return bitstreamId;
+    }
+
 	/**
 	 * Register a bitstream already in storage.
 	 *
@@ -875,7 +952,7 @@ public class BitstreamStorageManager
 	 *            The internal_id
 	 * @return The path based on the id without leading or trailing separators
 	 */
-	private static String getIntermediatePath(String iInternalId) {
+	public static String getIntermediatePath(String iInternalId) {
 		StringBuffer buf = new StringBuffer();
 		for (int i = 0; i < directoryLevels; i++) {
 			int digits = i * digitsPerLevel;

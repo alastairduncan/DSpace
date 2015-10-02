@@ -388,6 +388,31 @@ public class Bundle extends DSpaceObject
 
         return b;
     }
+    
+    /**
+     * Create a new bitstream in this bundle.
+     * 
+     * @param is
+     *            the stream to read the new bitstream from
+     * 
+     * @return the newly created bitstream
+     */
+    public Bitstream createBigBitstream(String bitstreamId, int itemId) throws AuthorizeException,
+            IOException, SQLException
+    {
+        // Check authorisation
+        AuthorizeManager.authorizeAction(ourContext, this, Constants.ADD);
+
+        log.debug("createBigBitstream: ");
+        
+        
+        Bitstream b = Bitstream.createBig(ourContext, bitstreamId, itemId);
+
+        // FIXME: Set permissions for bitstream
+        addBitstream(b);
+
+        return b;
+    }
 
     /**
      * Create a new bitstream in this bundle. This method is for registering
