@@ -63,6 +63,12 @@
   </filter-mapping>
     -->
 
+ <filter>
+    <description>Upload filter for Cocoon</description>
+    <display-name>Cocoon Upload filter</display-name>
+    <filter-name>DSpaceUploadFilter</filter-name>
+    <filter-class>org.dspace.app.xmlui.cocoon.servlet.DSpaceUploadFilter</filter-class>
+  </filter>
 
   <!--
     - Declare a filter for multipart MIME handling
@@ -122,6 +128,13 @@
 
   <!-- Filter mappings ================================================ -->
 
+
+  <filter-mapping>
+        <filter-name>DSpaceUploadFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
   <!-- Filter mappings -->
   <filter-mapping>
         <filter-name>dspace.request</filter-name>
@@ -161,14 +174,10 @@
 
   <!-- Servlet Context Listener ======================================= -->
   
-    <!--
-       DSpace Kernel startup listener. This listener is in charge of initializing/starting the
-       DSpace Kernel. It MUST be listed BEFORE any other DSpace listeners, as DSpace services
-       will not function until the Kernel is initialized.
-    -->
-    <listener>
-       <listener-class>org.dspace.servicemanager.servlet.DSpaceKernelServletContextListener</listener-class>
-    </listener>
+    <!-- kernel start listener (from impl), starts up the kernel for standalong webapps -->
+  <listener>
+     <listener-class>org.dspace.servicemanager.servlet.DSpaceKernelServletContextListener</listener-class>
+  </listener>
   
     <!-- Listener to clean up Commons-FileUpload -->
     <listener>

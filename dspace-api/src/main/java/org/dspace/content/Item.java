@@ -24,15 +24,14 @@ import org.dspace.authorize.AuthorizeManager;
 import org.dspace.authorize.ResourcePolicy;
 import org.dspace.browse.BrowseException;
 import org.dspace.browse.IndexBrowse;
-import org.dspace.content.authority.ChoiceAuthorityManager;
-import org.dspace.content.authority.Choices;
-import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.core.LogManager;
+import org.dspace.content.authority.Choices;
+import org.dspace.content.authority.ChoiceAuthorityManager;
+import org.dspace.event.Event;
 import org.dspace.eperson.EPerson;
 import org.dspace.eperson.Group;
-import org.dspace.event.Event;
 import org.dspace.handle.HandleManager;
 import org.dspace.identifier.IdentifierException;
 import org.dspace.identifier.IdentifierService;
@@ -41,8 +40,6 @@ import org.dspace.storage.rdbms.TableRow;
 import org.dspace.storage.rdbms.TableRowIterator;
 import org.dspace.utils.DSpace;
 import org.dspace.versioning.VersioningService;
-import org.dspace.workflow.WorkflowItem;
-import org.dspace.xmlworkflow.storedcomponents.XmlWorkflowItem;
 
 /**
  * Class representing an item in DSpace.
@@ -266,7 +263,7 @@ public class Item extends DSpaceObject
         }
 
         String query = "SELECT item.* FROM metadatavalue,item WHERE item.in_archive='1' " +
-                "AND item.item_id = metadatavalue.resource_id AND metadatavalue.resource_type_id=2 AND metadata_field_id = ?";
+                "AND item.item_id = metadatavalue.item_id AND metadata_field_id = ?";
         TableRowIterator rows = null;
         if (Item.ANY.equals(authority)) {
             rows = DatabaseManager.queryTable(context, "item", query, mdf.getFieldID());
@@ -901,6 +898,32 @@ public class Item extends DSpaceObject
         // FIXME: Create permissions for new bundle + bitstream
         return bitstream;
     }
+    
+    /**
+     * Create a single bitstream in a new bundle. Provided as a convenience
+     * method for the most common use.
+     *
+     * 
+     * @param name
+     *            is the name of the bundle (ORIGINAL, TEXT, THUMBNAIL)
+     * @return Bitstream that is created
+     * @throws AuthorizeException
+     * @throws IOException
+     * @throws SQLException
+     */
+    public Bitstream createBigSingleBitstream(String bitstreamId, String name, int itemId)
+            throws AuthorizeException, IOException, SQLException
+    {
+    	log.debug("createBigSingleBitstream:");
+        // Authorisation is checked by methods below
+        // Create a bundle
+        Bundle bnd = createBundle(name);
+        Bitstream bitstream = bnd.createBigBitstream(bitstreamId, itemId);
+        addBundle(bnd);
+
+        // FIXME: Create permissions for new bundle + bitstream
+        return bitstream;
+    }
 
     /**
      * Convenience method, calls createSingleBitstream() with name "ORIGINAL"
@@ -1161,14 +1184,8 @@ public class Item extends DSpaceObject
         ourContext.addEvent(new Event(Event.MODIFY, Constants.ITEM, getID(), 
                 "WITHDRAW", getIdentifiers(ourContext)));
 
-        // switch all READ authorization policies to WITHDRAWN_READ
-		AuthorizeManager.switchPoliciesAction(ourContext, this, Constants.READ, Constants.WITHDRAWN_READ);
-		for (Bundle bnd : this.getBundles()) {
-			AuthorizeManager.switchPoliciesAction(ourContext, bnd, Constants.READ, Constants.WITHDRAWN_READ);
-			for (Bitstream bs : bnd.getBitstreams()) {
-				AuthorizeManager.switchPoliciesAction(ourContext, bs, Constants.READ, Constants.WITHDRAWN_READ);
-			}
-		}
+        // remove all authorization policies, saving the custom ones
+        AuthorizeManager.removeAllPoliciesByDSOAndTypeNotEqualsTo(ourContext, this, ResourcePolicy.TYPE_CUSTOM);
 
         // Write log
         log.info(LogManager.getHeader(ourContext, "withdraw_item", "user="
@@ -1226,28 +1243,16 @@ public class Item extends DSpaceObject
         ourContext.addEvent(new Event(Event.MODIFY, Constants.ITEM, getID(), 
                 "REINSTATE", getIdentifiers(ourContext)));
 
-        // restore all WITHDRAWN_READ authorization policies back to READ
-        for (Bundle bnd : this.getBundles()) {
-			AuthorizeManager.switchPoliciesAction(ourContext, bnd, Constants.WITHDRAWN_READ, Constants.READ);
-			for (Bitstream bs : bnd.getBitstreams()) {
-				AuthorizeManager.switchPoliciesAction(ourContext, bs, Constants.WITHDRAWN_READ, Constants.READ);
-			}
-		}
-        
-        // check if the item was withdrawn before the fix DS-3097
-        if (AuthorizeManager.getPoliciesActionFilter(ourContext, this, Constants.WITHDRAWN_READ).size() != 0) {
-        	AuthorizeManager.switchPoliciesAction(ourContext, this, Constants.WITHDRAWN_READ, Constants.READ);
+        // authorization policies
+        if (colls.length > 0)
+        {
+            // FIXME: not multiple inclusion friendly - just apply access
+            // policies from first collection
+            // remove the item's policies and replace them with
+            // the defaults from the collection
+            inheritCollectionDefaultPolicies(colls[0]);
         }
-        else {
-	        // authorization policies
-	        if (colls.length > 0)
-	        {
-	            // remove the item's policies and replace them with
-	            // the defaults from the collection
-	        	adjustItemPolicies(getOwningCollection());
-	        }
-        }
-        
+
         // Write log
         log.info(LogManager.getHeader(ourContext, "reinstate_item", "user="
                 + e.getEmail() + ",item_id=" + getID()));
@@ -1695,6 +1700,7 @@ public class Item extends DSpaceObject
         Bundle[] bundles = getBundles("ORIGINAL");
         if (bundles.length == 0)
         {
+        	log.warn("hasUploadedFiles: No original bundle");
             // if no ORIGINAL bundle,
             // return false that there is no file!
             return false;
@@ -1704,6 +1710,7 @@ public class Item extends DSpaceObject
             Bitstream[] bitstreams = bundles[0].getBitstreams();
             if (bitstreams.length == 0)
             {
+            	log.warn("hasUploadedFiles: No files in original bundle");
                 // no files in ORIGINAL bundle!
                 return false;
             }
@@ -1770,12 +1777,7 @@ public class Item extends DSpaceObject
         // is this collection not yet created, and an item template is created
         if (getOwningCollection() == null)
         {
-        	if (!isInProgressSubmission()) {
-        		return true;
-        	}
-        	else {
-        		return false;
-        	}
+            return true;
         }
 
         // is this person an COLLECTION_EDITOR for the owning collection?
@@ -1785,20 +1787,6 @@ public class Item extends DSpaceObject
         }
 
         return false;
-    }
-    
-    /**
-     * Check if the item is an inprogress submission
-     * @param context
-     * @param item
-     * @return <code>true</code> if the item is an inprogress submission, i.e. a WorkspaceItem or WorkflowItem
-     * @throws SQLException
-     */
-    public boolean isInProgressSubmission() throws SQLException {
-		return WorkspaceItem.findByItem(ourContext, this) != null ||
-				((ConfigurationManager.getProperty("workflow", "workflow.framework").equals("xmlworkflow")
-						&& XmlWorkflowItem.findByItem(ourContext, this) != null)
-						|| WorkflowItem.findByItem(ourContext, this) != null);
     }
     
     public String getName()

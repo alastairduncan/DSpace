@@ -216,6 +216,25 @@ public class Bitstream extends DSpaceObject
         return bitstream;
     }
 
+    // Variant for big files
+    static Bitstream createBig(Context context, String bitstreamId, int itemID) throws IOException, SQLException {
+
+        log.info("createBig bitstream_id=" + bitstreamId);
+
+        // Store the bits
+        int bstreamid = BitstreamStorageManager.storeBig(context, bitstreamId);
+
+        log.info(LogManager.getHeader(context, "create_bitstream", "bitstream_id=" + bitstreamId));
+
+        // Set the format to "unknown"
+        Bitstream bitstream = find(context, bstreamid);
+        bitstream.setFormat(null);
+
+        context.addEvent(new Event(Event.CREATE, Constants.BITSTREAM, bstreamid, null, bitstream.getIdentifiers(context)));
+
+        return bitstream;
+    }
+
     /**
      * Register a new bitstream, with a new ID.  The checksum and file size
      * are calculated.  This method is not public, and does not check

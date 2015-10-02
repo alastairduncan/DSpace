@@ -268,6 +268,9 @@
             <!-- Modernizr enables HTML5 elements & feature detects -->
             <script src="{concat($theme-path, 'vendor/modernizr/modernizr.js')}">&#160;</script>
 
+            <script src="{concat($context-path, '/static/js/resumable/resumable.js')}">&#160;</script>
+            <script src="{concat($context-path, '/static/js/jquery-1.7.2.min.js')}">&#160;</script>
+
             <!-- Add the title in -->
             <xsl:variable name="page_title" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='title'][last()]" />
             <title>

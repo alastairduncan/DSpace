@@ -13,10 +13,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.servlet.multipart.Part;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Logger;
 import org.dspace.app.util.Util;
 import org.dspace.app.xmlui.utils.UIException;
 import org.dspace.app.xmlui.wing.Message;
@@ -37,6 +40,7 @@ import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.curate.Curator;
 import org.dspace.handle.HandleManager;
+import org.dspace.storage.bitstore.BitstreamStorageManager;
 import org.dspace.submit.step.AccessStep;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +54,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FlowItemUtils 
 {
+	private static Logger LOG = Logger.getLogger(FlowItemUtils.class);
 
 	/** Language Strings */
 	private static final Message T_metadata_updated = new Message("default","The Item's metadata was successfully updated.");
@@ -589,6 +594,81 @@ public class FlowItemUtils
 		}
 		return result;
 	}
+
+	public static FlowResult processAddBitstreamBigfile(Context context, int itemID, Request request) throws SQLException, AuthorizeException, IOException {
+		FlowResult result = new FlowResult();
+		result.setContinue(false);
+
+		String message = "";
+
+		Enumeration parameterNames = request.getParameterNames();
+
+		Map<String,String> files = new HashMap<String,String>();
+		String[] paramValues = request.getParameterValues("bitstream-id");
+
+		LOG.debug("processAddBitstreamBigfile: bitstream ids length " + paramValues.length );
+
+		for (int i = 0; i < paramValues.length; i++) {
+			LOG.debug("processAddBitstreamBigfile: file-name- \"" + paramValues[i].trim() + "\"" );
+
+			String filename = request.getParameter("file-name-" + paramValues[i].trim());
+			LOG.debug("processAddBitstreamBigfile: file-name " + filename);
+
+			files.put(paramValues[i], filename);
+		}
+
+		// Upload a new file
+
+		Item item = Item.find(context, itemID);
+
+		String bundleName = request.getParameter("bundle");
+		LOG.debug("processAddBitstreamBigfile: files keyset size: " + files.keySet().size());
+		for(String key: files.keySet()){
+
+			String name = files.get(key);
+			LOG.debug("processAddBitstreamBigfile: about to add bitstream metadata to bundle " + key );
+			Bitstream bitstream;
+			Bundle[] bundles = item.getBundles(bundleName);
+			if (bundles.length < 1) {
+				LOG.debug("processAddBitstreamBigfile: no bundle about to create one and add bitstream metadata to bundle " + key );
+				// set bundle's name to ORIGINAL
+				bitstream = item.createBigSingleBitstream(key, name, itemID);
+
+				// set the permission as defined in the owning collection
+				Collection owningCollection = item.getOwningCollection();
+				if (owningCollection != null) {
+					Bundle bnd = bitstream.getBundles()[0];
+					bnd.inheritCollectionDefaultPolicies(owningCollection);
+				}
+			} else {
+				LOG.debug("processAddBitstreamBigfile: already got a bundle about to add bitstream metadata to bundle " + key );
+			// There is a bundle already, just add bitstream
+				String filePath = BitstreamStorageManager.getIntermediatePath(key) + key;
+				bitstream = bundles[0].registerBitstream(0, filePath);
+			}
+			bitstream.setName(name);
+			// Identify the format
+				BitstreamFormat format = FormatIdentifier.guessFormat(context, bitstream);
+				bitstream.setFormat(format);
+
+				// Update to DB
+				bitstream.update();
+				item.update();
+
+				processAccessFields(context, request, item.getOwningCollection(), bitstream);
+
+				context.commit();
+			//bitstream.setName(name);
+			message = message + "Added bitstream " + name + "\n";
+		}
+
+		result.setMessage(new Message("default", message));
+
+		result.setContinue(true);
+		result.setOutcome(true);
+		return result;
+	}
+
 
     private static void processAccessFields(Context context, HttpServletRequest request, Collection collection, Bitstream b) throws SQLException, AuthorizeException {
 
