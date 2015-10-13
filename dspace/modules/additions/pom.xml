@@ -103,6 +103,24 @@
             </exclusion>
          </exclusions>
       </dependency>
+      <dependency>
+            <groupId>org.apache.cocoon</groupId>
+            <artifactId>cocoon-core</artifactId>
+            <version>2.2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+         <!-- DSpace XMLUI API -->
+        <dependency>
+            <groupId>org.dspace</groupId>
+            <artifactId>dspace-xmlui</artifactId>
+            <type>jar</type>
+            <classifier>classes</classifier>
+        </dependency>
 
    </dependencies>
 

@@ -135,6 +135,7 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 		// if multipart form, then we are uploading a file
 		if ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1)) {
 			log.debug("doProcessing: its a multipart/form-data request ");
+			
 			// This is a multipart request, so it's a file upload
 			// (return any status messages or errors reported)
 			int status = processUploadFile(context, request, response, subInfo);
@@ -419,7 +420,13 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 			log.debug("processUploadFile: parameterValues.length: " + parameterValues.length);
 		} else {
 			log.debug("processUploadFile: parameterValues.length is null ");
-			return STATUS_INTEGRITY_ERROR;
+			// could be the case where the files have already been added and the next button has been clicked
+			// if there are no uploaded files its an integrity error if there are uploaded files everything is ok
+			if(item.getBundles().length <= 0){
+				return STATUS_INTEGRITY_ERROR;
+			}else{
+				return STATUS_COMPLETE;
+			}
 		}
 
 		// loop through our request parameters
@@ -531,7 +538,7 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 			}
 
 		}// end while
-		log.error("processUploadFile: status complete");
+		log.debug("processUploadFile: status complete");
 
 		return STATUS_COMPLETE;
 	}

@@ -199,9 +199,16 @@
     			<ul class="resumable-list"></ul>
 
     			<script>
+    		<!-- hide the button that will be used to save uploaded file metadata.
+    		It's clicked using jquery when the upload has completed. 
+    		Its a hack  as I don't know how to do a redirect in the java code and via cocoon-->
+    		 if( $( "#aspect_submission_StepTransformer_field_submit_upload" ).length )         // use this if you are using id to check
+			{
+		    	$( "#aspect_submission_StepTransformer_field_submit_upload" ).hide();
+			}
             var r = new Resumable({
                target:'/xmlui/item/upload',
-               chunkSize:1*1024*1024,
+               chunkSize:20*1024*1024,
                simultaneousUploads:4,
                testChunks: true,
                throttleProgressCallbacks:1,
@@ -242,6 +249,7 @@
               r.on('complete', function(){
                 // Hide pause/resume when the upload has completed
                 $('.resumable-progress .progress-resume-link, .resumable-progress .progress-pause-link').hide();
+                $( "#aspect_submission_StepTransformer_field_submit_upload" ).click();        
                  
               });
               r.on('fileSuccess', function(file,message){
