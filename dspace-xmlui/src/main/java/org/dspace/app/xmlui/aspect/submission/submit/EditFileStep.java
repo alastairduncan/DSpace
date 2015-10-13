@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.environment.SourceResolver;
+import org.apache.log4j.Logger;
 import org.dspace.app.xmlui.utils.UIException;
 import org.dspace.app.xmlui.aspect.submission.AbstractStep;
 import org.dspace.app.xmlui.wing.Message;
@@ -48,6 +49,7 @@ import org.xml.sax.SAXException;
  */
 public class EditFileStep extends AbstractStep
 {
+	private static Logger LOG = Logger.getLogger(EditFileStep.class);
 	
 	/** Language Strings **/
     protected static final Message T_head = 
@@ -98,7 +100,7 @@ public class EditFileStep extends AbstractStep
 	throws ProcessingException, SAXException, IOException
 	{ 
 		super.setup(resolver,objectModel,src,parameters);
-		
+		LOG.debug("setup: ");
 		//the bitstream should be stored in our Submission Info object
         this.bitstream = submissionInfo.getBitstream();
 	}
@@ -107,6 +109,7 @@ public class EditFileStep extends AbstractStep
     public void addBody(Body body) throws SAXException, WingException,
             UIException, SQLException, IOException, AuthorizeException
     {
+    	LOG.debug("addBody: ");
 		Collection collection = submission.getCollection();
 		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";
 

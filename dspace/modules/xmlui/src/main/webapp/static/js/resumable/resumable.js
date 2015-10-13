@@ -35,7 +35,7 @@
     var $ = this;
     $.files = [];
     $.defaults = {
-      chunkSize:1*1024*1024,
+      chunkSize:20*1024*1024,
       forceChunkSize:false,
       simultaneousUploads:3,
       fileParameterName:'file',
