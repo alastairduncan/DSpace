@@ -152,7 +152,7 @@ it, please enter the types and the actual numbers or codes.</hint>
          <required></required>
        </field>
        
-       <field>
+     <!--    <field>
          <dc-schema>dc</dc-schema>
          <dc-element>subject</dc-element>
          <dc-qualifier>other</dc-qualifier>
@@ -162,7 +162,7 @@ it, please enter the types and the actual numbers or codes.</hint>
 	    <hint>Select the Organisational Unit from the list</hint>
 	    <required></required>
 	    <vocabulary>orgunits</vocabulary>
-       </field>
+       </field>-->
        
        <field>
          <dc-schema>gtr</dc-schema>
@@ -188,7 +188,6 @@ it, please enter the types and the actual numbers or codes.</hint>
          <input-type>twobox</input-type>
          <hint>Enter appropriate subject keywords or phrases. </hint>
          <required></required>
-         <vocabulary>orgunits</vocabulary>
        </field>
 
        <field>
