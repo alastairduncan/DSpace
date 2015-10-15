@@ -126,10 +126,10 @@
                     <xsl:call-template name="itemSummaryView-DIM-abstract"/>
                     <xsl:call-template name="itemSummaryView-DIM-URI"/>
                     <xsl:call-template name="itemSummaryView-collections"/>
-                    <div class="simple-item-view-collections item-page-field-wrapper table">
+                   <!--  --> <div class="simple-item-view-collections item-page-field-wrapper table">
 	                	<h5>Organisational Units</h5>
                     <xsl:apply-templates mode="itemOrgUnitView-DIM"/>
-                      </div>
+                      </div>-->
                     <div class="simple-item-view-collections item-page-field-wrapper table">
                			<h5>Gateway to research projects</h5>
                     <xsl:apply-templates mode="itemGTRView-DIM"/>
@@ -463,12 +463,12 @@
                 <xsl:apply-templates mode="itemDetailView-DIM"/>
             </table>
         </div>
-         <div>
+       <!--   <div>
 	        <xsl:text>This item is linked to these Organisational unit(s): </xsl:text>
 	        <br/>
 	        <xsl:apply-templates mode="itemOrgUnitView-DIM"/>
         </div>
-         <br/>
+         <br/>--> 
         <div>
 	        <xsl:text>This item is linked to these Gateway to research project(s): </xsl:text>
 	        <br/>
