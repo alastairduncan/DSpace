@@ -116,6 +116,7 @@ public class DSpaceUploadFilter extends AbstractLogEnabled implements Filter {
 					context = ContextUtil.obtainContext(request);
 					complete = uploader.doUpload(context, request, response);
 					context.complete();
+					//once the upload is complete the javascript will continue by clicking a hidden button.
 					return;					
 				} else {
 					uploader.doGet(request, response);
@@ -124,6 +125,7 @@ public class DSpaceUploadFilter extends AbstractLogEnabled implements Filter {
 				
 			} else {
 				// LOG.debug("doFilter: Its NOT a resumable request");
+				filterChain.doFilter(req, res);
 			}
 			
 
@@ -136,7 +138,7 @@ public class DSpaceUploadFilter extends AbstractLogEnabled implements Filter {
 					getLogger(), this);
 		}
 		
-		filterChain.doFilter(req, res);
+		
 
 	}
 }
