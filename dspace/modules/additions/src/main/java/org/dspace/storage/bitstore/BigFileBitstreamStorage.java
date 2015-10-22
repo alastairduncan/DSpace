@@ -289,9 +289,8 @@ public class BigFileBitstreamStorage {
 		// the database
 
 		// //MessageDigest d = out.getChecksum();
-		// bitstream.setColumn("checksum",
-		// DatatypeConverter.printHexBinary(d.digest()));
-		// bitstream.setColumn("checksum_algorithm", d.getAlgorithm());
+		//bitstream.setColumn("checksum",	DatatypeConverter.printHexBinary(digest.digest()));
+		//bitstream.setColumn("checksum_algorithm", digest.getAlgorithm());
 		bitstream.setColumn("size_bytes", fileSize);
 		bitstream.setColumn("deleted", false);
 		DatabaseManager.update(context, bitstream);
@@ -338,6 +337,9 @@ public class BigFileBitstreamStorage {
 			bitstream.setColumn("deleted", true);
 			bitstream.setColumn("internal_id", sInternalId);
 			bitstream.setColumn("store_number", assetstore);
+			//bitstream.setColumn("checksum",	DatatypeConverter.printHexBinary(digest.digest()));
+			//bitstream.setColumn("checksum_algorithm", digest.getAlgorithm());
+			
 			DatabaseManager.insert(tempContext, bitstream);
 
 			tempContext.complete();

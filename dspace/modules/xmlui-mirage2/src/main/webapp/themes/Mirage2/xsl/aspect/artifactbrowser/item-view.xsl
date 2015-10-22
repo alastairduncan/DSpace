@@ -126,7 +126,7 @@
                     <xsl:call-template name="itemSummaryView-DIM-abstract"/>
                     <xsl:call-template name="itemSummaryView-DIM-URI"/>
                     <xsl:call-template name="itemSummaryView-collections"/>
-                   <!--  --> <div class="simple-item-view-collections item-page-field-wrapper table">
+                   <!-- <div class="simple-item-view-collections item-page-field-wrapper table">
 	                	<h5>Organisational Units</h5>
                     <xsl:apply-templates mode="itemOrgUnitView-DIM"/>
                       </div>-->

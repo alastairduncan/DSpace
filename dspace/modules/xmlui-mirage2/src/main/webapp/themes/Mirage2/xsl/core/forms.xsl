@@ -208,6 +208,7 @@
 			}
             var r = new Resumable({
                target:'/xmlui/item/upload',
+               chunkRetryInterval:5000,
                chunkSize:20*1024*1024,
                simultaneousUploads:4,
                testChunks: true,

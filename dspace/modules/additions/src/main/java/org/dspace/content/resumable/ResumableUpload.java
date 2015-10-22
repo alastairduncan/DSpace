@@ -22,6 +22,8 @@ public class ResumableUpload {
 	Logger LOG = Logger.getLogger(ResumableUpload.class);
 
 	private static ResumableUpload uploader = null;
+	
+	private String checksum = null;
 
 	private Map<String, ResumableInfo> uploads = new HashMap<String, ResumableInfo>();
 
@@ -34,6 +36,10 @@ public class ResumableUpload {
 			uploader = new ResumableUpload();
 		}
 		return uploader;
+	}
+	
+	public String getChecksum(){
+		return checksum;
 	}
 
 	
@@ -126,11 +132,15 @@ public class ResumableUpload {
 				filePath = filePath.replace(".temp", "");
 
 				File f = new File(info.getResumableFilePath());
-
-				f.renameTo(new File(filePath));
+				File newFile = new File(filePath);
+				f.renameTo(newFile);
 
 				uploads.remove(info.getResumableIdentifier());
-
+				
+				//calculate the checksum
+				
+				//checksum = org.dspace.curate.Utils.checksum(newFile, "MD5");
+				//LOG.debug("doUpload: checksum " + checksum);
 			} else {
 				LOG.debug("doUpload: Upload Not finished dealing with: " + resumableChunkNumber);
 				// return the bitstreamid so that the client can send this to the database.
