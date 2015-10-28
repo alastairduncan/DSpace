@@ -157,13 +157,17 @@
         </xsl:for-each>
     </xsl:template>
       
+      <!--  add bitstream -->
     <xsl:template match="dri:div[@id='aspect.submission.StepTransformer.div.resumable-error']">
     	<xsl:call-template name="resumable-upload"></xsl:call-template>
     </xsl:template>
-    
+    <!--  update bitstream -->
+    <xsl:template match="dri:div[@id='aspect.administrative.item.AddResumableBitstreamForm.div.resumable-error']">
+    	<xsl:call-template name="resumable-upload"></xsl:call-template>
+    </xsl:template>
     
     <!--  Resumable box and java script for large uploads -->
-    <xsl:template name="resumable-upload" match="dri:div[@id='aspect.administrative.item.AddResumableBitstreamForm.div.resumable-error']" priority="2">
+    <xsl:template name="resumable-upload"  priority="2">
     	<div class="resumable-error"> 
             Your browser, unfortunately, is not supported by Resumable.js. The library requires support for <a href="http://www.w3.org/TR/FileAPI/">the HTML5 File API</a> along with <a href="http://www.w3.org/TR/FileAPI/#normalization-of-params">file slicing</a>. 
           </div>
@@ -250,8 +254,13 @@
               r.on('complete', function(){
                 // Hide pause/resume when the upload has completed
                 $('.resumable-progress .progress-resume-link, .resumable-progress .progress-pause-link').hide();
-                $( "#aspect_submission_StepTransformer_field_submit_upload" ).click();        
-                 
+                var submitElementExists = document.getElementById("aspect_submission_StepTransformer_div_submit-upload");
+                var uploadElementExists = document.getElementById("aspect_administrative_item_AddResumableBitstreamForm_field_submit_upload");
+                if(submitElementExists != null){
+                	$( "#aspect_submission_StepTransformer_field_submit_upload" ).click();    
+                }else if(uploadElementExists != null){
+                	$( "#aspect_administrative_item_AddResumableBitstreamForm_field_submit_upload" ).click(); 
+                }
               });
               r.on('fileSuccess', function(file,message){
                // Reflect that the file upload has completed
@@ -270,6 +279,7 @@
                  $('#aspect_administrative_item_AddResumableBitstreamForm_div_add-bitstream').append('<input type="hidden" name="file-name-'+message+'" value="'+file.fileName+'" />');
                   $('#aspect_administrative_item_AddResumableBitstreamForm_div_add-bitstream').append('<input type="hidden" name="bitstream-id" value="'+message+'" />');
                }
+               
                });
              r.on('fileError', function(file, message){
               // Reflect that the file upload has resulted in error
