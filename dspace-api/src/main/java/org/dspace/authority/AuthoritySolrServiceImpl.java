@@ -58,6 +58,7 @@ public class AuthoritySolrServiceImpl implements AuthorityIndexingService, Autho
     }
 
     public void indexContent(AuthorityValue value, boolean force) {
+    	log.debug("indexContent: " + value.getClass().getName());
         SolrInputDocument doc = value.getSolrInputDocument();
 
         try{

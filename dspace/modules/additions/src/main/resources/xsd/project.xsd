@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://gtr.rcuk.ac.uk/gtr/api/project"
+    targetNamespace="http://gtr.rcuk.ac.uk/gtr/api/project"
+    xmlns:gtr="http://gtr.rcuk.ac.uk/gtr/api" xmlns:gtr-proj="http://gtr.rcuk.ac.uk/gtr/api/project"
+    attributeFormDefault="qualified" elementFormDefault="qualified">
+
+    <xs:import schemaLocation="gtr2.v2.xsd" namespace="http://gtr.rcuk.ac.uk/gtr/api"/>
+
+    <xs:element name="project" type="gtr-proj:project"/>
+    <xs:element name="projects" type="gtr-proj:projects"/>
+
+    <xs:complexType name="project">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A research project </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gtr:resource">
+                <xs:sequence>
+                    <xs:element name="identifiers" type="gtr-proj:identifiers"/>
+                    <xs:element name="title" type="xs:string"/>
+                    <xs:element name="status" type="xs:string" minOccurs="0"/>
+                    <xs:element name="grantCategory" type="xs:string" minOccurs="0"/>
+                    <xs:element name="abstractText" type="xs:string" minOccurs="0"/>
+                    <xs:element name="techAbstractText" type="xs:string" minOccurs="0"/>
+                    <xs:element name="potentialImpact" type="xs:string" minOccurs="0"/>
+                    <xs:element name="healthCategories" type="gtr-proj:healthCategories" minOccurs="0"/>
+                    <xs:element name="researchActivities" type="gtr-proj:researchActivities" minOccurs="0"/>
+                    <xs:element name="researchSubjects" type="gtr-proj:researchSubjects" minOccurs="0"/>
+                    <xs:element name="researchTopics" type="gtr-proj:researchTopics" minOccurs="0"/>
+                    <xs:element name="start" type="xs:date" minOccurs="0"/>
+                    <xs:element name="end" type="xs:date" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="identifiers">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Identifiers and reference numbers. </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="identifier" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="type" type="xs:string"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="projects">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A bulk collection of project </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gtr:bulk">
+                <xs:sequence>
+                    <xs:element name="project" type="gtr-proj:project" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="classification">
+        <xs:all>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="text" type="xs:string"/>
+            <xs:element name="percentage" type="xs:int" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="healthCategories">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Collection of Health Category gtr-proj:classification </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="healthCategory" type="gtr-proj:classification" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="researchActivities">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Collection of Research Activity gtr-proj:classification </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="researchActivity" type="gtr-proj:classification" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="researchSubjects">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Collection of Research Subject gtr-proj:classification </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="researchSubject" type="gtr-proj:classification" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="researchTopics">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Collection of Research Topic gtr-proj:classification </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="researchTopic" type="gtr-proj:classification" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

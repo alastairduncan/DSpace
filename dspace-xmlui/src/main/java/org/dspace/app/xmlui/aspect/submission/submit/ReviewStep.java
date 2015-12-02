@@ -49,6 +49,7 @@ import org.xml.sax.SAXException;
 public class ReviewStep extends AbstractSubmissionStep
 {
 
+	private static Logger LOG = Logger.getLogger(ReviewStep.class);
 	/** Language Strings **/
     protected static final Message T_head = 
         message("xmlui.Submission.submit.ReviewStep.head");
@@ -95,7 +96,7 @@ public class ReviewStep extends AbstractSubmissionStep
     throws ProcessingException, SAXException, IOException
     { 
         super.setup(resolver,objectModel,src,parameters);
-
+        LOG.debug("setup:");
         this.resolver = resolver;
         this.src = src;
     }
@@ -103,6 +104,7 @@ public class ReviewStep extends AbstractSubmissionStep
 	public void addBody(Body body) throws SAXException, WingException,
 	UIException, SQLException, IOException, AuthorizeException
 	{
+		 LOG.debug("addBody:");
 		// Get actionable URL
 		Collection collection = submission.getCollection();
 		String actionURL = contextPath + "/handle/"+collection.getHandle() + "/submit/" + knot.getId() + ".continue";

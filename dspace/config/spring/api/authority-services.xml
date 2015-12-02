@@ -6,8 +6,8 @@
 
     A copy of the DuraSpace License has been included in this
     distribution and is available at: http://www.dspace.org/license
-
 -->
+
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -17,10 +17,9 @@
            http://www.springframework.org/schema/context/spring-context.xsd"
        default-autowire-candidates="*Service,*DAO,javax.sql.DataSource">
 
-    <context:annotation-config /> <!-- allows us to use spring annotations in beans -->
+    <context:annotation-config />
 
-    <!-- Authority control -->
-    <bean class="org.dspace.authority.AuthoritySolrServiceImpl" id="org.dspace.authority.AuthoritySearchService"/>
+   <bean class="org.dspace.authority.AuthoritySolrServiceImpl" id="org.dspace.authority.AuthoritySearchService"/>
     <alias name="org.dspace.authority.AuthoritySearchService" alias="org.dspace.authority.indexer.AuthorityIndexingService"/>
 
     <bean id="dspace.DSpaceAuthorityIndexer" class="org.dspace.authority.indexer.DSpaceAuthorityIndexer"/>
@@ -28,8 +27,11 @@
     <bean name="AuthorityTypes" class="org.dspace.authority.AuthorityTypes">
         <property name="types">
             <list>
+             <bean class="org.dspace.authority.ldap.LDAPAuthorityValue"/>
+              <bean class="org.dspace.authority.PersonAuthorityValue"/>
                 <bean class="org.dspace.authority.orcid.OrcidAuthorityValue"/>
-                <bean class="org.dspace.authority.PersonAuthorityValue"/>
+                <bean class="org.dspace.authority.gtr.GtrAuthorityValue"/>
+               
             </list>
         </property>
         <property name="fieldDefaults">
@@ -37,14 +39,26 @@
                 <entry key="dc_contributor_author">
                     <bean class="org.dspace.authority.PersonAuthorityValue"/>
                 </entry>
+                <entry key="dc_contributor_editor">
+                    <bean class="org.dspace.authority.PersonAuthorityValue"/>
+                </entry>
+                <entry key="dc_project_id">
+                    <bean class="org.dspace.authority.AuthorityValue"/>
+                </entry>
             </map>
         </property>
     </bean>
+    
+     <alias name="GTRSource" alias="GtrAuthoritySource"/>
+    <bean name="GTRSource" class="org.dspace.authority.gtr.GtrAuthority">
+    	<constructor-arg value="http://gtr.rcuk.ac.uk"/>
+    </bean>
+    
+    <alias name="LDAPSource" alias="LDAPAuthoritySource"/>
+    <bean name="LDAPSource" class="org.dspace.authority.ldap.LDAPAuthority"/>
 
     <alias name="OrcidSource" alias="AuthoritySource"/>
     <bean name="OrcidSource" class="org.dspace.authority.orcid.Orcid">
         <constructor-arg value="http://pub.orcid.org"/>
     </bean>
-
-
 </beans>

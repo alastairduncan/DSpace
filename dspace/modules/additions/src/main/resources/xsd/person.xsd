@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://gtr.rcuk.ac.uk/gtr/api/person"
+    targetNamespace="http://gtr.rcuk.ac.uk/gtr/api/person" xmlns:gtr="http://gtr.rcuk.ac.uk/gtr/api"
+    xmlns:gtr-per="http://gtr.rcuk.ac.uk/gtr/api/person" attributeFormDefault="qualified"
+    elementFormDefault="qualified">
+
+    <xs:import schemaLocation="gtr2.v2.xsd" namespace="http://gtr.rcuk.ac.uk/gtr/api"/>
+
+    <xs:element name="person" type="gtr-per:person"/>
+    <xs:element name="persons" type="gtr-per:persons"/>
+
+    <xs:complexType name="person">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> Research person </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gtr:resource">
+                <xs:sequence>
+                    <xs:element name="firstName" type="xs:string" minOccurs="0"/>
+                    <xs:element name="otherNames" type="xs:string" minOccurs="0"/>
+                    <xs:element name="surname" type="xs:string" minOccurs="0"/>
+                    <xs:element name="email" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="persons">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"> A bulk collection of person </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="gtr:bulk">
+                <xs:sequence>
+                    <xs:element name="person" type="person" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

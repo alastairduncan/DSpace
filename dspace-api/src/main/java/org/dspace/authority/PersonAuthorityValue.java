@@ -9,6 +9,7 @@ package org.dspace.authority;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -31,12 +32,15 @@ public class PersonAuthorityValue extends AuthorityValue {
     private List<String> nameVariants = new ArrayList<String>();
     private String institution;
     private List<String> emails = new ArrayList<String>();
+    private static Logger LOG = Logger.getLogger(PersonAuthorityValue.class);
 
     public PersonAuthorityValue() {
+    	 LOG.debug("default constructor: " );
     }
 
     public PersonAuthorityValue(SolrDocument document) {
         super(document);
+        LOG.debug("constructor: " );
     }
 
     public String getName() {
@@ -120,6 +124,7 @@ public class PersonAuthorityValue extends AuthorityValue {
 
     @Override
     public SolrInputDocument getSolrInputDocument() {
+    	LOG.debug("getSolrInputDocument: " );
         SolrInputDocument doc = super.getSolrInputDocument();
         if (StringUtils.isNotBlank(getFirstName())) {
             doc.addField("first_name", getFirstName());
@@ -140,6 +145,7 @@ public class PersonAuthorityValue extends AuthorityValue {
 
     @Override
     public void setValues(SolrDocument document) {
+    	LOG.debug("setValues: " );
         super.setValues(document);
         this.firstName = ObjectUtils.toString(document.getFieldValue("first_name"));
         this.lastName = ObjectUtils.toString(document.getFieldValue("last_name"));
@@ -165,7 +171,7 @@ public class PersonAuthorityValue extends AuthorityValue {
 
     @Override
     public Map<String, String> choiceSelectMap() {
-
+    	LOG.debug("choiceSelectMap PersonAuthority: " );
         Map<String, String> map = super.choiceSelectMap();
 
         if (StringUtils.isNotBlank(getFirstName())) {
@@ -198,6 +204,7 @@ public class PersonAuthorityValue extends AuthorityValue {
 
     @Override
     public String getAuthorityType() {
+    	LOG.debug("getAuthorityType " );
         return "person";
     }
 
