@@ -673,43 +673,11 @@ public class DataCiteConnector implements DOIConnector {
 		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(getUsername(), this.getPassword()));
 		CloseableHttpClient httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
-		String encoded;
-		try {
-			encoded = DatatypeConverter.printBase64Binary((getUsername() + ":" + this.getPassword()).getBytes("UTF-8"));
-			req.addHeader("AUTHORIZATION", "Basic " + encoded);
-		} catch (UnsupportedEncodingException e1) {
-			throw new DOIIdentifierException(e1.getMessage(), e1);
-		}
-
-		// DefaultHttpClient httpclient = new DefaultHttpClient();
-		/*
-		 * HttpClient httpclient = HttpClientBuilder.create().build();
-		 * httpclient.getParams().setAuthenticationPreemptive(true);
-		 * httpclient.getCredentialsProvider().setCredentials( new
-		 * AuthScope(HOST, 443), new
-		 * UsernamePasswordCredentials(this.getUsername(), this.getPassword()));
-		 */
-		log.debug("sendHttpRequest-------------------");
-		log.debug("sendHttpRequest " + req.getMethod());
-		log.debug("sendHttpRequest " + req.toString());
-		Header[] headers = req.getAllHeaders();
-
-		for (int i = 0; i < headers.length; i++) {
-
-			log.debug("sendHttpRequest: header: " + headers[i].getName() + " value: " + headers[i].getValue());
-
-		}
-
-		log.debug("sendHttpRequest-------------------");
-
+		
 		HttpEntity entity = null;
 		try {
 			HttpResponse response = httpclient.execute(req);
 			
-			
-			log.debug("sendHttpRequest+++++++++++++++++++++++++++++++");
-			
-
 			StatusLine status = response.getStatusLine();
 			int statusCode = status.getStatusCode();
 
@@ -719,34 +687,6 @@ public class DataCiteConnector implements DOIConnector {
 				content = EntityUtils.toString(entity, "UTF-8");
 			}
 			
-			
-			
-			log.debug("sendHttpRequest resopnse status: " + status);
-			log.debug("sendHttpRequest response content: " + content);
-			log.debug("sendHttpRequest+++++++++++++++++++++++++++++++");
-
-			/*
-			 * While debugging it can be useful to see whitch requests are send:
-			 * 
-			 * log.debug("Going to send HTTP request of type " + req.getMethod()
-			 * + "."); log.debug("Will be send to " + req.getURI().toString() +
-			 * "."); if (req instanceof HttpEntityEnclosingRequestBase) {
-			 * log.debug("Request contains entity!");
-			 * HttpEntityEnclosingRequestBase reqee =
-			 * (HttpEntityEnclosingRequestBase) req; if (reqee.getEntity()
-			 * instanceof StringEntity) { StringEntity se = (StringEntity)
-			 * reqee.getEntity(); try { BufferedReader br = new
-			 * BufferedReader(new InputStreamReader(se.getContent())); String
-			 * line = null; while ((line = br.readLine()) != null) {
-			 * log.debug(line); } log.info("----"); } catch (IOException ex) {
-			 * 
-			 * } } } else { log.debug("Request contains no entity!"); }
-			 * log.debug("The request got http status code {}.",
-			 * Integer.toString(statusCode)); if (null == content) {
-			 * log.debug("The response did not contain any answer."); } else {
-			 * log.debug("DataCite says: {}", content); }
-			 */
-
 			// We can handle some status codes here, others have to be handled
 			// above
 			switch (statusCode) {
