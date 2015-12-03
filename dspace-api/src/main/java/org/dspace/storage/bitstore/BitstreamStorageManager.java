@@ -396,13 +396,9 @@ public class BitstreamStorageManager
             throw sqle;
         }
 
-        //TODO sort out the checksum of the file;
-        // if everything has completed correctly then write out the metadata to
-        // the database
-
-        // //MessageDigest d = out.getChecksum();
-        // bitstream.setColumn("checksum", DatatypeConverter.printHexBinary(d.digest()));
-        // bitstream.setColumn("checksum_algorithm", d.getAlgorithm());
+        // the checksum generation will probably be a real problem with large files!! Is there anyway around it??
+        bitstream.setColumn("checksum", org.dspace.curate.Utils.checksum(file, "MD5"));
+        bitstream.setColumn("checksum_algorithm", "MD5");
         bitstream.setColumn("size_bytes", fileSize);
         bitstream.setColumn("deleted", false);
         DatabaseManager.update(context, bitstream);
