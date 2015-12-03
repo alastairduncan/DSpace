@@ -8,16 +8,20 @@
 package org.dspace.submit.step;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.commons.lang.time.DateUtils;
 
+import org.dspace.authorize.AuthorizeManager;
+import org.dspace.content.Collection;
+import org.dspace.handle.HandleManager;
 import org.dspace.app.util.SubmissionInfo;
 import org.dspace.app.util.Util;
 import org.dspace.authorize.AuthorizeException;
@@ -135,7 +139,7 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 		// if multipart form, then we are uploading a file
 		if ((contentType != null) && (contentType.indexOf("multipart/form-data") != -1)) {
 			log.debug("doProcessing: its a multipart/form-data request ");
-			
+
 			// This is a multipart request, so it's a file upload
 			// (return any status messages or errors reported)
 			int status = processUploadFile(context, request, response, subInfo);
@@ -197,6 +201,8 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 			log.debug("doProcessing: status edit bitstream ");
 			return STATUS_EDIT_BITSTREAM;
 		}
+		
+		
 
 		// ---------------------------------------------
 		// Step #2: Process any remove file request(s)
@@ -296,6 +302,23 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 		if (fileRequired && !item.hasUploadedFiles() && !buttonPressed.equals(SUBMIT_MORE_BUTTON)) {
 			log.debug("doProcessing: no more files error");
 			return STATUS_NO_FILES_ERROR;
+		}
+		log.debug("doProcessing: button pressed: " + buttonPressed);
+		// execute only if comes from submit next or EditBitstreamStep
+		if (buttonPressed.equals("submit_next") || buttonPressed.equals("submit_edit")) {
+			Bundle[] bundles = item.getBundles("ORIGINAL");
+			if (bundles.length > 0) {
+				for(int n = 0; n < bundles.length; n++){
+					 Bitstream[] bitstreams = bundles[n].getBitstreams();
+					 if(bitstreams != null){
+						 for(int i = 0; i < bitstreams.length; i++){
+							 processAccessFields(context, request, subInfo, bitstreams[i]);
+						 }
+					 }else{
+						 // no bitstreams can't embargo a bitstream that does not exist
+					 }
+				}
+			}	
 		}
 
 		// commit all changes to database
@@ -420,11 +443,13 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 			log.debug("processUploadFile: parameterValues.length: " + parameterValues.length);
 		} else {
 			log.debug("processUploadFile: parameterValues.length is null ");
-			// could be the case where the files have already been added and the next button has been clicked
-			// if there are no uploaded files its an integrity error if there are uploaded files everything is ok
-			if(item.getBundles().length <= 0){
+			// could be the case where the files have already been added and the
+			// next button has been clicked
+			// if there are no uploaded files its an integrity error if there
+			// are uploaded files everything is ok
+			if (item.getBundles().length <= 0) {
 				return STATUS_INTEGRITY_ERROR;
-			}else{
+			} else {
 				return STATUS_COMPLETE;
 			}
 		}
@@ -541,6 +566,59 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 		log.debug("processUploadFile: status complete");
 
 		return STATUS_COMPLETE;
+	}
+
+	private void processAccessFields(Context context, HttpServletRequest request, SubmissionInfo subInfo, Bitstream b) throws SQLException, AuthorizeException {
+		// ResourcePolicy Management
+
+		log.debug("processAccessFields: ");
+
+		boolean isAdvancedFormEnabled = ConfigurationManager.getBooleanProperty("webui.submission.restrictstep.enableAdvancedForm", false);
+		// if it is a simple form we should create the policy for Anonymous
+		// if Anonymous does not have right on this collection, create policies
+		// for any other groups with
+		// DEFAULT_ITEM_READ specified.
+		if (!isAdvancedFormEnabled) {
+			log.debug("processAccessFields:  simple embargo field");
+			Date startDate = null;
+			if (request.getParameter("embargo_until_date") != null) {
+				try {
+					startDate = DateUtils.parseDate(request.getParameter("embargo_until_date"), new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" });
+					log.debug("processAccessFields: until date " + request.getParameter("embargo_until_date"));
+				} catch (Exception e) {
+					// Ignore start date already null
+				}
+				String reason = request.getParameter("reason");
+				
+				if(context == null){
+					log.debug("processAccessFields: context is null ");
+				}else{
+					log.debug("processAccessFields: context is not null ");
+				}
+				
+				if(subInfo.getCollectionHandle() == null){
+					log.debug("processAccessFields: collection handle is null ");
+				}else{
+					log.debug("processAccessFields: collection handle is not null ");
+				}
+				if( b == null){
+					log.debug("processAccessFields: bitstream object is null ");
+				}else{
+					log.debug("processAccessFields: bitstream object is not null ");
+				}
+				Collection c = (Collection) HandleManager.resolveToObject(context, subInfo.getCollectionHandle());
+				
+				
+				if( c == null){
+					log.debug("processAccessFields: collection object is null ");
+				}else{
+					log.debug("processAccessFields: collection object is not null ");
+				}
+				
+				log.debug("processAccessFields: reason " + reason);
+				AuthorizeManager.generateAutomaticPolicies(context, startDate, reason, b, c);
+			}
+		}
 	}
 
 	/*

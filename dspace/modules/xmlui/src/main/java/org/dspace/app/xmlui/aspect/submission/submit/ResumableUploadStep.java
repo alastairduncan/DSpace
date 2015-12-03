@@ -10,20 +10,25 @@ package org.dspace.app.xmlui.aspect.submission.submit;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.dspace.app.sherpa.SHERPAJournal;
 import org.dspace.app.sherpa.SHERPAPublisher;
 import org.dspace.app.sherpa.SHERPAResponse;
 import org.dspace.app.sherpa.submit.SHERPASubmitService;
 import org.dspace.app.xmlui.utils.UIException;
 import org.dspace.app.xmlui.aspect.submission.AbstractSubmissionStep;
+import org.dspace.app.xmlui.aspect.submission.submit.AccessStepUtil;
 import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
 import org.dspace.app.xmlui.wing.element.Body;
@@ -37,14 +42,18 @@ import org.dspace.app.xmlui.wing.element.List;
 import org.dspace.app.xmlui.wing.element.Row;
 import org.dspace.app.xmlui.wing.element.Table;
 import org.dspace.app.xmlui.wing.element.Text;
+import org.dspace.app.util.SubmissionInfo;
 import org.dspace.app.util.Util;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.authorize.AuthorizeManager;
 import org.dspace.content.Bitstream;
 import org.dspace.content.BitstreamFormat;
 import org.dspace.content.Bundle;
 import org.dspace.content.Collection;
 import org.dspace.content.Item;
 import org.dspace.core.ConfigurationManager;
+import org.dspace.core.Context;
+import org.dspace.handle.HandleManager;
 import org.dspace.utils.DSpace;
 import org.xml.sax.SAXException;
 
@@ -188,6 +197,8 @@ public class ResumableUploadStep extends AbstractSubmissionStep
             editFile.addBody(body);
             return;
         }
+        
+        Division resumableDiv = body.addDivision("resumable-error");
       
         // Get a list of all files in the original bundle
         Item item = submission.getItem();
@@ -200,14 +211,14 @@ public class ResumableUploadStep extends AbstractSubmissionStep
         {
             bitstreams = bundles[0].getBitstreams();
         }
-
+        
         // Part A:
         //  First ask the user if they would like to upload a new file (may be the first one)
         Division div = body.addInteractiveDivision("submit-upload", actionURL, Division.METHOD_MULTIPART, "primary submission");
         div.setHead(T_submission_head);
         addSubmissionProgressList(div);
         
-        Division resumableDiv = body.addDivision("resumable-error");
+       
 
         List upload = null;
         if (!disableFileEditing)
@@ -244,6 +255,14 @@ public class ResumableUploadStep extends AbstractSubmissionStep
             {
                 file.addError(T_virus_error);
             }*/
+            
+         // if AdvancedAccessPolicy=false: add simpleForm in UploadWithEmbargoStep
+           // if(!isAdvancedFormEnabled){
+                AccessStepUtil asu = new AccessStepUtil(context);
+                // if the item is embargoed default value will be displayed.
+                asu.addEmbargoDateSimpleForm(item, upload, errorFlag);
+                asu.addReason(null, upload, errorFlag);
+           // }
 
             Text description = upload.addItem().addText("description");
             description.setLabel(T_description);

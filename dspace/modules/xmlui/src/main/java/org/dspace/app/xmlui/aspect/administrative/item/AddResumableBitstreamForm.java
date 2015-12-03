@@ -81,12 +81,14 @@ public class AddResumableBitstreamForm extends AbstractDSpaceTransformer
             int itemID = parameters.getParameterAsInteger("itemID", -1);
             org.dspace.content.Item item = org.dspace.content.Item.find(context, itemID);
 
-            // DIVISION: main div
-            //Division div = body.addInteractiveDivision("add-bitstream", contextPath + "/admin/item", Division.METHOD_MULTIPART, "primary administrative item");
-            Division div = body.addInteractiveDivision("add-bitstream", contextPath + "/admin/item", Division.METHOD_GET, "primary administrative item");
+            
             // resumable upload div this is a holder where the html and java script will be placed
             // during the xsl transformation 
             Division resumableDiv = body.addDivision("resumable-error");
+         // DIVISION: main div
+            //Division div = body.addInteractiveDivision("add-bitstream", contextPath + "/admin/item", Division.METHOD_MULTIPART, "primary administrative item");
+            Division div = body.addInteractiveDivision("add-bitstream", contextPath + "/admin/item", Division.METHOD_GET, "primary administrative item");
+           
             // LIST: upload form
             List upload = div.addList("submit-upload-new", List.TYPE_FORM);
             upload.setHead(T_head1);
@@ -147,8 +149,6 @@ public class AddResumableBitstreamForm extends AbstractDSpaceTransformer
                 asu.addReason(null, upload, -1);
             }
 
-
-
             // ITEM: actions
             Item actions = upload.addItem();
             Button button = actions.addButton("submit_upload");
@@ -158,11 +158,10 @@ public class AddResumableBitstreamForm extends AbstractDSpaceTransformer
                 button.setDisabled();
             }
 
-            actions.addButton("submit_cancel").setValue(T_submit_cancel);
-            
-          
-            
+            actions.addButton("submit_cancel").setValue(T_submit_cancel);            
             div.addHidden("administrative-continue").setValue(knot.getId());
+            
+            
         }
 	
 	/**
