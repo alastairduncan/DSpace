@@ -268,8 +268,8 @@ public class ResumableUploadStep extends AbstractSubmissionStep
             description.setLabel(T_description);
             description.setHelp(T_description_help);
 
-            Button uploadSubmit = upload.addItem().addButton("submit_upload");
-            uploadSubmit.setValue(T_submit_upload);
+            /*Button uploadSubmit = upload.addItem().addButton("submit_upload");
+            uploadSubmit.setValue(T_submit_upload);*/
             
          // resumable upload div this is a holder where the html and java script will be placed
             // during the xsl transformation 
