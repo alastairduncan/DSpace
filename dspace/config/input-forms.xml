@@ -116,6 +116,17 @@
          <hint>Enter the series and number assigned to this item by your community.</hint>
          <required></required>
        </field>--> 
+       
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>OpenAIRE grant agreement URI</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the grant agreement number in the format specified here: https://wiki.surfnet.nl/display/standards/info-eu-repo#info-eu-repo-GrantAgreementIdentifiers e.g. info:eu-repo/grantAgreement/EC/FP7/12345</hint>
+         <required></required>
+       </field>
 
        <field>
          <dc-schema>dc</dc-schema>
