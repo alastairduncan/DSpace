@@ -582,8 +582,6 @@ public class FlowItemUtils {
 	public static FlowResult processAddBitstream(Context context, int itemID, Request request) throws SQLException, AuthorizeException, IOException {
 		FlowResult result = new FlowResult();
 		result.setContinue(false);
-
-		LOG.debug("processAddBitstream *********************************************************************");
 		// Upload a new file
 		Item item = Item.find(context, itemID);
 
@@ -594,7 +592,6 @@ public class FlowItemUtils {
 		}
 
 		if (filePart != null && filePart.getSize() > 0) {
-			LOG.debug("processAddBitstream &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 			InputStream is = filePart.getInputStream();
 
 			String bundleName = request.getParameter("bundle");
@@ -648,7 +645,6 @@ public class FlowItemUtils {
 			result.setOutcome(true);
 			result.setMessage(T_bitstream_added);
 		} else {
-			LOG.debug("processAddBitstream ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 			result.setContinue(false);
 			result.setOutcome(false);
 			result.setMessage(T_bitstream_failed);
@@ -747,10 +743,9 @@ public class FlowItemUtils {
 		// Step 3:
 		// Save our changes
 		bitstream.update();
-		context.commit();
-
 		processAccessFields(context, request, ((Item) bitstream.getParentObject()).getOwningCollection(), bitstream);
-
+		context.commit();
+		
 		result.setContinue(true);
 		result.setOutcome(true);
 		result.setMessage(T_bitstream_updated);

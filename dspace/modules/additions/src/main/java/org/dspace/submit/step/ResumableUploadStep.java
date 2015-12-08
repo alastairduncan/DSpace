@@ -305,7 +305,7 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 		}
 		log.debug("doProcessing: button pressed: " + buttonPressed);
 		// execute only if comes from submit next or EditBitstreamStep
-		if (buttonPressed.equals("submit_next") || buttonPressed.equals("submit_edit")) {
+		if (buttonPressed.equals("submit_next") || buttonPressed.equals("submit_edit")|| buttonPressed.equals("submit_upload")) {
 			Bundle[] bundles = item.getBundles("ORIGINAL");
 			if (bundles.length > 0) {
 				for(int n = 0; n < bundles.length; n++){
@@ -570,53 +570,25 @@ public class ResumableUploadStep extends AbstractProcessingStep {
 
 	private void processAccessFields(Context context, HttpServletRequest request, SubmissionInfo subInfo, Bitstream b) throws SQLException, AuthorizeException {
 		// ResourcePolicy Management
-
-		log.debug("processAccessFields: ");
-
 		boolean isAdvancedFormEnabled = ConfigurationManager.getBooleanProperty("webui.submission.restrictstep.enableAdvancedForm", false);
 		// if it is a simple form we should create the policy for Anonymous
 		// if Anonymous does not have right on this collection, create policies
 		// for any other groups with
 		// DEFAULT_ITEM_READ specified.
 		if (!isAdvancedFormEnabled) {
-			log.debug("processAccessFields:  simple embargo field");
 			Date startDate = null;
 			if (request.getParameter("embargo_until_date") != null) {
 				try {
+					log.debug("processAccessFields: got an embargo until date" );
 					startDate = DateUtils.parseDate(request.getParameter("embargo_until_date"), new String[] { "yyyy-MM-dd", "yyyy-MM", "yyyy" });
-					log.debug("processAccessFields: until date " + request.getParameter("embargo_until_date"));
 				} catch (Exception e) {
 					// Ignore start date already null
 				}
 				String reason = request.getParameter("reason");
-				
-				if(context == null){
-					log.debug("processAccessFields: context is null ");
-				}else{
-					log.debug("processAccessFields: context is not null ");
-				}
-				
-				if(subInfo.getCollectionHandle() == null){
-					log.debug("processAccessFields: collection handle is null ");
-				}else{
-					log.debug("processAccessFields: collection handle is not null ");
-				}
-				if( b == null){
-					log.debug("processAccessFields: bitstream object is null ");
-				}else{
-					log.debug("processAccessFields: bitstream object is not null ");
-				}
 				Collection c = (Collection) HandleManager.resolveToObject(context, subInfo.getCollectionHandle());
-				
-				
-				if( c == null){
-					log.debug("processAccessFields: collection object is null ");
-				}else{
-					log.debug("processAccessFields: collection object is not null ");
-				}
-				
-				log.debug("processAccessFields: reason " + reason);
 				AuthorizeManager.generateAutomaticPolicies(context, startDate, reason, b, c);
+			}else{
+				log.debug("processAccessFields: no embargo until date" );
 			}
 		}
 	}
