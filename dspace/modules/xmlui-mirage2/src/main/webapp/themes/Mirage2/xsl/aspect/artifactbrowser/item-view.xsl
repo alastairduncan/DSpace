@@ -132,7 +132,15 @@
                       </div>-->
                     <div class="simple-item-view-collections item-page-field-wrapper table">
                			<h5>Gateway to research projects</h5>
-                    <xsl:apply-templates mode="itemGTRView-DIM"/>
+                    	<xsl:apply-templates mode="itemGTRView-DIM"/>
+                    </div>
+                    <div class="simple-item-view-collections item-page-field-wrapper table">
+               			<h5>Is referenced by:</h5>
+                    	<xsl:apply-templates mode="itemIsReferencedByView-DIM"/>
+                    </div>
+                    <div class="simple-item-view-collections item-page-field-wrapper table">
+               			<h5>Funders:</h5>
+                    	<xsl:apply-templates mode="relatedView-DIM"/>
                     </div>
                 </div>
             </div>
@@ -516,7 +524,33 @@
 	    </xsl:if>
     </xsl:template>
     
+    <xsl:template match="dim:field" mode="relatedView-DIM">
+	    <xsl:if test="./@mdschema = 'dc'">
+		    <xsl:if test="./@element = 'relation'">
+		    	  <xsl:if test="not(./@qualifier)">
+		    		<xsl:copy-of select="./node()"/>
+				 </xsl:if>  
+			</xsl:if>	
+	    </xsl:if>
+    </xsl:template>
     
+    <xsl:template match="dim:field" mode="itemIsReferencedByView-DIM">
+	    <xsl:if test="./@mdschema = 'dc'">
+	    	<xsl:if test="./@element = 'relation'">
+	    		<xsl:if test="./@qualifier = 'isreferencedby'">
+				    <xsl:element name="a">
+					   <xsl:attribute name="href">
+	                        <xsl:copy-of select="./node()"/>
+                    	</xsl:attribute>
+                    	<xsl:copy-of select="./node()"/>
+					</xsl:element>	
+					<xsl:if test="count(following-sibling::dim:field[@element='relation' and @qualifier='relation']) != 0">
+                            <br/>
+                        </xsl:if>
+				</xsl:if>
+			</xsl:if>    	
+	    </xsl:if>
+    </xsl:template>
     
 
     <xsl:template match="dim:field" mode="itemDetailView-DIM">
