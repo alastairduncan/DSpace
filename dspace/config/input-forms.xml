@@ -106,7 +106,7 @@
          <required></required>
        </field>
 
-     <!--   <field>
+     <!--<field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
@@ -120,11 +120,33 @@
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
+         <dc-qualifier>isreferencedby</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Related publication persistent URL:</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the persistent id of an isReferencedBy publication e.g. http://purl.org/net/epubs/work/23647412</hint>
+         <required></required>
+       </field>
+       
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
          <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>OpenAIRE grant agreement URI</label>
+         <repeatable>true</repeatable>
+         <label>OpenAIRE funders grant agreement URI</label>
          <input-type>onebox</input-type>
          <hint>Enter the grant agreement number in the format specified here: https://wiki.surfnet.nl/display/standards/info-eu-repo#info-eu-repo-GrantAgreementIdentifiers e.g. info:eu-repo/grantAgreement/EC/FP7/12345</hint>
+         <required></required>
+       </field>
+       
+        <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>rights</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Openaire rights</label>
+         <input-type value-pairs-name="rights">dropdown</input-type>
+         <hint>Select the access rights for this dataset as specified here: https://wiki.surfnet.nl/display/standards/info-eu-repo#info-eu-repo-AccessRights</hint>
          <required></required>
        </field>
 
@@ -276,6 +298,28 @@ it, please enter the types and the actual numbers or codes.</hint>
        <stored-value>Dataset</stored-value>
      </pair>
    </value-pairs>
+   
+ 
+    <value-pairs value-pairs-name="rights" dc-term="rights">
+     <pair>
+       <displayed-value>openAccess</displayed-value>
+       <stored-value>info:eu-repo/semantics/openAccess</stored-value>
+     </pair>
+      <pair>
+       <displayed-value>closedAccess</displayed-value>
+       <stored-value>info:eu-repo/semantics/closedAccess</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>embargoedAccess</displayed-value>
+       <stored-value>info:eu-repo/semantics/embargoedAccess</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>restrictedAccess</displayed-value>
+       <stored-value>info:eu-repo/semantics/restrictedAccess</stored-value>
+     </pair>
+    
+     </value-pairs>
+     
 
    <!-- default language order: (from dspace 1.2.1)
         "en_US", "en", "es", "de", "fr", "it", "ja", "zh", "other", ""
