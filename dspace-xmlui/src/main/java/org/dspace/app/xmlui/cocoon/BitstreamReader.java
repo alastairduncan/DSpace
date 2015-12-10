@@ -549,21 +549,6 @@ public class BitstreamReader extends AbstractReader implements Recyclable
         return null;
     }
     
-    
-    /**
-         * Write the actual data out to the response.
-         *
-         * Some implementation notes:
-         *
-         * 1) We set a short expiration time just in the hopes of preventing someone
-         * from overloading the server by clicking reload a bunch of times. I
-         * Realize that this is nowhere near 100% effective but it may help in some
-         * cases and shouldn't hurt anything.
-         *
-         * 2) We accept partial downloads, thus if you lose a connection halfway
-         * through most web browser will enable you to resume downloading the
-         * bitstream.
-         */
     public void generate() throws IOException, SAXException,
             ProcessingException
     {
@@ -641,70 +626,64 @@ public class BitstreamReader extends AbstractReader implements Recyclable
                 response.setHeader("Content-Disposition", "attachment;filename=" + '"' + name + '"');
         }
 
+        response.setContentType(bitstreamMimeType);
         ByteRange byteRange = null;
 
-        // Turn off partial downloads, they cause problems
-        // and are only rarely used. Specifically some windows pdf
-        // viewers are incapable of handling this request. You can
-        // uncomment the following lines to turn this feature back on.
-
-//        response.setHeader("Accept-Ranges", "bytes");
-//        String ranges = request.getHeader("Range");
-//        if (ranges != null)
-//        {
-//            try
-//            {
-//                ranges = ranges.substring(ranges.indexOf('=') + 1);
-//                byteRange = new ByteRange(ranges);
-//            }
-//            catch (NumberFormatException e)
-//            {
-//                byteRange = null;
-//                if (response instanceof HttpResponse)
-//                {
-//                    // Respond with status 416 (Request range not
-//                    // satisfiable)
-//                    response.setStatus(416);
-//                }
-//            }
-//        }
+        response.setHeader("Accept-Ranges", "bytes");
+        String ranges = request.getHeader("Range");
+        if (ranges != null)
+        {
+            try
+            {
+                ranges = ranges.substring(ranges.indexOf('=') + 1);
+                byteRange = new ByteRange(ranges);
+            }
+            catch (NumberFormatException e)
+            {
+                byteRange = null;
+                if (response instanceof HttpResponse)
+                {
+                    // Respond with status 416 (Request range not
+                    // satisfiable)
+                    response.addHeader("Content-Range", "bytes */" + this.bitstreamSize);
+                    response.sendError(HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
+                }
+            }
+        }
 
         try
         {
             if (byteRange != null)
             {
-                String entityLength;
-                String entityRange;
-                if (this.bitstreamSize != -1)
-                {
-                    entityLength = "" + this.bitstreamSize;
-                    entityRange = byteRange.intersection(
-                            new ByteRange(0, this.bitstreamSize)).toString();
-                }
-                else
-                {
-                    entityLength = "*";
-                    entityRange = byteRange.toString();
+                response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
+                long start = byteRange.getStart();
+                long end = byteRange.getEnd();
+                long rangeLength = byteRange.length();
+
+                response.addHeader("Content-Range", "bytes " + start + "-" + end + "/" + this.bitstreamSize);
+                response.setContentLength((int) rangeLength);
+
+                long skipped = this.bitstreamInputStream.skip(start);
+
+                if (skipped < start) {
+                    log.error("copyRange: Skipped only " + skipped + " bytes out of " + start + " required.");
+                    throw new IOException("Skipped only " + skipped + " bytes out of " + start + " required.");
                 }
 
-                response.setHeader("Content-Range", entityRange + "/" + entityLength);
-                if (response instanceof HttpResponse)
-                {
-                    // Response with status 206 (Partial content)
-                    response.setStatus(206);
-                }
+                long bytesToCopy = end - start + 1;
 
-                int pos = 0;
-                int posEnd;
-                while ((length = this.bitstreamInputStream.read(buffer)) > -1)
-                {
-                    posEnd = pos + length - 1;
-                    ByteRange intersection = byteRange.intersection(new ByteRange(pos, posEnd));
-                    if (intersection != null)
-                    {
-                        out.write(buffer, (int) intersection.getStart() - pos, (int) intersection.length());
+                while (bytesToCopy > 0) {
+                    int bytesRead = this.bitstreamInputStream.read(buffer);
+                    if (bytesRead <= bytesToCopy) {
+                        out.write(buffer, 0, bytesRead);
+                        bytesToCopy -= bytesRead;
+                    } else {
+                        out.write(buffer, 0, (int) bytesToCopy);
+                        bytesToCopy = 0;
                     }
-                    pos += length;
+                    if (bytesRead < buffer.length) {
+                        break;
+                    }
                 }
             }
             else
