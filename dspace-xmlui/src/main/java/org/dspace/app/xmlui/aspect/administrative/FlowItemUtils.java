@@ -601,12 +601,15 @@ public class FlowItemUtils
 
 		String message = "";
 
-		Enumeration parameterNames = request.getParameterNames();
-
 		Map<String,String> files = new HashMap<String,String>();
 		String[] paramValues = request.getParameterValues("bitstream-id");
 
-		LOG.debug("processAddBitstreamBigfile: bitstream ids length " + paramValues.length );
+		if (paramValues == null) {
+			message = "No files have been uploaded! Upload some files before clicking Submit";
+			result.setMessage(new Message("default", message));
+			result.setContinue(false);
+			return result;
+		}
 
 		for (int i = 0; i < paramValues.length; i++) {
 			LOG.debug("processAddBitstreamBigfile: file-name- \"" + paramValues[i].trim() + "\"" );
@@ -622,15 +625,12 @@ public class FlowItemUtils
 		Item item = Item.find(context, itemID);
 
 		String bundleName = request.getParameter("bundle");
-		LOG.debug("processAddBitstreamBigfile: files keyset size: " + files.keySet().size());
 		for(String key: files.keySet()){
 
 			String name = files.get(key);
-			LOG.debug("processAddBitstreamBigfile: about to add bitstream metadata to bundle " + key );
 			Bitstream bitstream;
 			Bundle[] bundles = item.getBundles(bundleName);
 			if (bundles.length < 1) {
-				LOG.debug("processAddBitstreamBigfile: no bundle about to create one and add bitstream metadata to bundle " + key );
 				// set bundle's name to ORIGINAL
 				bitstream = item.createBigSingleBitstream(key, name, itemID);
 
@@ -641,7 +641,6 @@ public class FlowItemUtils
 					bnd.inheritCollectionDefaultPolicies(owningCollection);
 				}
 			} else {
-				LOG.debug("processAddBitstreamBigfile: already got a bundle about to add bitstream metadata to bundle " + key );
 			// There is a bundle already, just add bitstream
 				String filePath = BitstreamStorageManager.getIntermediatePath(key) + key;
 				bitstream = bundles[0].registerBitstream(0, filePath);

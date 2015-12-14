@@ -153,14 +153,12 @@ public class AddResumableBitstreamForm extends AbstractDSpaceTransformer
             Item actions = upload.addItem();
             Button button = actions.addButton("submit_upload");
             button.setValue(T_submit_upload);
-            
             if (bundleCount == 0) {
                 button.setDisabled();
             }
 
             actions.addButton("submit_cancel").setValue(T_submit_cancel);            
             div.addHidden("administrative-continue").setValue(knot.getId());
-            
             
         }
 	
