@@ -396,9 +396,13 @@ public class BitstreamStorageManager
             throw sqle;
         }
 
-        // the checksum generation will probably be a real problem with large files!! Is there anyway around it??
-        bitstream.setColumn("checksum", org.dspace.curate.Utils.checksum(file, "MD5"));
-        bitstream.setColumn("checksum_algorithm", "MD5");
+        // create and start a new thread that will calculate the checksum in the background.
+        // files are not streamed they are chunked so can't generate the checksum on the fly without ordering
+        // and then saving. So the checksum needs to be generated after the upload is complete.
+        // for large files this will take some time and may screw up the UI experience so do it in the background
+        ChecksumCalculator ccalc = new BigFileBitstreamStorage().new ChecksumCalculator(bitstream, context, file);
+        (new Thread(ccalc)).start();
+
         bitstream.setColumn("size_bytes", fileSize);
         bitstream.setColumn("deleted", false);
         DatabaseManager.update(context, bitstream);
@@ -962,4 +966,47 @@ public class BitstreamStorageManager
 		return buf.toString();
 	}
 
+	public class ChecksumCalculator implements Runnable
+	{		
+		private TableRow bitstream;
+		private Context context;
+		private Boolean initialised = false;
+		private File file;
+
+		public ChecksumCalculator(TableRow bitstream, Context context, File file) {
+			this.bitstream = bitstream;
+			this.context = context;
+			this.file = file;
+			synchronized(initialised){
+				initialised = true;
+			}
+			log.debug("ChecksumCalculator created and initialised a ChecksumCalculator");
+		}
+
+		@Override
+		public void run() {
+			log.debug("ChecksumCalculator created and running a ChecksumCalculator");
+			synchronized(initialised){
+				if(initialised){
+					log.debug("ChecksumCalculator has been initialised");
+					try {
+						
+						bitstream.setColumn("checksum", org.dspace.curate.Utils.checksum(file, "MD5"));
+						bitstream.setColumn("checksum_algorithm", "MD5");
+						
+						DatabaseManager.update(context, bitstream);
+					} catch (SQLException e) {
+						log.error("ChecksumCalculator.run: ", e);
+					} catch (IOException e) {
+						log.error("ChecksumCalculator.run: ", e);
+					}
+					
+					log.debug("ChecksumCalculator.run: Checksum generated for " + file.getAbsolutePath() + " " + bitstream.getStringColumn("checksum"));
+				}else{
+					log.error("ChecksumCalculator.run: Not initialised can't generate checksum");
+				}
+			}
+			log.debug("ChecksumCalculator has completed");
+		}
+	}
 }
