@@ -206,10 +206,10 @@
     		<!-- hide the button that will be used to save uploaded file metadata.
     		It's clicked using jquery when the upload has completed. 
     		Its a hack  as I don't know how to do a redirect in the java code and via cocoon-->
-    		 if( $( "#aspect_submission_StepTransformer_field_submit_upload" ).length )         // use this if you are using id to check
-			{
+    		 if( $( "#aspect_submission_StepTransformer_field_submit_upload" ).length ){
 		    	$( "#aspect_submission_StepTransformer_field_submit_upload" ).hide();
 			}
+		
             var r = new Resumable({
                target:'/xmlui/item/upload',
                chunkRetryInterval:5000,
@@ -229,6 +229,14 @@
               r.assignBrowse($('.resumable-browse')[0]);
               // Handle file add event
               r.on('fileAdded', function(file){
+              
+              	 <!--  hide the submit button for bitstreams until a file has been uploaded --> 
+            var uploadElementExists = document.getElementById("aspect_administrative_item_AddResumableBitstreamForm_field_submit_upload");
+            if(uploadElementExists != null){
+               $( "#aspect_administrative_item_AddResumableBitstreamForm_field_submit_upload" ).hide();
+                
+            }
+              
               // Show progress pabr
                $('.resumable-progress, .resumable-list').show();
                  // Show pause, hide resume
@@ -256,10 +264,11 @@
                 $('.resumable-progress .progress-resume-link, .resumable-progress .progress-pause-link').hide();
                 var submitElementExists = document.getElementById("aspect_submission_StepTransformer_div_submit-upload");
                 var uploadElementExists = document.getElementById("aspect_administrative_item_AddResumableBitstreamForm_field_submit_upload");
+           
                 if(submitElementExists != null){
                 	$( "#aspect_submission_StepTransformer_field_submit_upload" ).click();    
                 }else if(uploadElementExists != null){
-                	$( "#aspect_administrative_item_AddResumableBitstreamForm_field_submit_upload" ).click(); 
+                	$( "#aspect_administrative_item_AddResumableBitstreamForm_field_submit_upload" ).show(); 
                 }
               });
               r.on('fileSuccess', function(file,message){
