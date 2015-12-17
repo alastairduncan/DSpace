@@ -23,6 +23,7 @@ import org.dspace.content.Bitstream;
 import org.dspace.content.Bundle;
 import org.dspace.content.Metadatum;
 import org.dspace.content.Item;
+import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.core.Email;
 import org.dspace.core.I18nUtil;
@@ -31,6 +32,7 @@ import org.dspace.storage.bitstore.BitstreamStorageManager;
 import org.dspace.utils.DSpace;
 
 import javax.mail.MessagingException;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -178,27 +180,49 @@ public class ItemRequestResponseAction extends AbstractAction
     	String message = request.getParameter("message");
     	String subject = request.getParameter("subject");
     	
+    	// get a new token to send for the download
+    	String token = requestItem.getNewToken(context);
+    	int bitstreanId = requestItem.getBitstreamId();
+    	
     	Email email = new Email();
         email.setSubject(subject);
-        email.setContent("{0}");
+        String content = "{0}";
+       
 		email.addRecipient(requestItem.getReqEmail());
         email.addArgument(message);
+        
+        String url = ConfigurationManager.getProperty("dspace.url") + "/bitstream/handle";
+        //request.getContextPath() + "/bitstream/handle/" + item.getHandle();
+
+        // create a download url with the token that will be used to override the normal authorisation rules;
+
+        if(item.getHandle() != null){
+        	
+        	url += "/" + item.getHandle();
+        }
        
-        if (requestItem.isAllfiles()){
+       if (requestItem.isAllfiles()){
             Bundle[] bundles = item.getBundles("ORIGINAL");
             for (int i = 0; i < bundles.length; i++){
                 Bitstream[] bitstreams = bundles[i].getBitstreams();
                 for (int k = 0; k < bitstreams.length; k++){
-                    if (!bitstreams[k].getFormat().isInternal() /*&& RequestItemManager.isRestricted(context, bitstreams[k])*/){
-                        email.addAttachment(BitstreamStorageManager.retrieve(context, bitstreams[k].getID()), bitstreams[k].getName(), bitstreams[k].getFormat().getMIMEType());
+                    if (!bitstreams[k].getFormat().isInternal() ){
+                    	url += "/" + bitstreams[k].getName() + "?bitstreamID=" + bitstreams[k].getID() + "&token=" + token;
+                    	content += "\n" + url ;
+                        //email.addAttachment(BitstreamStorageManager.retrieve(context, bitstreams[k].getID()), bitstreams[k].getName(), bitstreams[k].getFormat().getMIMEType());
                     }
                 }
             }
         } else {
+        	
             Bitstream bit = Bitstream.find(context,requestItem.getBitstreamId());
-            email.addAttachment(BitstreamStorageManager.retrieve(context, requestItem.getBitstreamId()), bit.getName(), bit.getFormat().getMIMEType());
+            url += "/" + bit.getName() + "?bitstreamID=" + bit.getID() + "&token=" + token;
+        	content += "\n" + url ;
+            //email.addAttachment(BitstreamStorageManager.retrieve(context, requestItem.getBitstreamId()), bit.getName(), bit.getFormat().getMIMEType());
         }     
-        
+       
+       email.setContent(content);
+       
         email.send();
 
         requestItem.setDecision_date(new Date());
