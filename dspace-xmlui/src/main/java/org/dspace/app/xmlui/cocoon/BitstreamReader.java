@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Map;
 
 import javax.mail.internet.MimeUtility;
@@ -29,6 +30,7 @@ import org.apache.cocoon.environment.http.HttpResponse;
 import org.apache.cocoon.reading.AbstractReader;
 import org.apache.cocoon.util.ByteRange;
 import org.apache.commons.lang.StringUtils;
+import org.dspace.app.requestitem.RequestItem;
 import org.dspace.app.xmlui.utils.AuthenticationUtil;
 import org.dspace.app.xmlui.utils.ContextUtil;
 import org.dspace.authorize.AuthorizeException;
@@ -43,6 +45,9 @@ import org.dspace.core.Constants;
 import org.dspace.core.Context;
 import org.dspace.disseminate.CitationDocument;
 import org.dspace.handle.HandleManager;
+import org.dspace.storage.bitstore.BitstreamStorageManager;
+import org.dspace.storage.rdbms.DatabaseManager;
+import org.dspace.storage.rdbms.TableRow;
 import org.dspace.usage.UsageEvent;
 import org.dspace.utils.DSpace;
 import org.xml.sax.SAXException;
@@ -196,6 +201,15 @@ public class BitstreamReader extends AbstractReader implements Recyclable
         
             this.isSpider = par.getParameter("userAgent", "").equals("spider");
 
+            String token = request.getParameter("token");
+            String bstreamid = request.getParameter("bitstreamID");
+            if(bitstreamID == -1 && bstreamid != null){
+                bitstreamID = Integer.valueOf(bstreamid);
+            }
+
+            log.debug("setup: token " + token);
+            log.debug("setup: bitstreamID " + bitstreamID);
+
             // Resolve the bitstream
             Bitstream bitstream = null;
             DSpaceObject dso = null;
@@ -281,6 +295,23 @@ public class BitstreamReader extends AbstractReader implements Recyclable
 
             // Is there a User logged in and does the user have access to read it?
             boolean isAuthorized = AuthorizeManager.authorizeActionBoolean(context, bitstream, Constants.READ);
+
+            // if the action is not authorised there may be special access granted by the help desk or author.
+            if (!isAuthorized) {
+                log.debug("setup: is not authorised");
+                // if there is a token look up and see if this is valid
+                if (token != null && !token.equals("")) {
+                    RequestItem requestItem = RequestItem.findByToken(context, token);
+                    if (requestItem != null) {
+                        isAuthorized = true;
+                    }
+                } else {
+                    log.debug("setup: no token found");
+                }
+            } else {
+                log.debug("setup: is authorised");
+            }
+
             if (item != null && item.isWithdrawn() && !AuthorizeManager.isAdmin(context))
             {
                 isAuthorized = false;
@@ -369,7 +400,13 @@ public class BitstreamReader extends AbstractReader implements Recyclable
 
                 //End of CitationDocument
             } else {
-                this.bitstreamInputStream = bitstream.retrieve();
+                if (isAuthorized && token != null) {
+                    // special case where the anonymous user has been given a token to enable a download to take place
+                    TableRow row = DatabaseManager.find(context, "bitstream", bitstreamID);
+                    this.bitstreamInputStream = BitstreamStorageManager.retrieve(context, row.getIntColumn("bitstream_id"));
+                } else {
+                    this.bitstreamInputStream = bitstream.retrieve();
+                }
                 this.bitstreamSize = bitstream.getSize();
             }
 
