@@ -186,7 +186,7 @@ public class ItemRequestResponseAction extends AbstractAction
     	
     	Email email = new Email();
         email.setSubject(subject);
-        String content = "{0}";
+        String content = title + "\nYou can download the reqested dataset(s) from the url(s) below \n";
        
 		email.addRecipient(requestItem.getReqEmail());
         email.addArgument(message);
