@@ -35,7 +35,7 @@
 	<!-- Prefixing dc.type -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element/doc:field/text()">
 		<xsl:call-template name="addPrefix">
-			<xsl:with-param name="value" select="." />
+			<xsl:with-param name="value" select="translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
 			<xsl:with-param name="prefix" select="'info:eu-repo/semantics/'"></xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
@@ -46,21 +46,19 @@
 	<!-- Replacing -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field/text()">
 		<xsl:choose>
-			<xsl:when test="contains(., 'open access')">
-				<xsl:text>info:eu-repo/semantics/openAccess</xsl:text>
-			</xsl:when>
-			<xsl:when test="contains(., 'openAccess')">
-				<xsl:text>info:eu-repo/semantics/openAccess</xsl:text>
-			</xsl:when>
+			
 			<xsl:when test="contains(., 'restrictedAccess')">
 				<xsl:text>info:eu-repo/semantics/restrictedAccess</xsl:text>
 			</xsl:when>
 			<xsl:when test="contains(., 'embargoedAccess')">
 				<xsl:text>info:eu-repo/semantics/embargoedAccess</xsl:text>
 			</xsl:when>
-			<xsl:otherwise>
-				<xsl:text>info:eu-repo/semantics/restrictedAccess</xsl:text>
+			<xsl:otherwise test="contains(., 'openAccess')">
+				<xsl:text>info:eu-repo/semantics/openAccess</xsl:text>
 			</xsl:otherwise>
+		<!--  	<xsl:otherwise>
+				<xsl:text>info:eu-repo/semantics/restrictedAccess</xsl:text>
+			</xsl:otherwise>-->
 		</xsl:choose>
 	</xsl:template>
 
