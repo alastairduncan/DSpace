@@ -36,7 +36,7 @@
 	<!-- Prefixing dc.type -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element/doc:field/text()">
 		<xsl:call-template name="addPrefix">
-			<xsl:with-param name="value" select="." />
+			<xsl:with-param name="value" select="translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
 			<xsl:with-param name="prefix" select="'info:eu-repo/semantics/'"></xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
@@ -46,7 +46,11 @@
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:element" />
 	<!-- Replacing -->
 	<xsl:template match="/doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element/doc:field/text()">
-		<xsl:text>info:eu-repo/semantics/openAccess</xsl:text>
+	<xsl:choose>
+			<xsl:when test="contains(., 'openAccess')">
+				<xsl:text>open access</xsl:text>
+			</xsl:when>
+			</xsl:choose>
 	</xsl:template>
 	
 
