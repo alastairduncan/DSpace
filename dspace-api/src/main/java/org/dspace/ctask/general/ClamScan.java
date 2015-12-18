@@ -251,7 +251,7 @@ public class ClamScan extends AbstractCurationTask
         }
         catch (IOException e)
         {
-            log.error("Error writing INSTREAM command . . .");
+            log.error("Error writing INSTREAM command . . ." + e.getMessage());
             return Curator.CURATE_ERROR;
         }
         int read = DEFAULT_CHUNK_SIZE;
@@ -263,7 +263,7 @@ public class ClamScan extends AbstractCurationTask
             }
             catch (IOException e)
             {
-                log.error("Failed attempting to read the InputStream . . . ");
+                log.error("Failed attempting to read the InputStream . . . " + e.getMessage());
                 return Curator.CURATE_ERROR;
             }
             if (read == -1)
@@ -277,7 +277,7 @@ public class ClamScan extends AbstractCurationTask
             }
             catch (IOException e)
             {
-                log.error("Could not write to the socket . . . ");
+                log.error("Could not write to the socket . . . " + e.getMessage());
                 return Curator.CURATE_ERROR;
             }
         }
@@ -288,7 +288,7 @@ public class ClamScan extends AbstractCurationTask
         }
         catch (IOException e)
         {
-            log.error("Error writing zero-length chunk to socket") ;
+            log.error("Error writing zero-length chunk to socket " + e.getMessage()) ;
             return Curator.CURATE_ERROR;
         }
         try
@@ -298,7 +298,7 @@ public class ClamScan extends AbstractCurationTask
         }
         catch (IOException e)
         {
-            log.error( "Error reading result from socket");
+            log.error( "Error reading result from socket " + e.getMessage());
             return Curator.CURATE_ERROR;
         }
         
