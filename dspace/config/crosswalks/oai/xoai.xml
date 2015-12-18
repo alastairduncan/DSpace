@@ -73,7 +73,7 @@
             <Transformer ref="openaireTransformer"/>
             <!-- OpenAIRE filter -->
             <Filter ref="openAireFilter"/>
-            <!-- Just an alias, in fact it returns all items within the driver context -->
+            <!-- Just an alias, in fact it returns all items within the openaire context -->
             <Set ref="openaireSet"/>
             <!-- Metadata Formats -->
             <Format ref="oaidc"/>
@@ -351,6 +351,7 @@
                     <string>doctoralThesis</string>
                     <string>book</string>
                     <string>bookPart</string>
+                    <string>Dataset</string>
                     <string>review</string>
                     <string>conferenceObject</string>
                     <string>lecture</string>
@@ -372,11 +373,12 @@
             <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
             <Configuration>
                 <string name="field">dc.rights</string>
-                <string name="operator">contains</string>
-                <list>
-                    <string>open access</string>
-                    <string>openAccess</string>
-                </list>
+                <string name="operator">ends_with</string>
+                <string name="value" >openAccess</string> 
+                <!-- <list>
+                    <string name="value" >open access</string>
+                   <string name="value" >openAccess</string>
+                </list>-->
             </Configuration>
         </CustomCondition>
 
@@ -400,7 +402,7 @@
             <Configuration>
                 <string name="field">dc.relation</string>
                 <string name="operator">starts_with</string>
-                <string name="value">info:eu-repo/grantAgreement/EC/FP</string>
+                <string name="value">info:eu-repo/grantAgreement</string>
             </Configuration>
         </CustomCondition>
     </Filters>
