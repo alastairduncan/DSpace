@@ -167,7 +167,16 @@
             <type>jar</type>
             <classifier>classes</classifier>
         </dependency>
-
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>1.19</version>
+        </dependency>
+        <dependency>
+        <groupId>org.dspace</groupId>
+    <artifactId>dspace-rest</artifactId>
+    <version>5.6-SNAPSHOT</version>
+ </dependency>
    </dependencies>
 
 </project>

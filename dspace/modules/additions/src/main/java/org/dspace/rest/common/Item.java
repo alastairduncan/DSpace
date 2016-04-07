@@ -9,6 +9,7 @@ package org.dspace.rest.common;
 
 import org.apache.log4j.Logger;
 import org.dspace.app.util.MetadataExposure;
+import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.content.Bundle;
 import org.dspace.content.Metadatum;
@@ -189,4 +190,6 @@ public class Item extends DSpaceObject {
 	public void setBitstreams(List<Bitstream> bitstreams) {
 		this.bitstreams = bitstreams;
 	}
+
+	
 }
