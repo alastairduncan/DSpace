@@ -29,3 +29,5 @@ META-INF/
 
 ##Mac noise
 .DS_Store
+/build.properties.bak
+/.gitignore
