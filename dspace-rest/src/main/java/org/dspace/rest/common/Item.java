@@ -9,6 +9,7 @@ package org.dspace.rest.common;
 
 import org.apache.log4j.Logger;
 import org.dspace.app.util.MetadataExposure;
+import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.content.Bundle;
 import org.dspace.content.Metadatum;
@@ -63,7 +64,11 @@ public class Item extends DSpaceObject {
             Metadatum[] dcvs = item.getMetadata(org.dspace.content.Item.ANY, org.dspace.content.Item.ANY, org.dspace.content.Item.ANY, org.dspace.content.Item.ANY);
             for (Metadatum dcv : dcvs) {
                 if (!MetadataExposure.isHidden(context, dcv.schema, dcv.element, dcv.qualifier)) {
-                    metadata.add(new MetadataEntry(dcv.getField(), dcv.value, dcv.language));
+                	MetadataEntry mentry = new MetadataEntry(dcv.getField(), dcv.value, dcv.language);
+                	if( dcv.authority != null){
+                		mentry.setAuthority(dcv.authority);
+                	}
+                	metadata.add(mentry);
                 }
             }
         } else {
@@ -185,4 +190,6 @@ public class Item extends DSpaceObject {
 	public void setBitstreams(List<Bitstream> bitstreams) {
 		this.bitstreams = bitstreams;
 	}
+
+	
 }
