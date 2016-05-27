@@ -30,6 +30,7 @@
             <list>
                 <bean class="org.dspace.authority.orcid.Orcidv2AuthorityValue"/>
                 <bean class="org.dspace.authority.PersonAuthorityValue"/>
+                <bean class="org.dspace.authority.fundref.FundrefAuthorityValue"/>
             </list>
         </property>
         <property name="fieldDefaults">
@@ -46,5 +47,9 @@
         <constructor-arg value="https://pub.orcid.org/v2.1"/>
     </bean>
 
+    <alias name="FundrefSource" alias="FundrefAuthoritySource"/>
+    <bean name="FundrefSource" class="org.dspace.authority.fundref.FundrefAuthority">
+        <constructor-arg value="https://api.crossref.org/funders"/>
+    </bean>
 
 </beans>
