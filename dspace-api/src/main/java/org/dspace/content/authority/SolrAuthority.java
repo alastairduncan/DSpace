@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.CommonParams;
@@ -35,8 +36,12 @@ import java.util.Map;
 public class SolrAuthority implements ChoiceAuthority {
 
     private static final Logger log = Logger.getLogger(SolrAuthority.class);
-    protected SolrAuthorityInterface source = new DSpace().getServiceManager().getServiceByName("AuthoritySource", SolrAuthorityInterface.class);
+    protected SolrAuthorityInterface source;
     private boolean externalResults = false;
+
+    public SolrAuthority() {
+        this.source = new DSpace().getServiceManager().getServiceByName("AuthoritySource", SolrAuthorityInterface.class);
+    }
 
     public Choices getMatches(String field, String text, int collection, int start, int limit, String locale, boolean bestMatch) {
         if(limit == 0)
@@ -111,13 +116,13 @@ public class SolrAuthority implements ChoiceAuthority {
 
                 if (externalResults && StringUtils.isNotBlank(text)) {
                     int sizeFromSolr = alreadyPresent.size();
-                    int maxExternalResults = limit <= 10 ? Math.max(limit - sizeFromSolr, 2) : Math.max(limit - 10 - sizeFromSolr, 2) + limit - 10;
+                    int maxExternalResults = limit <= 10 ? Math.max(limit - sizeFromSolr, 2) : Math.max(limit - 10 - sizeFromSolr, 2) + 10;
                     addExternalResults(text, choices, alreadyPresent, maxExternalResults);
                 }
 
 
                 // hasMore = (authDocs.size() == (limit + 1));
-                hasMore = true;
+                hasMore = false;
             }
 
 
@@ -196,7 +201,7 @@ public class SolrAuthority implements ChoiceAuthority {
                 log.debug("requesting label for key " + key + " using locale " + locale);
             }
             SolrQuery queryArgs = new SolrQuery();
-            queryArgs.setQuery("id:" + key);
+            queryArgs.setQuery("id:" + ClientUtils.escapeQueryChars(key));
             queryArgs.setRows(1);
             QueryResponse searchResponse = getSearchService().search(queryArgs);
             SolrDocumentList docs = searchResponse.getResults();
