@@ -220,6 +220,9 @@ public final class ChoiceAuthorityManager
         if (externalInput && ma instanceof SolrGtrAuthority) {
             ((SolrGtrAuthority)ma).addExternalResultsInNextMatches();
         }
+        if (externalInput && ma instanceof SolrFundrefAuthority) {
+            ((SolrFundrefAuthority)ma).addExternalResultsInNextMatches();
+        }
         return ma.getMatches(fieldKey, query, collection, start, limit, locale);
     }
 

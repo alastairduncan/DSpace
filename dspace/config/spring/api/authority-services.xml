@@ -31,7 +31,7 @@
               <bean class="org.dspace.authority.PersonAuthorityValue"/>
                 <bean class="org.dspace.authority.orcid.OrcidAuthorityValue"/>
                 <bean class="org.dspace.authority.gtr.GtrAuthorityValue"/>
-               
+                <bean class="org.dspace.authority.fundref.FundrefAuthorityValue"/>
             </list>
         </property>
         <property name="fieldDefaults">
@@ -44,6 +44,9 @@
                 </entry>
                 <entry key="dc_project_id">
                     <bean class="org.dspace.authority.AuthorityValue"/>
+                </entry>
+                <entry key="fundref_funder-name">
+                    <bean class="org.dspace.authority.fundref.FundrefAuthorityValue"/>
                 </entry>
             </map>
         </property>
@@ -61,4 +64,7 @@
     <bean name="OrcidSource" class="org.dspace.authority.orcid.Orcid">
         <constructor-arg value="http://pub.orcid.org"/>
     </bean>
+
+    <alias name="FundrefSource" alias="FundrefAuthoritySource"/>
+    <bean name="FundrefSource" class="org.dspace.authority.fundref.FundrefAuthority"/>
 </beans>
