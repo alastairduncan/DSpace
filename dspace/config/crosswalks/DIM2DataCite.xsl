@@ -23,9 +23,9 @@
     <!-- DO NOT CHANGE ANYTHING BELOW THIS LINE EXCEPT YOU REALLY KNOW WHAT YOU ARE DOING! -->
     
     <!-- We need the prefix to determine DOIs that were minted by ourself. -->
-    <xsl:param name="prefix">10.5072/dspace-</xsl:param>
+    <xsl:param name="prefix">10.5286/edata/</xsl:param>
     <!-- The content of the following parameter will be used as element publisher. -->
-    <xsl:param name="publisher">My University</xsl:param>
+    <xsl:param name="publisher">Science and Technology Facilities Council</xsl:param>
     <!-- The content of the following variable will be used as element contributor with contributorType datamanager. -->
     <xsl:variable name="datamanager"><xsl:value-of select="$publisher" /></xsl:variable>
     <!-- The content of the following variable will be used as element contributor with contributorType hostingInstitution. -->
