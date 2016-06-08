@@ -126,6 +126,7 @@
                     <xsl:call-template name="itemSummaryView-DIM-abstract"/>
                     <xsl:call-template name="itemSummaryView-DIM-URI"/>
                     <xsl:call-template name="itemSummaryView-collections"/>
+                    <xsl:call-template name="itemSummaryView-DIM-funders"/>
                     <div class="simple-item-view-collections item-page-field-wrapper table">
                         <h5>Is referenced by:</h5>
                         <xsl:apply-templates mode="itemIsReferencedByView-DIM"/>
@@ -453,6 +454,20 @@
                 <xsl:text>)</xsl:text>
             </a>
         </div>
+    </xsl:template>
+
+    <xsl:template name="itemSummaryView-DIM-funders">
+        <xsl:if test="dim:field[@element='contributor'][@qualifier='funder' and descendant::text()]">
+            <div class="simple-item-view-funders item-page-field-wrapper table">
+                <h5>Funders</h5>
+                <xsl:for-each select="dim:field[@element='contributor'][@qualifier='funder']">
+                    <xsl:copy-of select="./node()"/>
+                    <xsl:if test="count(following-sibling::dim:field[@element='contributor' and @qualifier='funder']) != 0">
+                        <br/>
+                    </xsl:if>
+                </xsl:for-each>
+            </div>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="dim:dim" mode="itemDetailView-DIM">

@@ -184,6 +184,17 @@ it, please enter the types and the actual numbers or codes.</hint>
          <hint>Select the language of the main content of the item.  If the language does not appear in the list, please select 'Other'.  If the content does not really have a language (for example, if it is a dataset or an image) please select 'N/A'.</hint>
          <required></required>
        </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>funder</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Funders:</label>
+         <input-type>onebox</input-type>
+         <hint>Enter a funder name and use the lookup to match known funders from Crossref.</hint>
+         <required></required>
+       </field>
      </page>
 
      <page number="2">
