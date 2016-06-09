@@ -10,6 +10,7 @@ package org.dspace.content.authority;
 import org.dspace.authority.AuthoritySearchService;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.fundref.FundrefAuthority;
+import org.dspace.content.authority.AuthorityVariantsSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -33,7 +34,7 @@ import java.util.Map;
  * @author Ben Bosman (ben at atmire dot com)
  * @author Mark Diggory (markd at atmire dot com)
  */
-public class SolrFundrefAuthority implements ChoiceAuthority {
+public class SolrFundrefAuthority implements AuthorityVariantsSupport, ChoiceAuthority {
 
     private static final Logger log = Logger.getLogger(SolrAuthority.class);
     private FundrefAuthority source = new DSpace().getServiceManager().getServiceByName("FundrefAuthoritySource", FundrefAuthority.class);
@@ -255,5 +256,49 @@ public class SolrFundrefAuthority implements ChoiceAuthority {
 
     public void addExternalResultsInNextMatches() {
         this.externalResults = true;
+    }
+
+    public List<String> getVariants(String key, String locale) {
+	List<String> list = new ArrayList<String>();
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("requesting variants for key " + key + " using locale " + locale);
+            }
+            SolrQuery queryArgs = new SolrQuery();
+            queryArgs.setQuery("id:" + ClientUtils.escapeQueryChars(key));
+            queryArgs.setRows(1);
+            QueryResponse searchResponse = getSearchService().search(queryArgs);
+            SolrDocumentList docs = searchResponse.getResults();
+            if (docs.getNumFound() == 1) {
+                try {
+                    for (Object o : docs.get(0).getFieldValues("all_labels_" + locale)) {
+                        list.add((String) o);
+                    }
+                    return list;
+                } catch (Exception e) {
+                    //ok to fail here
+                }
+                try {
+                    for (Object o : docs.get(0).getFieldValues("all_labels")) {
+                        list.add((String) o);
+                    }
+                    return list;
+                } catch (Exception e) {
+                    log.error("couldn't get field value for key " + key,e);
+                }
+                try {
+                    for (Object o : docs.get(0).getFieldValues("all_labels_en")) {
+                        list.add((String) o);
+                    }
+                    return list;
+                } catch (Exception e) {
+                    log.error("couldn't get field value for key " + key,e);
+                }
+            }
+        } catch (Exception e) {
+            log.error("error occurred while trying to get variants for key " + key,e);
+        }
+
+        return list;
     }
 }
