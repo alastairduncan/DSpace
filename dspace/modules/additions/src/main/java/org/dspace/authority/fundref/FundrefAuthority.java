@@ -104,14 +104,43 @@ public class FundrefAuthority
 			return new FundrefAuthorityValue();
 
 		String name = null;
+		String shortName = null;
 
 		try {
 			JSONObject obj = new JSONObject(content);
 			name = obj.getJSONObject("prefLabel").getJSONObject("Label").getJSONObject("literalForm").getString("content");
+
+			List<JSONObject> labels = new ArrayList();
+
+			JSONArray arr = obj.optJSONArray("altLabel");
+			if (arr != null) {
+				for (int i = 0; i < arr.length(); i++) {
+					labels.add(arr.getJSONObject(i).getJSONObject("Label"));
+				}
+			} else {
+				JSONObject altLabel = obj.optJSONObject("altLabel");
+				if (altLabel != null) {
+					labels.add(altLabel.getJSONObject("Label"));
+				}
+			}
+
+			for (JSONObject label : labels) {
+				JSONObject usageFlag = label.optJSONObject("usageFlag");
+				if (usageFlag == null) {
+					continue;
+				}
+
+				String resource = usageFlag.optString("resource");
+				if (resource.equals("http://data.fundref.org/vocabulary/abbrevName")
+				 || resource.equals("http://data.crossref.org/fundingdata/vocabulary/abbrevName")) {
+					shortName = label.getJSONObject("literalForm").getString("content");
+					break;
+				}
+			}
 		} catch (JSONException e) {
 			log.error("Error decoding content from " + id, e);
 		}
 
-		return FundrefAuthorityValue.create(id, name);
+		return FundrefAuthorityValue.create(id, name, shortName);
 	}
 }
