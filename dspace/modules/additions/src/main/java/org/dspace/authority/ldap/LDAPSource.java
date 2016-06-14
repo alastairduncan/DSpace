@@ -7,14 +7,15 @@
  */
 package org.dspace.authority.ldap;
 
+import org.dspace.authority.AuthoritySource;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.ldap.LDAPAuthority;
 
 import java.util.List;
 
 
-public abstract class LDAPSource {
-
+public abstract class LDAPSource implements AuthoritySource
+{
     protected ActiveDirectoryLDAP adLDAP;
 
     public LDAPSource() {

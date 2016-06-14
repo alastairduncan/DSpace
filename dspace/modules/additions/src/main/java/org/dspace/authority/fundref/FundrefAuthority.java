@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.dspace.authority.AuthoritySource;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.utils.DSpace;
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class FundrefAuthority
+public class FundrefAuthority implements AuthoritySource
 {
 	private static Logger log = Logger.getLogger(FundrefAuthority.class);
 
@@ -53,7 +54,7 @@ public class FundrefAuthority
 		return content;
 	}
 
-	//@Override
+	@Override
 	public List<AuthorityValue> queryAuthorities(String text, int max) {
 		List<AuthorityValue> values = new ArrayList<AuthorityValue>();
 
@@ -97,7 +98,7 @@ public class FundrefAuthority
 		return values;
 	}
 
-	//@Override
+	@Override
 	public AuthorityValue queryAuthorityID(String id) {
 		String content = getUrlContent(id);
 		if (content == null)
