@@ -7,18 +7,14 @@
  */
 package org.dspace.content.authority;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.params.CommonParams;
 import org.dspace.authority.AuthoritySearchService;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.SolrAuthorityInterface;
-import org.dspace.core.ConfigurationManager;
 import org.dspace.utils.DSpace;
 
 import java.util.ArrayList;
@@ -47,84 +43,11 @@ public class SolrAuthority implements ChoiceAuthority {
         if(limit == 0)
             limit = 10;
 
-        SolrQuery queryArgs = new SolrQuery();
-        if (text == null || text.trim().equals("")) {
-            queryArgs.setQuery("*:*");
-        } else {
-            String searchField = "value";
-            String localSearchField = "";
-            try {
-                //A downside of the authors is that the locale is sometimes a number, make sure that this isn't one
-                Integer.parseInt(locale);
-                locale = null;
-            } catch (NumberFormatException e) {
-                //Everything is allright
-            }
-            if (locale != null && !"".equals(locale)) {
-                localSearchField = searchField + "_" + locale;
-            }
-
-            String query = "(" + toQuery(searchField, text) + ") ";
-            if (!localSearchField.equals("")) {
-                query += " or (" + toQuery(localSearchField, text) + ")";
-            }
-            queryArgs.setQuery(query);
-        }
-
-        queryArgs.addFilterQuery("field:" + field);
-        queryArgs.set(CommonParams.START, start);
-        //We add one to our facet limit so that we know if there are more matches
-        int maxNumberOfSolrResults = limit + 1;
-        if(externalResults){
-            maxNumberOfSolrResults = ConfigurationManager.getIntProperty("xmlui.lookup.select.size", 12);
-        }
-        queryArgs.set(CommonParams.ROWS, maxNumberOfSolrResults);
-
-        String sortField = "value";
-        String localSortField = "";
-        if (StringUtils.isNotBlank(locale)) {
-            localSortField = sortField + "_" + locale;
-            queryArgs.setSortField(localSortField, SolrQuery.ORDER.asc);
-        } else {
-            queryArgs.setSortField(sortField, SolrQuery.ORDER.asc);
-        }
-
         Choices result;
         try {
             int max = 0;
             boolean hasMore = false;
-            QueryResponse searchResponse = getSearchService().search(queryArgs);
-            SolrDocumentList authDocs = searchResponse.getResults();
-            ArrayList<Choice> choices = new ArrayList<Choice>();
-            if (authDocs != null) {
-                max = (int) searchResponse.getResults().getNumFound();
-                int maxDocs = authDocs.size();
-                if (limit < maxDocs)
-                    maxDocs = limit;
-                List<AuthorityValue> alreadyPresent = new ArrayList<AuthorityValue>();
-                for (int i = 0; i < maxDocs; i++) {
-                    SolrDocument solrDocument = authDocs.get(i);
-                    if (solrDocument != null) {
-                        AuthorityValue val = AuthorityValue.fromSolr(solrDocument);
-
-                        Map<String, String> extras = val.choiceSelectMap();
-                        extras.put("insolr", val.getId());
-                        choices.add(new Choice(val.getId(), val.getValue(), val.getValue(), extras));
-                        alreadyPresent.add(val);
-                    }
-                }
-
-                if (externalResults && StringUtils.isNotBlank(text)) {
-                    int sizeFromSolr = alreadyPresent.size();
-                    int maxExternalResults = limit <= 10 ? Math.max(limit - sizeFromSolr, 2) : Math.max(limit - 10 - sizeFromSolr, 2) + 10;
-                    addExternalResults(text, choices, alreadyPresent, maxExternalResults);
-                }
-
-
-                // hasMore = (authDocs.size() == (limit + 1));
-                hasMore = false;
-            }
-
+            List<Choice> choices = getExternalResults(text, limit);
 
             int confidence;
             if (choices.size() == 0)
@@ -141,6 +64,23 @@ public class SolrAuthority implements ChoiceAuthority {
         }
 
         return result;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    private List<Choice> getExternalResults(String text, int max) {
+        List<Choice> choices = new ArrayList<Choice>();
+
+        if (source == null) {
+            log.warn("external source for authority not configured");
+            return choices;
+        }
+
+        List<AuthorityValue> values = source.queryAuthorities(text, max);
+
+        for (AuthorityValue val : values) {
+            choices.add(new Choice(val.generateString(), val.getValue(), val.getValue(), val.choiceSelectMap()));
+        }
+
+        return choices;
     }
 
     protected void addExternalResults(String text, ArrayList<Choice> choices, List<AuthorityValue> alreadyPresent, int max) {

@@ -17,17 +17,27 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authority.AuthorityValue;
+import org.dspace.authority.SolrAuthorityInterface;
 import org.dspace.utils.DSpace;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class FundrefAuthority
+public class FundrefAuthority implements SolrAuthorityInterface
 {
 	private static Logger log = Logger.getLogger(FundrefAuthority.class);
 
 	private static FundrefAuthority fundrefAuthority;
+
+	public void init() {
+	}
+
+	public FundrefAuthority() {
+	}
+
+	public FundrefAuthority(String url) {
+	}
 
 	public static FundrefAuthority getFundrefAuthority() {
 		if (fundrefAuthority == null) {
@@ -53,7 +63,7 @@ public class FundrefAuthority
 		return content;
 	}
 
-	//@Override
+	@Override
 	public List<AuthorityValue> queryAuthorities(String text, int max) {
 		List<AuthorityValue> values = new ArrayList<AuthorityValue>();
 
@@ -97,7 +107,7 @@ public class FundrefAuthority
 		return values;
 	}
 
-	//@Override
+	@Override
 	public AuthorityValue queryAuthorityID(String id) {
 		String content = getUrlContent(id);
 		if (content == null)
