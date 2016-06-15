@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.dspace.authority.AuthoritySource;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.utils.DSpace;
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class FundrefAuthority
+public class FundrefAuthority implements AuthoritySource
 {
 	private static Logger log = Logger.getLogger(FundrefAuthority.class);
 
@@ -53,7 +54,7 @@ public class FundrefAuthority
 		return content;
 	}
 
-	//@Override
+	@Override
 	public List<AuthorityValue> queryAuthorities(String text, int max) {
 		List<AuthorityValue> values = new ArrayList<AuthorityValue>();
 
@@ -97,21 +98,50 @@ public class FundrefAuthority
 		return values;
 	}
 
-	//@Override
+	@Override
 	public AuthorityValue queryAuthorityID(String id) {
 		String content = getUrlContent(id);
 		if (content == null)
 			return new FundrefAuthorityValue();
 
 		String name = null;
+		String shortName = null;
 
 		try {
 			JSONObject obj = new JSONObject(content);
 			name = obj.getJSONObject("prefLabel").getJSONObject("Label").getJSONObject("literalForm").getString("content");
+
+			List<JSONObject> labels = new ArrayList();
+
+			JSONArray arr = obj.optJSONArray("altLabel");
+			if (arr != null) {
+				for (int i = 0; i < arr.length(); i++) {
+					labels.add(arr.getJSONObject(i).getJSONObject("Label"));
+				}
+			} else {
+				JSONObject altLabel = obj.optJSONObject("altLabel");
+				if (altLabel != null) {
+					labels.add(altLabel.getJSONObject("Label"));
+				}
+			}
+
+			for (JSONObject label : labels) {
+				JSONObject usageFlag = label.optJSONObject("usageFlag");
+				if (usageFlag == null) {
+					continue;
+				}
+
+				String resource = usageFlag.optString("resource");
+				if (resource.equals("http://data.fundref.org/vocabulary/abbrevName")
+				 || resource.equals("http://data.crossref.org/fundingdata/vocabulary/abbrevName")) {
+					shortName = label.getJSONObject("literalForm").getString("content");
+					break;
+				}
+			}
 		} catch (JSONException e) {
 			log.error("Error decoding content from " + id, e);
 		}
 
-		return FundrefAuthorityValue.create(id, name);
+		return FundrefAuthorityValue.create(id, name, shortName);
 	}
 }

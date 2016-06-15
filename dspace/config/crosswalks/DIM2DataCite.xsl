@@ -15,7 +15,7 @@
     
     <!-- CONFIGURATION -->
     <!-- The content of the following variable will be used as element publisher. -->
-    <xsl:variable name="publisher">My University</xsl:variable>
+    <xsl:variable name="publisher">Science and Technology Facilities Council</xsl:variable>
     <!-- The content of the following variable will be used as element contributor with contributorType datamanager. -->
     <xsl:variable name="datamanager"><xsl:value-of select="$publisher" /></xsl:variable>
     <!-- The content of the following variable will be used as element contributor with contributorType hostingInstitution. -->

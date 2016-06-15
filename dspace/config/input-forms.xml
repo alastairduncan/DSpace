@@ -198,13 +198,13 @@ it, please enter the types and the actual numbers or codes.</hint>
        </field>-->
        
        <field>
-         <dc-schema>gtr</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier></dc-qualifier>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>funder</dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Gateway to research ID</label>
+         <label>Funders:</label>
          <input-type>onebox</input-type>
-         <hint>Enter the gateway to research project id.</hint>
+         <hint>Enter a funder name and use the lookup to match known funders from Crossref.</hint>
          <required></required>
        </field>
        

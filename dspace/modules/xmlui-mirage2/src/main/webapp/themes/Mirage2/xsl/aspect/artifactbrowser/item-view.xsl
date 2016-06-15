@@ -126,20 +126,18 @@
                     <xsl:call-template name="itemSummaryView-DIM-abstract"/>
                     <xsl:call-template name="itemSummaryView-DIM-URI"/>
                     <xsl:call-template name="itemSummaryView-collections"/>
+                    <xsl:call-template name="itemSummaryView-DIM-funders"/>
+
                    <!-- <div class="simple-item-view-collections item-page-field-wrapper table">
 	                	<h5>Organisational Units</h5>
                     <xsl:apply-templates mode="itemOrgUnitView-DIM"/>
                       </div>-->
                     <div class="simple-item-view-collections item-page-field-wrapper table">
-               			<h5>Gateway to research projects</h5>
-                    	<xsl:apply-templates mode="itemGTRView-DIM"/>
-                    </div>
-                    <div class="simple-item-view-collections item-page-field-wrapper table">
                			<h5>Is referenced by:</h5>
                     	<xsl:apply-templates mode="itemIsReferencedByView-DIM"/>
                     </div>
                     <div class="simple-item-view-collections item-page-field-wrapper table">
-               			<h5>Funders:</h5>
+               			<h5>Related records:</h5>
                     	<xsl:apply-templates mode="relatedView-DIM"/>
                     </div>
                 </div>
@@ -464,23 +462,26 @@
         </div>
     </xsl:template>
 
+    <xsl:template name="itemSummaryView-DIM-funders">
+        <xsl:if test="dim:field[@element='contributor'][@qualifier='funder' and descendant::text()]">
+            <div class="simple-item-view-funders item-page-field-wrapper table">
+                <h5>Funders</h5>
+                <xsl:for-each select="dim:field[@element='contributor'][@qualifier='funder']">
+                    <xsl:copy-of select="./node()"/>
+                    <xsl:if test="count(following-sibling::dim:field[@element='contributor' and @qualifier='funder']) != 0">
+                        <br/>
+                    </xsl:if>
+                </xsl:for-each>
+            </div>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="dim:dim" mode="itemDetailView-DIM">
         <xsl:call-template name="itemSummaryView-DIM-title"/>
         <div class="ds-table-responsive">
             <table class="ds-includeSet-table detailtable table table-striped table-hover">
                 <xsl:apply-templates mode="itemDetailView-DIM"/>
             </table>
-        </div>
-       <!--   <div>
-	        <xsl:text>This item is linked to these Organisational unit(s): </xsl:text>
-	        <br/>
-	        <xsl:apply-templates mode="itemOrgUnitView-DIM"/>
-        </div>
-         <br/>--> 
-        <div>
-	        <xsl:text>This item is linked to these Gateway to research project(s): </xsl:text>
-	        <br/>
-	        <xsl:apply-templates mode="itemGTRView-DIM"/>
         </div>
 
         <span class="Z3988">
@@ -509,18 +510,6 @@
 					<br/>
 				</xsl:if>
 			</xsl:if>    	
-	    </xsl:if>
-    </xsl:template>
-    
-    <xsl:template match="dim:field" mode="itemGTRView-DIM">
-	    <xsl:if test="./@mdschema = 'gtr'">
-		    <xsl:element name="a">
-			    <xsl:attribute name="href">
-			        <xsl:text>http://gtr.rcuk.ac.uk/search/project?term="</xsl:text><xsl:copy-of select="encoder:encode(string(./node()))"/><xsl:text>"</xsl:text>
-			    </xsl:attribute>
-			    <xsl:copy-of select="./node()"/>
-			</xsl:element>	
-			<br/>    	
 	    </xsl:if>
     </xsl:template>
     

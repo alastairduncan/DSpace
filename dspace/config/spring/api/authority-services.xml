@@ -45,7 +45,7 @@
                 <entry key="dc_project_id">
                     <bean class="org.dspace.authority.AuthorityValue"/>
                 </entry>
-                <entry key="fundref_funder-name">
+                <entry key="dc_contributor_funder">
                     <bean class="org.dspace.authority.fundref.FundrefAuthorityValue"/>
                 </entry>
             </map>
