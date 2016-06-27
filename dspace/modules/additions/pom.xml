@@ -103,25 +103,28 @@
             </exclusion>
          </exclusions>
       </dependency>
-      <dependency>
-            <groupId>org.apache.cocoon</groupId>
-            <artifactId>cocoon-core</artifactId>
-            <version>2.2.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.sf.ehcache</groupId>
-                    <artifactId>ehcache</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-         <!-- DSpace XMLUI API -->
-        <dependency>
-            <groupId>org.dspace</groupId>
-            <artifactId>dspace-xmlui</artifactId>
-            <type>jar</type>
-            <classifier>classes</classifier>
-        </dependency>
 
+      <!-- Local dependencies -->
+      <dependency>
+         <groupId>javax.xml.bind</groupId>
+         <artifactId>jaxb-api</artifactId>
+         <version>2.2.11</version>
+      </dependency>
+      <dependency>
+         <groupId>com.unboundid</groupId>
+         <artifactId>unboundid-ldapsdk</artifactId>
+         <version>3.0.0</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jvnet.jaxb2_commons</groupId>
+         <artifactId>jaxb2-basics-runtime</artifactId>
+         <version>0.9.4</version>
+      </dependency>
+      <dependency>
+         <groupId>org.json</groupId>
+         <artifactId>json</artifactId>
+         <version>20151123</version>
+      </dependency>
    </dependencies>
 
 </project>
