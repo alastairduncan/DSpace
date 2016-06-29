@@ -2505,4 +2505,11 @@
     <message key="xmlui.mirage2.choice-authority-control.loading">Loading...</message>
 
     <message key="xmlui.mirage2.item-list.thumbnail">Thumbnail</message>
+
+
+    <!-- Funder select box -->
+    <message key="xmlui.ChoiceLookupTransformer.field.dc_contributor_funder.title">Select Funder</message>
+    <message key="xmlui.ChoiceLookupTransformer.field.dc_contributor_funder.help">Select a funder from the list above or select 'Enter manually...' and type the name in the box below. Then click 'Add'.</message>
+    <message key="xmlui.ChoiceLookupTransformer.field.dc_contributor_funder.nonauthority">Enter manually...</message>
+
 </catalogue>
