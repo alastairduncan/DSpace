@@ -960,18 +960,6 @@
                         </label>
                     </xsl:if>
                     <div class="clearfix">
-                        <xsl:if test="contains(dri:params/@operations,'add')">
-                        <button type="submit" name="{concat('submit_',@n,'_add')}"
-                                class="ds-button-field btn btn-default pull-right ds-add-button">
-                            <xsl:if test="dri:params/@choicesPresentation = 'lookup'">
-                                <xsl:attribute name="style">
-                                    <xsl:text>display:none;</xsl:text>
-                                </xsl:attribute>
-                            </xsl:if>
-                            <!-- Make invisible if we have choice-lookup operation that provides its own Add. -->
-                            <i18n:text>xmlui.mirage2.forms.instancedCompositeFields.add</i18n:text>
-                        </button>
-                    </xsl:if>
 
                 <xsl:choose>
                     <!-- insert choice mechansim and/or Add button here -->
@@ -994,6 +982,19 @@
                         </xsl:call-template>
                     </xsl:when>
                 </xsl:choose>
+
+                    <xsl:if test="contains(dri:params/@operations,'add')">
+                        <button type="submit" name="{concat('submit_',@n,'_add')}"
+                                class="ds-button-field btn btn-default pull-right ds-add-button">
+                            <xsl:if test="dri:params/@choicesPresentation = 'lookup'">
+                                <xsl:attribute name="style">
+                                    <xsl:text>display:none;</xsl:text>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <!-- Make invisible if we have choice-lookup operation that provides its own Add. -->
+                            <i18n:text>xmlui.mirage2.forms.instancedCompositeFields.add</i18n:text>
+                        </button>
+                    </xsl:if>
                     </div>
                     </div>
                 </xsl:if>
