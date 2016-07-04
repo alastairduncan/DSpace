@@ -38,16 +38,6 @@
 
    <form name="traditional">
      <page number="1">
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>contributor</dc-element>
-         <dc-qualifier>author</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Authors</label>
-         <input-type>name</input-type>
-         <hint>Enter the names of the authors of this item.</hint>
-         <required></required>
-       </field>
 
        <field>
          <dc-schema>dc</dc-schema>
@@ -56,11 +46,11 @@
          <repeatable>false</repeatable>
          <label>Title</label>
          <input-type>onebox</input-type>
-         <hint>Enter the main title of the item.</hint>
-         <required>You must enter a main title for this item.</required>
+         <hint>Enter the title of the dataset.</hint>
+         <required>You must enter a title for this item.</required>
        </field>
 
-       <field>
+<!--   <field>
          <dc-schema>dc</dc-schema>
          <dc-element>title</dc-element>
          <dc-qualifier>alternative</dc-qualifier>
@@ -68,6 +58,40 @@
          <label>Other Titles</label>
          <input-type>onebox</input-type>
          <hint>If the item has any alternative titles, please enter them here.</hint>
+         <required></required>
+       </field> -->
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>contributor</dc-element>
+         <dc-qualifier>author</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Authors</label>
+         <input-type>name</input-type>
+         <hint>Enter the names of the people who created the dataset. Use the 'Lookup' button to find pepole in ORCID.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>description</dc-element>
+         <dc-qualifier>abstract</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Abstract</label>
+         <input-type>textarea</input-type>
+         <hint>Enter the abstract of the item. </hint>
+         <required>You must enter an abstract for this item.</required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>subject</dc-element>
+         <dc-qualifier>other</dc-qualifier>
+         <!-- An input-type of twobox MUST be marked as repeatable -->
+         <repeatable>true</repeatable>
+         <label>Subject Keywords</label>
+         <input-type>twobox</input-type>
+         <hint>Enter appropriate subject keywords or phrases. </hint>
          <required></required>
        </field>
 
@@ -78,89 +102,10 @@
          <repeatable>false</repeatable>
          <label>Date of Issue</label>
          <input-type>date</input-type>
-         <hint>Please give the date of previous publication or public distribution.
-                        You can leave out the day and/or month if they aren't
-                        applicable.</hint>
+         <hint>Please give the date of publication or public distribution.
+               You can leave out the day and/or month if they aren't
+               applicable. You must enter at least the year.</hint>
          <required>You must enter at least the year.</required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>publisher</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Publisher</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the name of the publisher of the previously issued instance of this item.</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier>citation</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Citation</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the standard citation for the previously issued instance of this item.</hint>
-         <required></required>
-       </field>
-
-     <!--<field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>ispartofseries</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Series/Report No.</label>
-         <input-type>series</input-type>
-         <hint>Enter the series and number assigned to this item by your community.</hint>
-         <required></required>
-       </field>--> 
-       
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier>isreferencedby</dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>Related publication persistent URL:</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the persistent id of an isReferencedBy publication e.g. http://purl.org/net/epubs/work/23647412</hint>
-         <required></required>
-       </field>
-       
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>relation</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
-         <label>OpenAIRE funders grant agreement URI</label>
-         <input-type>onebox</input-type>
-         <hint>Enter the grant agreement number in the format specified here: https://wiki.surfnet.nl/display/standards/info-eu-repo#info-eu-repo-GrantAgreementIdentifiers e.g. info:eu-repo/grantAgreement/EC/FP7/12345</hint>
-         <required></required>
-       </field>
-       
-        <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>rights</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Openaire rights</label>
-         <input-type value-pairs-name="rights">dropdown</input-type>
-         <hint>Select the access rights for this dataset as specified here: https://wiki.surfnet.nl/display/standards/info-eu-repo#info-eu-repo-AccessRights</hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>identifier</dc-element>
-         <dc-qualifier></dc-qualifier>
-         <!-- An input-type of qualdrop_value MUST be marked as repeatable -->
-         <repeatable>true</repeatable>
-         <label>Identifiers</label>
-         <input-type value-pairs-name="common_identifiers">qualdrop_value</input-type>
-         <hint>If the item has any identification numbers or codes associated with
-it, please enter the types and the actual numbers or codes.</hint>
-         <required></required>
        </field>
 
        <field>
@@ -185,39 +130,96 @@ it, please enter the types and the actual numbers or codes.</hint>
          <required></required>
        </field>
 
+     </page>
+     <page number="2">
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>publisher</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Publisher</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the name of the publisher of the dataset if it has previously been published elsewhere.</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier>citation</dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Citation</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the standard citation for the dataset if it has previously been published elsewhere.</hint>
+         <required></required>
+       </field>
+
+     <!--<field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>ispartofseries</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Series/Report No.</label>
+         <input-type>series</input-type>
+         <hint>Enter the series and number assigned to this item by your community.</hint>
+         <required></required>
+       </field>--> 
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier>isreferencedby</dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>Related publication persistent URL</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the persistent id of any publications that references this data; e.g. http://purl.org/net/epubs/work/23647412 or a DOI</hint>
+         <required></required>
+       </field>
+
+<!--   <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>relation</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>true</repeatable>
+         <label>OpenAIRE funders grant agreement URI</label>
+         <input-type>onebox</input-type>
+         <hint>Enter the grant agreement number in the format specified here: https://wiki.surfnet.nl/display/standards/info-eu-repo#info-eu-repo-GrantAgreementIdentifiers e.g. info:eu-repo/grantAgreement/EC/FP7/12345</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>rights</dc-element>
+         <dc-qualifier></dc-qualifier>
+         <repeatable>false</repeatable>
+         <label>Openaire rights</label>
+         <input-type value-pairs-name="rights">dropdown</input-type>
+         <hint>Select the access rights for this dataset as specified here: https://wiki.surfnet.nl/display/standards/info-eu-repo#info-eu-repo-AccessRights</hint>
+         <required></required>
+       </field>
+
+       <field>
+         <dc-schema>dc</dc-schema>
+         <dc-element>identifier</dc-element>
+         <dc-qualifier></dc-qualifier> -->
+         <!-- An input-type of qualdrop_value MUST be marked as repeatable -->
+<!--     <repeatable>true</repeatable>
+         <label>Identifiers</label>
+         <input-type value-pairs-name="common_identifiers">qualdrop_value</input-type>
+         <hint>If the item has any identification numbers or codes associated with
+it, please enter the types and the actual numbers or codes.</hint>
+         <required></required>
+       </field> -->
+
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>contributor</dc-element>
          <dc-qualifier>funder</dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Funders:</label>
+         <label>Funders</label>
          <input-type>onebox</input-type>
          <hint>Enter a funder name and use the lookup to match known funders from Crossref.</hint>
-         <required></required>
-       </field>
-     </page>
-
-     <page number="2">
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>subject</dc-element>
-         <dc-qualifier>other</dc-qualifier>
-         <!-- An input-type of twobox MUST be marked as repeatable -->
-         <repeatable>true</repeatable>
-         <label>Subject Keywords</label>
-         <input-type>twobox</input-type>
-         <hint>Enter appropriate subject keywords or phrases. </hint>
-         <required></required>
-       </field>
-
-       <field>
-         <dc-schema>dc</dc-schema>
-         <dc-element>description</dc-element>
-         <dc-qualifier>abstract</dc-qualifier>
-         <repeatable>false</repeatable>
-         <label>Abstract</label>
-         <input-type>textarea</input-type>
-         <hint>Enter the abstract of the item. </hint>
          <required></required>
        </field>
 
@@ -228,10 +230,11 @@ it, please enter the types and the actual numbers or codes.</hint>
          <repeatable>false</repeatable>
          <label>Sponsors</label>
          <input-type>textarea</input-type>
-         <hint>Enter the names of any sponsors and/or funding codes in the box. </hint>
+         <hint>Enter the names of any sponsors and/or extended funding information in the box. </hint>
          <required></required>
        </field>
 
+<!--
        <field>
          <dc-schema>dc</dc-schema>
          <dc-element>description</dc-element>
@@ -242,6 +245,7 @@ it, please enter the types and the actual numbers or codes.</hint>
          <hint>Enter any other description or comments in this box. </hint>
          <required></required>
        </field>
+-->
      </page>
    </form>
 
@@ -305,8 +309,20 @@ it, please enter the types and the actual numbers or codes.</hint>
 
    <value-pairs value-pairs-name="common_types" dc-term="type">
      <pair>
+       <displayed-value>Collection</displayed-value>
+       <stored-value>Collection</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Dataset</displayed-value>
        <stored-value>Dataset</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Image</displayed-value>
+       <stored-value>Image</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Sound</displayed-value>
+       <stored-value>Sound</stored-value>
      </pair>
    </value-pairs>
    
