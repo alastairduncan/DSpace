@@ -697,30 +697,30 @@
         <footer>
                 <div class="row">
                     <hr/>
-                    <div class="col-xs-7 col-sm-8">
+                    <div class="col-xs-12 col-sm-12">
                         <div>
-                            <a href="http://www.dspace.org/" target="_blank">DSpace software</a> copyright&#160;&#169;&#160;2002-2015&#160; <a href="http://www.duraspace.org/" target="_blank">DuraSpace</a>
+                            <a href="http://www.rcuk.ac.uk/" target="_blank"><img src="{$theme-path}/images/RCUK-logo.jpg" alt="Research Councils UK" /></a>
+                            <p>Science and Technology Facilities Council<br />Switchboard: 01793 442000</p>
                         </div>
                         <div class="hidden-print">
-                            <a>
-                                <xsl:attribute name="href">
-                                    <xsl:value-of
-                                            select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath'][not(@qualifier)]"/>
-                                    <xsl:text>/contact</xsl:text>
-                                </xsl:attribute>
-                                <i18n:text>xmlui.dri2xhtml.structural.contact-link</i18n:text>
-                            </a>
+                            <a href="http://www.stfc.ac.uk/about-us/contact-us/">Contact Us</a>
                             <xsl:text> | </xsl:text>
-                            <a>
-                                <xsl:attribute name="href">
-                                    <xsl:value-of
-                                            select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath'][not(@qualifier)]"/>
-                                    <xsl:text>/feedback</xsl:text>
-                                </xsl:attribute>
-                                <i18n:text>xmlui.dri2xhtml.structural.feedback-link</i18n:text>
-                            </a>
+                            <a href="http://www.stfc.ac.uk/about-us/privacy-statement/">Cookies &amp; Privacy</a>
+                            <xsl:text> | </xsl:text>
+                            <a href="http://www.stfc.ac.uk/about-us/terms-of-website-use-disclaimer/">Terms &amp; Conditions</a>
+                            <xsl:text> | </xsl:text>
+                            <a href="http://www.stfc.ac.uk/about-us/ynglc5b7n-a-stfc/">Cymraeg</a>
+                            <xsl:text> | </xsl:text>
+                            <a href="http://www.stfc.ac.uk/about-us/past-foi-requests/">FOI</a>
+                            <xsl:text> | </xsl:text>
+                            <a href="http://www.stfc.ac.uk/about-us/copyright/">Copyright</a>
+                            <xsl:text> | </xsl:text>
+                            <a href="http://www.stfc.ac.uk/about-us/site-map/">Sitemap</a>
+                            <xsl:text> | </xsl:text>
+                            <a href="http://www.stfc.ac.uk/about-us/accessibility/">Accessibility</a>
                         </div>
                     </div>
+
                 </div>
                 <!--Invisible link to HTML sitemap (for search engines) -->
                 <a class="hidden">
