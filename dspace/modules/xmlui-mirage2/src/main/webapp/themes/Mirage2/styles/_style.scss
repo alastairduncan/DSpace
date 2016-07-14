@@ -56,6 +56,10 @@ header .navbar-default{
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#114a8d', endColorstr='#022e67',GradientType=0 ); /* IE6-9 */
 }
 
+header .navbar-brand {
+    padding: 10px 15px;
+}
+
 header .navbar-brand img{
 	height: 70px;
 	padding: 0px 0px;
@@ -70,6 +74,11 @@ header .navbar-brand img{
   	background: linear-gradient(0deg, #245793, #3771b5); /* Standard syntax (must be last) */
   	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3771b5', endColorstr='#245793',GradientType=0 ); /* IE6-9 */
   }
+
+// This centres the breadcrumbs vertically within the banner
+.trail-wrapper .breadcrumb {
+    padding-top: 14px;
+}
   
 .trail-wrapper .breadcrumb a{
 	color: #999;

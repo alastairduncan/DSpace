@@ -337,7 +337,7 @@
                             <span class="icon-bar"></span>
                         </button>
 
-                        <a href="{$context-path}/" class="navbar-brand">
+                        <a href="http://www.stfc.ac.uk/" class="navbar-brand">
                             <img src="{$theme-path}/images/STFC-Logo.png" />
                         </a>
 
