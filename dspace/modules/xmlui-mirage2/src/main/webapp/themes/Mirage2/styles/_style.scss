@@ -13,10 +13,10 @@
  
  #frame {margin:0 auto; width:800px; text-align:left;}
  
- /* Uploader: Drag & Drop */
+/* Uploader: Drag & Drop */
 .resumable-error {display:none; font-size:14px; font-style:italic;}
-.resumable-drop {padding:15px; font-size:13px; text-align:center; color:#666; font-weight:bold;background-color:#eee; border:2px dashed #aaa; border-radius:10px; margin-top:40px; z-index:9999; display:none;}
-.resumable-dragover {padding:30px; color:#555; background-color:#ddd; border:1px solid #999;}
+.resumable-drop {padding:15px; font-size:13px; text-align:center; color:#666; font-weight:bold;background-color:#eee; border:2px dashed #aaa; border-radius:10px; z-index:9999; display:none;}
+.resumable-dragover {padding:15px; color:#555; background-color:#ddd; border:2px solid #999;}
 
 /* Uploader: Progress bar */
 .resumable-progress {margin:30px 0 30px 0; width:100%; display:none;}
@@ -115,6 +115,12 @@ color: white;
 }
 
 
+// Make the required metadata more obvious
 .control-label.required {
     color: #800;
+}
+
+// Add some space between the progress buttons and subheading
+.submission .btn-group {
+    margin-bottom: 20px;
 }
