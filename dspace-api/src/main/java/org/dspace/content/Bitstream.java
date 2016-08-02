@@ -608,6 +608,11 @@ public class Bitstream extends DSpaceObject
                 .getIntColumn("bitstream_id"));
     }
 
+    // Used by SophosScan
+    public String getFilename() throws IOException, SQLException {
+        return BitstreamStorageManager.getFilename(ourContext, bRow.getIntColumn("bitstream_id"));
+    }
+
     /**
      * Get the bundles this bitstream appears in
      * 
