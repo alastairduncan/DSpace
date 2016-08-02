@@ -1009,4 +1009,8 @@ public class BitstreamStorageManager
 			log.debug("ChecksumCalculator has completed");
 		}
 	}
+
+	public static String getFilename(Context context, int id) throws SQLException, IOException {
+		return getFile(DatabaseManager.find(context, "bitstream", id)).getCanonicalPath();
+	}
 }
