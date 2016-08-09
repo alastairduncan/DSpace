@@ -921,6 +921,9 @@ public abstract class DSpaceObject
             dcv.element = element;
             dcv.qualifier = qualifier;
             dcv.language = (lang == null ? null : lang.trim());
+            if(dcv.language != null && dcv.language.equals("")){
+            	dcv.language = null;
+            }
 
             // Logic to set Authority and Confidence:
             //  - normalize an empty string for authority to NULL.
