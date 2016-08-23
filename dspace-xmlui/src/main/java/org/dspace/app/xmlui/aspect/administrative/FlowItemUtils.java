@@ -202,6 +202,13 @@ public class FlowItemUtils
                         String authority = request.getParameter("value_"+index+"_authority");
                         String confidence = request.getParameter("value_"+index+"_confidence");
 			String lang = request.getParameter("language_"+index);
+
+			/* Hack put in so that empty strings are not put into the database.
+			 * Will probably need to be removed at some point when a proper fix is found */
+			if (lang != null && lang.equals("")) {
+				lang = null;
+			}
+
 			String remove = request.getParameter("remove_"+index);
 			
 			// the user selected the remove checkbox.
