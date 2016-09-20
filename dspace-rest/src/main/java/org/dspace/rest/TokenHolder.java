@@ -16,6 +16,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
+import org.dspace.authenticate.AuthenticationManager;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.eperson.EPerson;
 import org.dspace.rest.common.User;
@@ -59,10 +60,12 @@ public class TokenHolder
         try
         {
             context = new org.dspace.core.Context();
-            EPerson dspaceUser = EPerson.findByEmail(context, user.getEmail());
+
+            AuthenticationManager.authenticate(context, user.getEmail(), user.getPassword(), null, null);
+            EPerson dspaceUser = context.getCurrentUser();
 
             synchronized (TokenHolder.class) {
-                if ((dspaceUser == null) || (!dspaceUser.checkPassword(user.getPassword())))
+                if (dspaceUser == null)
                 {
                     token = null;
                 }
@@ -86,12 +89,6 @@ public class TokenHolder
         {
             context.abort();
             log.error("Could not read user from database. Message:" + e);
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-        catch (AuthorizeException e)
-        {
-            context.abort();
-            log.error("Could not find user, AuthorizeException. Message:" + e);
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
         finally
