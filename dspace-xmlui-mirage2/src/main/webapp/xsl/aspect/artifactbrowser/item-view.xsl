@@ -464,17 +464,28 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="url-render">
+        <xsl:element name="a">
+            <xsl:attribute name="href">
+                <xsl:choose>
+                    <xsl:when test="starts-with(., 'doi:')">
+                        <xsl:text>http://doi.org/</xsl:text><xsl:copy-of select="substring(., 5, string-length(.))"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy-of select="./node()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:copy-of select="./node()"/>
+        </xsl:element>
+    </xsl:template>
+
     <xsl:template name="itemSummaryView-DIM-referenced-by">
         <xsl:if test="dim:field[@element='relation'][@qualifier='isreferencedby' and descendant::text()]">
             <div class="simple-item-view-referenced-by item-page-field-wrapper table">
                 <h5>Is referenced by</h5>
                 <xsl:for-each select="dim:field[@element='relation'][@qualifier='isreferencedby']">
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:copy-of select="./node()"/>
-                        </xsl:attribute>
-                        <xsl:copy-of select="./node()"/>
-                    </xsl:element>
+                    <xsl:call-template name="url-render" />
                     <xsl:if test="count(following-sibling::dim:field[@element='relation' and @qualifier='isreferencedby']) != 0">
                         <br/>
                     </xsl:if>
@@ -488,12 +499,7 @@
             <div class="simple-item-view-funders item-page-field-wrapper table">
                 <h5>Related records</h5>
                 <xsl:for-each select="dim:field[@element='relation'][not(@qualifier)]">
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:copy-of select="./node()"/>
-                        </xsl:attribute>
-                        <xsl:copy-of select="./node()"/>
-                    </xsl:element>
+                    <xsl:call-template name="url-render" />
                     <xsl:if test="count(following-sibling::dim:field[@element='relation'][not(@qualifier)]) != 0">
                         <br/>
                     </xsl:if>
