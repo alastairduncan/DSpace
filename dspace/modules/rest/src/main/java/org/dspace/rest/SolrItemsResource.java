@@ -69,6 +69,9 @@ public class SolrItemsResource extends Resource {
 				Item i = new Item();
 				i.setId(obj.getID());
 				items.add(i);
+				i.setType(obj.getTypeText());
+				i.setName(obj.getName());
+				i.setHandle(obj.getHandle());
 			}
 
 			context.complete();
