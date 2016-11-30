@@ -91,9 +91,10 @@ public class EmbargoManager
              }
         }
         String slift = myLift.toString();
+        boolean ignoreAuth = context.ignoreAuthorization();
         try
         {
-            context.turnOffAuthorisationSystem();
+            context.setIgnoreAuthorization(true);
             item.clearMetadata(lift_schema, lift_element, lift_qualifier, Item.ANY);
             item.addMetadata(lift_schema, lift_element, lift_qualifier, null, slift);
             log.info("Set embargo on Item "+item.getHandle()+", expires on: "+slift);
@@ -104,7 +105,7 @@ public class EmbargoManager
         }
         finally
         {
-            context.restoreAuthSystemState();
+            context.setIgnoreAuthorization(ignoreAuth);
         }
     }
 
@@ -174,8 +175,7 @@ public class EmbargoManager
     {
         init();
 
-        // new version of Embargo policies remain in place.
-        //lifter.liftEmbargo(context, item);
+        lifter.liftEmbargo(context, item);
         item.clearMetadata(lift_schema, lift_element, lift_qualifier, Item.ANY);
 
         // set the dc.date.available value to right now
@@ -266,7 +266,7 @@ public class EmbargoManager
         try
         {
             context = new Context();
-            context.turnOffAuthorisationSystem();
+            context.setIgnoreAuthorization(true);
             Date now = new Date();
              
             // scan items under embargo
