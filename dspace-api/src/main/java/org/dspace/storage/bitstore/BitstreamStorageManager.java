@@ -7,7 +7,9 @@
  */
 package org.dspace.storage.bitstore;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.DigestInputStream;
@@ -400,9 +402,29 @@ public class BitstreamStorageManager
         // files are not streamed they are chunked so can't generate the checksum on the fly without ordering
         // and then saving. So the checksum needs to be generated after the upload is complete.
         // for large files this will take some time and may screw up the UI experience so do it in the background
-        ChecksumCalculator ccalc = new BigFileBitstreamStorage().new ChecksumCalculator(bitstream, context, file);
-        (new Thread(ccalc)).start();
+        String checksum = null;
+        File checksumFile = new File(file.toString() + ".md5");
+        BufferedReader br = new BufferedReader(new FileReader(checksumFile));
+        try {
+            while (true) {
+                checksum = br.readLine();
+                if (checksum != null) {
+                    checksumFile.delete();
+                    break;
+                }
 
+                try {
+                    Thread.sleep(1000);
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        } finally {
+            br.close();
+        }
+
+        bitstream.setColumn("checksum", checksum);
+        bitstream.setColumn("checksum_algorithm", "MD5");
         bitstream.setColumn("size_bytes", fileSize);
         bitstream.setColumn("deleted", false);
         DatabaseManager.update(context, bitstream);
@@ -964,50 +986,6 @@ public class BitstreamStorageManager
 		}
 		buf.append(File.separator);
 		return buf.toString();
-	}
-
-	public class ChecksumCalculator implements Runnable
-	{		
-		private TableRow bitstream;
-		private Context context;
-		private Boolean initialised = false;
-		private File file;
-
-		public ChecksumCalculator(TableRow bitstream, Context context, File file) {
-			this.bitstream = bitstream;
-			this.context = context;
-			this.file = file;
-			synchronized(initialised){
-				initialised = true;
-			}
-			log.debug("ChecksumCalculator created and initialised a ChecksumCalculator");
-		}
-
-		@Override
-		public void run() {
-			log.debug("ChecksumCalculator created and running a ChecksumCalculator");
-			synchronized(initialised){
-				if(initialised){
-					log.debug("ChecksumCalculator has been initialised");
-					try {
-						
-						bitstream.setColumn("checksum", org.dspace.curate.Utils.checksum(file, "MD5"));
-						bitstream.setColumn("checksum_algorithm", "MD5");
-						
-						DatabaseManager.update(context, bitstream);
-					} catch (SQLException e) {
-						log.error("ChecksumCalculator.run: ", e);
-					} catch (IOException e) {
-						log.error("ChecksumCalculator.run: ", e);
-					}
-					
-					log.debug("ChecksumCalculator.run: Checksum generated for " + file.getAbsolutePath() + " " + bitstream.getStringColumn("checksum"));
-				}else{
-					log.error("ChecksumCalculator.run: Not initialised can't generate checksum");
-				}
-			}
-			log.debug("ChecksumCalculator has completed");
-		}
 	}
 
 	public static String getFilename(Context context, int id) throws SQLException, IOException {
