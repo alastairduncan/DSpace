@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -137,10 +138,10 @@ public class ResumableUpload {
 
 				uploads.remove(info.getResumableIdentifier());
 				
-				//calculate the checksum
-				
-				//checksum = org.dspace.curate.Utils.checksum(newFile, "MD5");
-				//LOG.debug("doUpload: checksum " + checksum);
+				// Calculate the checksum asynchronously
+				File checksumFile = new File(filePath + ".md5");
+				Thread t = new Thread(new ChecksumCalculator(newFile, checksumFile));
+				t.start();
 			} else {
 				LOG.debug("doUpload: Upload Not finished dealing with: " + resumableChunkNumber);
 				// return the bitstreamid so that the client can send this to the database.
@@ -212,4 +213,45 @@ public class ResumableUpload {
 		return info;
 	}
 
+	private class ChecksumCalculator implements Runnable
+	{
+		private Boolean initialised = false;
+		private File file;
+		private File checksumFile;
+
+		public ChecksumCalculator(File file, File checksumFile) {
+			this.file = file;
+			this.checksumFile = checksumFile;
+			synchronized (initialised) {
+				initialised = true;
+			}
+			LOG.debug("ChecksumCalculator created and initialised a ChecksumCalculator");
+		}
+
+		@Override
+		public void run() {
+			LOG.debug("ChecksumCalculator created and running a ChecksumCalculator");
+			synchronized (initialised) {
+				if (initialised){
+					LOG.debug("ChecksumCalculator has been initialised");
+					PrintWriter pw = null;
+					try {
+						pw = new PrintWriter(checksumFile);
+						String checksum = org.dspace.curate.Utils.checksum(file, "MD5");
+						pw.println(checksum);
+						LOG.debug("ChecksumCalculator.run: Checksum generated for " + file.getAbsolutePath() + " " + checksum);
+					} catch (IOException e) {
+						LOG.error("ChecksumCalculator.run: ", e);
+					} finally {
+						if (pw != null) {
+							pw.close();
+						}
+					}
+				} else {
+					LOG.error("ChecksumCalculator.run: Not initialised can't generate checksum");
+				}
+			}
+			LOG.debug("ChecksumCalculator has completed");
+		}
+	}
 }
