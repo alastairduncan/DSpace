@@ -105,7 +105,7 @@ public class SophosScan extends AbstractCurationTask
         int retcode;
 
         try {
-            Process sav = new ProcessBuilder(Arrays.asList("/usr/local/bin/savscan", filename)).start();
+            Process sav = new ProcessBuilder(Arrays.asList("/usr/local/bin/savscan", "-archive", "-f", "-all", "--no-reset-atime", filename)).start();
             retcode = sav.waitFor();
         } catch (IOException | InterruptedException e) {
             log.error(e.toString());
