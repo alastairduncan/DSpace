@@ -11,19 +11,19 @@
 
         <roles>
             <role id="reviewer" name="Reviewer" description="The people responsible for this step are able to edit the metadata of incoming submissions, and then accept or reject them." />
-            <role id="editor" name="Editor" description="The people responsible for this step are able to edit the metadata of incoming submissions, and then accept or reject them."/>
-            <role id="finaleditor" name="Final Editor" description="The people responsible for this step are able to edit the metadata of incoming submissions, but will not be able to reject them."/>
+            <!-- <role id="editor" name="Editor" description="The people responsible for this step are able to edit the metadata of incoming submissions, and then accept or reject them."/>
+            <role id="finaleditor" name="Final Editor" description="The people responsible for this step are able to edit the metadata of incoming submissions, but will not be able to reject them."/> -->
         </roles>
 
         <step id="reviewstep" role="reviewer" userSelectionMethod="claimaction">
-            <outcomes>
+            <!-- <outcomes>
                 <step status="0">editstep</step>
-            </outcomes>
+            </outcomes> -->
             <actions>
                 <action id="reviewaction"/>
             </actions>
         </step>
-        <step id="editstep" role="editor" userSelectionMethod="claimaction">
+        <!-- <step id="editstep" role="editor" userSelectionMethod="claimaction">
             <outcomes>
                 <step status="0">finaleditstep</step>
             </outcomes>
@@ -35,7 +35,7 @@
             <actions>
                 <action id="finaleditaction"/>
             </actions>
-        </step>
+        </step> -->
     </workflow>
 
     <!--Workflow where a reviewManager can select a single review who will then either accept/reject the item-->
