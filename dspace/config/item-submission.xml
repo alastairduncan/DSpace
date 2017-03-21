@@ -226,53 +226,34 @@
         <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadStep</xmlui-binding>
         <workflow-editable>true</workflow-editable>
       </step> -->
-       
 
-       <!-- Step 4 Upload Item with Embargo Features
-            to enable this step, please make sure to comment-out the previous step "UploadStep" -->
-       <step>
-           <heading>submit.progressbar.upload</heading>
-           <processing-class>org.dspace.submit.step.ResumableUploadStep</processing-class>
-           <jspui-binding>org.dspace.app.webui.submit.step.JSPUploadWithEmbargoStep</jspui-binding>
-           <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadWithEmbargoStep</xmlui-binding>
-           <workflow-editable>true</workflow-editable>
-       </step>
-       
-
- 	  <!--Step 5 will be to Verify/Review everything -->
- 	  <step>
-        <heading>submit.progressbar.verify</heading>
-        <processing-class>org.dspace.submit.step.VerifyStep</processing-class>
- 	    <jspui-binding>org.dspace.app.webui.submit.step.JSPVerifyStep</jspui-binding>
-		<xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.ReviewStep</xmlui-binding>
-		<workflow-editable>true</workflow-editable>
-      </step>
-
-      <!--Step 6 will be to select a Creative Commons License-->
-      <!-- Uncomment this step to allow the user to select a Creative Commons license -->
-       <!--
+      <!-- Step 4 Upload Item with Embargo Features
+           to enable this step, please make sure to comment-out the previous step "UploadStep" -->
       <step>
-        <heading>submit.progressbar.CClicense</heading>
-        <processing-class>org.dspace.submit.step.CCLicenseStep</processing-class>
-        <jspui-binding>org.dspace.app.webui.submit.step.JSPCCLicenseStep</jspui-binding>
-		<xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.CCLicenseStep</xmlui-binding>
-		<workflow-editable>false</workflow-editable>
+        <heading>submit.progressbar.upload</heading>
+        <processing-class>org.dspace.submit.step.ResumableUploadStep</processing-class>
+        <jspui-binding>org.dspace.app.webui.submit.step.JSPUploadWithEmbargoStep</jspui-binding>
+        <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.UploadWithEmbargoStep</xmlui-binding>
+        <workflow-editable>true</workflow-editable>
       </step>
-      -->
 
-      <!--Step 7 will be to Sign off on the License-->
+      <!-- Step 5 will be to select a License -->
       <step>
         <heading>submit.progressbar.license</heading>
-        <processing-class>org.dspace.submit.step.LicenseStep</processing-class>
-        <jspui-binding>org.dspace.app.webui.submit.step.JSPLicenseStep</jspui-binding>
-		<xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.LicenseStep</xmlui-binding>
-		<workflow-editable>false</workflow-editable>
+        <processing-class>org.dspace.submit.step.StfcLicenseStep</processing-class>
+        <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.StfcLicenseStep</xmlui-binding>
+        <workflow-editable>false</workflow-editable>
       </step>
 
+      <!-- Step 6 will be to Verify/Review everything -->
+      <step>
+        <heading>submit.progressbar.verify</heading>
+        <processing-class>org.dspace.submit.step.VerifyStep</processing-class>
+        <jspui-binding>org.dspace.app.webui.submit.step.JSPVerifyStep</jspui-binding>
+        <xmlui-binding>org.dspace.app.xmlui.aspect.submission.submit.ReviewStep</xmlui-binding>
+        <workflow-editable>true</workflow-editable>
+      </step>
 
-     
-   </submission-process>
-
- </submission-definitions>
-
+    </submission-process>
+  </submission-definitions>
 </item-submission>
