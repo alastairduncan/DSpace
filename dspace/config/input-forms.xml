@@ -68,7 +68,9 @@
          <repeatable>true</repeatable>
          <label>Authors</label>
          <input-type>name</input-type>
-         <hint>Enter the names of the people who created the dataset. Use the 'Lookup' button to find pepole in ORCID.</hint>
+         <hint>Enter the names of the people who created the dataset.
+               Use the 'Lookup' button to find pepole in ORCID. Use the 'Add' button if they cannot be found in the ORCID lookup. You can search by name or ORCID ID.
+               You can use the ~ (tilde) character directly after a word to do a 'fuzzy' search on that word; this can help when searching for names containing diacritics.</hint>
          <required></required>
        </field>
 
