@@ -4,18 +4,18 @@
 # {1}  Name of collection
 # {2}  handle 
 #
-Subject: DSpace: Submission Approved and Archived 
+Subject: eData: Submission Approved and Archived
 
 You submitted: {0}
 
 To collection: {1}
 
-Your submission has been accepted and archived in DSpace,
-and it has been assigned the following identifier:
+Your submission has been accepted and archived in eData. It has the
+following URL:
 {2}
 
-Please use this identifier when citing your submission.
+A DOI will be assigned shortly. Please use the DOI when citing your
+submission.
 
-Many thanks!
-
-DSpace
+Many thanks,
+The eData Team
