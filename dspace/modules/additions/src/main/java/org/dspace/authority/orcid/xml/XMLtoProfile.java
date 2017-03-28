@@ -53,7 +53,7 @@ public class XMLtoProfile extends XMLtoBio
         Profile profile = new Profile();
 
         try {
-	    Node bioNode = XMLUtils.getNode(node, ORCID_BIO);
+            Node bioNode = XMLUtils.getNode(node, ORCID_BIO);
 
             setOrcid(bioNode, profile);
             setPersonalDetails(bioNode, profile);
@@ -66,7 +66,7 @@ public class XMLtoProfile extends XMLtoBio
             log.error("Error in finding the bio in profile xml.", e);
         }
 
-	setAffiliations(node, profile);
+        setAffiliations(node, profile);
 
         return profile;
     }
