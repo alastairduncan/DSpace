@@ -11,6 +11,9 @@ import org.dspace.app.util.MetadataExposure;
 import org.dspace.app.util.Util;
 import org.dspace.app.xmlui.wing.AttributeMap;
 import org.dspace.app.xmlui.wing.WingException;
+import org.dspace.authority.AuthorityValue;
+import org.dspace.authority.AuthorityValueFinder;
+import org.dspace.authority.orcid.Orcidv2AuthorityValue;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.content.*;
@@ -282,6 +285,11 @@ public class ItemAdapter extends AbstractAdapter
                         {
                                 attributes.put("authority", dcv.authority);
                                 attributes.put("confidence", Choices.getConfidenceText(dcv.confidence));
+
+                                AuthorityValue av = (new AuthorityValueFinder()).findByUID(context, dcv.authority);
+                                if (av != null && av instanceof Orcidv2AuthorityValue) {
+                                    attributes.put("orcid_id", ((Orcidv2AuthorityValue)av).getOrcid_id());
+                                }
                         }
                         startElement(DIM,"field",attributes);
                         sendCharacters(dcv.value);
