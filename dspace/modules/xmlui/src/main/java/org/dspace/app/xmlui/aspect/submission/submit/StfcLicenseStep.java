@@ -36,7 +36,7 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 	private static final Logger log = Logger.getLogger(StfcLicenseStep.class);
 
 	protected static final Message T_head = message("xmlui.Submission.submit.LicenseStep.head");
-	protected static final String T_text = "Please select a license under which the work will be distributed. This step requires that the work has been licensed by the copyright holder or that you have the legal authority from the copyright holder to license the work.";
+	protected static final String T_text = "Please select a license under which the work will be distributed. The work can only be licensed by the copyright holder or under legal authority from the copyright holder. Co-creators must be consulted before a license is assigned. Once assigned, a Creative Commons License is permanent and cannot be revoked, nor can the content be changed. For more details on licensing see our guide on the library webpage.";
 
 	public StfcLicenseStep() {
 		this.requireSubmission = true;

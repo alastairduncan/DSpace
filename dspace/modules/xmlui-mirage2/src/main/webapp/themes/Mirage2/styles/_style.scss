@@ -124,3 +124,16 @@ color: white;
 .submission .btn-group {
     margin-bottom: 20px;
 }
+
+.popover {
+    color: #333;
+    max-width: 500px;
+}
+
+.help-links {
+    clear: right;
+}
+
+.help-links > a, .help-links > a:hover, .help-links > a:focus {
+    color: #fff;
+}

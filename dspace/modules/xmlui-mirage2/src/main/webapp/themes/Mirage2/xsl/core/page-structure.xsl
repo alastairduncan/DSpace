@@ -276,6 +276,8 @@
                     <xsl:when test="starts-with($request-uri, 'page/about')">
                         <i18n:text>xmlui.mirage2.page-structure.aboutThisRepository</i18n:text>
                     </xsl:when>
+                    <xsl:when test="$request-uri = 'page/search'">Search</xsl:when>
+                    <xsl:when test="$request-uri = 'page/policy'">Policies</xsl:when>
                     <xsl:when test="not($page_title)">
                         <xsl:text>  </xsl:text>
                     </xsl:when>
@@ -470,6 +472,14 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
+                    </div>
+
+                    <div class="navbar-header pull-right hidden-xs help-links">
+                        <a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" title="Access" data-content="&lt;p&gt;Anyone can search eData – no ID is needed to search the archive.&lt;/p&gt;&lt;p&gt;All datasets deposited in eData are assigned a &lt;b&gt;doi&lt;/b&gt; which can be used to cite your data. You may wish to use the following format when citing data: &lt;i&gt;Creators. Publication Year. Dataset Title [format and/or medium]. Publisher/Repository. doi.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;Only STFC members of staff may deposit datasets in eData. For more information contact &lt;a href='mailto:edata@stfc.ac.uk'&gt;eData@stfc.ac.uk&lt;/a&gt; or see the “Submission” link.&lt;/p&gt;" data-html="true" data-placement="bottom">Access</a>
+                        <a tabindex="0" class="btn" href="/page/search">Search</a>
+                        <a tabindex="0" class="btn" role="button" data-toggle="popover" data-trigger="focus" title="Submission" data-content="&lt;p&gt;eData is an institutional repository where STFC staff can deposit data that support journal articles and other published research. eData does not replace subject-based, national, or STFC Facility data repositories. Researchers should check with their Funder or Facility for any specific requirements on where to deposit data.&lt;/p&gt;&lt;p&gt;eData is intended to store data supporting published research. It is not intended to store:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;data still in active (live) use by research projects&lt;/li&gt;&lt;li&gt;data that is confidential or sensitive&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Only STFC members of staff may deposit datasets in eData – please login using your federal ID and password. You will then need to apply for permission to submit, which includes acceptance of the deposit agreement, before you can deposit your data. Please contact &lt;a href='mailto:edata@stfc.ac.uk'&gt;edata@stfc.ac.uk&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Once you have the correct permissions, please login again with your federal ID and password. Click on the menu (top right). Under “My account” select “Submissions” followed by “Start a new submission.” Select a collection to submit to; this is usually your department. You can then follow the onscreen instructions.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;It is best to prepare your deposit information in advance.&lt;/strong&gt; See our guide to depositing data on the &lt;a href='http://libweb-dlral.stfc.ac.uk:8008/'&gt;library website&lt;/a&gt;, or contact &lt;a href='mailto:edata@stfc.ac.uk'&gt;eData@stfc.ac.uk&lt;/a&gt; for advice.&lt;/p&gt;" data-html="true" data-placement="bottom">Submission</a>
+                        <a tabindex="0" class="btn" href="/page/policy">Policies</a>
+                        <a tabindex="0" class="btn" href="mailto:edata@stfc.ac.uk">Contact</a>
                     </div>
                 </div>
             </div>
@@ -762,6 +772,101 @@
                         <p><i18n:text>xmlui.mirage2.page-structure.heroUnit.content</i18n:text></p>
                     </div>
                 </xsl:when>
+                <xsl:when test="$request-uri = 'page/search'">
+                    <div class="hero-unit">
+                        <h1>Search</h1>
+                        <p>The following techniques can be used to improve the efficiency and effectiveness of searching within eData.</p>
+                        <h2>Boolean searching:</h2>
+                        <p>Boolean searching employs logical operators to connect multiple search terms. This can aid precision-searching by combining or excluding search terms. The most commonly-used operators are AND, OR and NOT. These should be entered in upper case. If entered in lower case, the search engine will read them as stop words and ignore them.</p>
+                        <ul>
+                            <li>Use AND to find publications with both terms in the record. This narrows the results set. For example, 'neutrino AND oscillation' will find only records containing both 'neutrino' and 'oscillation'. Note that multiple terms entered without operators are combined using AND connectors by the search engine: the search 'neutrino oscillation' will return the same hits as 'neutrino AND oscillation'.</li>
+                            <li>Use OR to find records with one or more of the search terms. This widens the result set. For example, the set of results retrieved by the search 'Vulcan OR Laser' will be the same as the combined sets of the separate single-term searches, 'Vulcan' and 'Laser'.</li>
+                            <li>Use NOT to exclude records containing a specified search term. For example, 'Vulcan NOT Laser' will find all records containing the term 'Vulcan' but not containing the term 'Laser'.</li>
+                            <li>Parentheses can be used to form more complex queries. Search operations in parentheses will be performed first. For example: '(Vulcan OR Laser) AND (Smith NOT Collier)'.</li>
+                        </ul>
+                        <h2>Phrase Searching:</h2>
+                        <p>eData allows for phrase searching with the use of " ". The query "plasma waves" will find fewer results than plasma waves.</p>
+                        <h2>Searching Specific Fields:</h2>
+                        <p>The single search box in eData will search across many fields automatically. For example, entering a title, author or keyword will bring back associated records.</p>
+                        <p>You can explicitly search a field using the syntax: "field:query". For example, the search author:Duncan, finds records that contain that value in the author field.</p>
+                        <h2>Wildcard Use in eData:</h2>
+                        <p>Searches within eData can be performed using the wildcards “?” and “*”.</p>
+                        <p>The question mark (?) will match any one character and can be used to find “Gray” or “Grey” by searching for “Gr?y”.</p>
+                        <p>The asterisk (*) will match zero or more characters within a word or at the end of a word. A search for “Ch*ter” would match “Charter”, “Character”, and “Chapter”. When used at the end of a word, such as “Temp*”, it will match all suffixes “Temptation”, “Temple” and “Temporary”.</p>
+                    </div>
+                </xsl:when>
+                <xsl:when test="$request-uri = 'page/policy'">
+                    <div class="hero-unit">
+                        <h1>Summary of Policies</h1>
+                        <h2>Purpose and Scope</h2>
+                        <p>eData is an Institutional Repository for STFC researchers who have a responsibility or requirement to deposit data, especially data that underpins publications, and data where the funding body requires its archiving and preservation.
+eData does not replace subject-based, national, or STFC Facility data repositories that STFC researchers use. Researchers should check with their Funder or Facility for any specific requirements on where to deposit data.</p>
+                        <p>Data deposit should be in line with any Data Management Plan associated with the research project.</p>
+                        <p>eData offers a service for the deposit, registration, preservation, discovery, sharing and citation of data.</p>
+                        <p>eData is not intended to store:
+                            <ul>
+                                <li>data still in active (live) use by research projects</li>
+                                <li>data that is confidential or sensitive</li>
+                            </ul>
+                        </p>
+                        <h2>Deposit</h2>
+                        <ul>
+                            <li>Depositors are required to accept and comply with deposit conditions.</li>
+                            <li>Any file format is accepted (advice is available on the best file formats for long-term preservation)</li>
+                            <li>Multiple files can be zipped up before deposit</li>
+                            <li>Researchers should ask for advice before submitting data files larger than 10GB</li>
+                            <li>Login to eData is authenticated by STFC federal id</li>
+                            <li>Permission to submit entries is approved and assigned by the eData Team</li>
+                            <li>Descriptive metadata to accepted standards for discovery, description, reporting and funder compliance must be assigned to each dataset</li>
+                            <li>A CC-BY licence is the default for deposited datasets </li>
+                            <li>There is an option to set an embargo period for datasets</li>
+                            <li>There are no charges to individual researchers for deposit or storage of datasets</li>
+                        </ul>
+                        <h2>Citation</h2>
+                        <ul>
+                            <li>Datasets are assigned a persistent and unique Digital Object Identifier (DOI) generated by DataCite for citation and attribution.</li>
+                            <li>It is expected that datasets deposited in eData will not be registered in another repository in order to maintain unique identification, citation and streamlined reporting of usage. </li>
+                            <li>Other repositories may point to records and datasets in eData.</li>
+                            <li>Guidelines to citing data in eData are provided.</li>
+                        </ul>
+                        <h2>Discovery</h2>
+                        <ul>
+                            <li>eData is indexed by Google and other search engines, maximising the global exposure of data deposited in eData.</li>
+                            <li>eData has a freely available public interface for searching and access to data</li>
+                            <li>Access and download statistics are available for datasets.</li>
+                        </ul>
+                        <h2>User support</h2>
+                        <ul>
+                            <li>A user guide to deposit is available and sent to each person when they register to deposit</li>
+                            <li>Online in-context help is available in the repository</li>
+                            <li>There is a dedicated email helpdesk <a href="mailto:edata@stfc.ac.uk">edata@stfc.ac.uk</a> for queries and feedback</li>
+                        </ul>
+                        <h2>Retention and Preservation</h2>
+                        <p>A Preservation Plan is in place.</p>
+                        <h2>Withdrawal Policy</h2>
+                        <p>If an uploaded dataset must later be withdrawn, the reason for the withdrawal will be indicated on a tombstone page, which will henceforth be served in its place. Withdrawal is considered an exceptional action, which normally should be requested and fully justified by the original uploader. In any other circumstance reasonable attempts will be made to contact the original uploader to obtain consent. The DOI and the URL of the original object are retained.</p>
+                        <h2>Operational Policies</h2>
+                        <ul>
+                            <li>eData is an ‘end-user’ self-service facility. Individuals are expected to enter their own data deposits</li>
+                            <li>The eData Team may engage in one-off projects to assist in ‘bulk’ or ‘retrospective’ deposits if the data is in scope for eData and funding and other required resources are provided</li>
+                            <li>“Communities” in eData are defined as STFC Departments. </li>
+                            <li>Technical management and development of eData is managed and resourced by the SCD Software Engineering Group.</li>
+                            <li>Promotion and user support for eData is managed and resourced by the Chadwick &amp; RAL Libraries.</li>
+                        </ul>
+                        <p class="text-right"><b><i>July 2017</i></b></p>
+                        <h1>Responsibilities of Depositors</h1>
+                        <ul>
+                            <li>Depositors are responsible for ensuring that any Data submitted to eData were generated in accordance with the policies of relevant research funders.</li>
+                            <li>Depositors agree to deposit Data according to eData Policies.</li>
+                            <li>Depositors are responsible for ensuring that if the submission contains material for which the Depositor does not hold copyright or other IP rights, the Depositor will have obtained the permission of the rights owner to grant STFC the rights required to make these Data available by eData, and that such third party-owned material is clearly identified and acknowledged within the text or content of the submission.</li>
+                            <li>Depositors are responsible for including sufficient supporting information in their deposit to enable other researchers to understand the research and re-use potential of the Data.</li>
+                            <li>If the Data is subject to an embargo on public access, Depositors are responsible for indicating the duration of the embargo in the eData deposit form.</li>
+                            <li>Depositors are responsible for ensuring that submitted Data have an appropriate and accurate metadata description so that the Data can be discoverable and effectively re-used by others.</li>
+                            <li>Depositors are responsible for assigning the appropriate licence to their Data and must be willing and able to grant STFC the right and licence to preserve and distribute their Data via eData.</li>
+                            <li>Depositors accept that we may make reasonable changes to the Terms and Conditions at any time, and, once we have posted those changes on our website, the new version will then apply to them.</li>
+                        </ul>
+                    </div>
+                </xsl:when>
                 <!-- Otherwise use default handling of body -->
                 <xsl:otherwise>
                     <xsl:apply-templates />
@@ -859,6 +964,12 @@
                   ga('send', 'pageview');
            </xsl:text></script>
         </xsl:if>
+
+        <script>
+$(function () {
+  $('[data-toggle="popover"]').popover();
+});
+        </script>
     </xsl:template>
 
     <!--The Language Selection-->
