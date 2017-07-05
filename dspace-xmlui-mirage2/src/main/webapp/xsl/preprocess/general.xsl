@@ -113,6 +113,32 @@
         </pageMeta>
     </xsl:template>
 
+    <xsl:template match="dri:pageMeta[dri:metadata[@element = 'request'][@qualifier = 'URI']/text() = 'page/search']">
+        <pageMeta>
+            <xsl:call-template name="copy-attributes"/>
+            <xsl:apply-templates select="*[not(self::dri:trail)]"/>
+            <trail target="{$context-path}/">
+                <i18n:text catalogue="default">xmlui.general.dspace_home</i18n:text>
+            </trail>
+            <trail>
+                <xsl:text>Search</xsl:text>
+            </trail>
+        </pageMeta>
+    </xsl:template>
+
+    <xsl:template match="dri:pageMeta[dri:metadata[@element = 'request'][@qualifier = 'URI']/text() = 'page/policy']">
+        <pageMeta>
+            <xsl:call-template name="copy-attributes"/>
+            <xsl:apply-templates select="*[not(self::dri:trail)]"/>
+            <trail target="{$context-path}/">
+                <i18n:text catalogue="default">xmlui.general.dspace_home</i18n:text>
+            </trail>
+            <trail>
+                <xsl:text>Policies</xsl:text>
+            </trail>
+        </pageMeta>
+    </xsl:template>
+
     <xsl:template match="dri:pageMeta">
     <pageMeta>
         <xsl:call-template name="copy-attributes"/>
