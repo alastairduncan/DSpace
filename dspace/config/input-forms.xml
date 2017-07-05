@@ -44,9 +44,9 @@
          <dc-element>title</dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Title</label>
+         <label>Dataset Title</label>
          <input-type>onebox</input-type>
-         <hint>Enter the title of the dataset.</hint>
+         <hint>Make the title of your dataset meaningful and distinctive, especially if you are archiving a number of similar datasets.</hint>
          <required>You must enter a title for this item.</required>
        </field>
 
@@ -66,12 +66,11 @@
          <dc-element>contributor</dc-element>
          <dc-qualifier>author</dc-qualifier>
          <repeatable>true</repeatable>
-         <label>Authors</label>
+         <label>Creators</label>
          <input-type>name</input-type>
-         <hint>Enter the names of the people who created the dataset.
-               Use the 'Lookup' button to find pepole in ORCID. Use the 'Add' button if they cannot be found in the ORCID lookup. You can search by name or ORCID ID.
-               You can use the ~ (tilde) character directly after a word to do a 'fuzzy' search on that word; this can help when searching for names containing diacritics.</hint>
-         <required></required>
+         <hint>Enter the names of the creators of the dataset.
+               Use the 'Lookup' button to find people registered in ORCID. Use the 'Add' button for people not registered in ORCID. You can search by name or ORCID ID.</hint>
+         <required>Enter the creators of the dataset.</required>
        </field>
 
        <field>
@@ -79,10 +78,11 @@
          <dc-element>description</dc-element>
          <dc-qualifier>abstract</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Abstract</label>
          <input-type>textarea</input-type>
+         <label>Description of dataset</label>
          <hint>Enter the abstract of the item. </hint>
-         <required>You must enter an abstract for this item.</required>
+         <hint>It is important to describe your dataset as thoroughly as possible. Consider the following when describing your data: how, why, when and using what software/equipment were the data created? What do the data mean? What is the content and structure of the data? For more advice see our guide on the library webpage.</hint>
+         <required>Enter a description of the dataset.</required>
        </field>
 
        <field>
@@ -114,7 +114,7 @@
          <dc-schema>dc</dc-schema>
          <dc-element>type</dc-element>
          <dc-qualifier></dc-qualifier>
-         <repeatable>true</repeatable>
+         <repeatable>false</repeatable>
          <label>Type</label>
          <input-type value-pairs-name="common_types">dropdown</input-type>
          <hint>Select the type(s) of content of the item. To select more than one value in the list, you may have to hold down the "CTRL" or "Shift" key.</hint>
@@ -230,9 +230,9 @@ it, please enter the types and the actual numbers or codes.</hint>
          <dc-element>description</dc-element>
          <dc-qualifier>sponsorship</dc-qualifier>
          <repeatable>false</repeatable>
-         <label>Sponsors</label>
+         <label>Grant Number</label>
          <input-type>textarea</input-type>
-         <hint>Enter the names of any sponsors and/or extended funding information in the box. </hint>
+         <hint></hint>
          <required></required>
        </field>
 

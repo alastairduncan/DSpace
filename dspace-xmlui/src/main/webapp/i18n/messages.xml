@@ -485,7 +485,7 @@
 	<message key="xmlui.EPerson.EditProfile.error_invalid_password">Choose a password at least 6 characters long</message>
 	<message key="xmlui.EPerson.EditProfile.error_unconfirmed_password">Please retype your password to confirm</message>
 	<message key="xmlui.EPerson.EditProfile.head_auth">Authorization groups you belong to</message>
-	<message key="xmlui.EPerson.EditProfile.head_identify">Identify</message>
+	<message key="xmlui.EPerson.EditProfile.head_identify">Details</message>
 	<message key="xmlui.EPerson.EditProfile.head_security">Security</message>
 
 	<!-- org.dspace.app.xmlui.eperson.EPersonUtils.java -->
@@ -532,9 +532,9 @@
 	<message key="xmlui.EPerson.LDAPLogin.title">Sign in</message>
 	<message key="xmlui.EPerson.LDAPLogin.trail">Sign in</message>
 	<message key="xmlui.EPerson.LDAPLogin.head1">Sign in to the STFC repository</message>
-	<message key="xmlui.EPerson.LDAPLogin.username">User Name</message>
+	<message key="xmlui.EPerson.LDAPLogin.username">STFC Federal ID</message>
 	<message key="xmlui.EPerson.LDAPLogin.error_bad_login">The user name and/or password supplied were not valid.</message>
-	<message key="xmlui.EPerson.LDAPLogin.password">Password</message>
+	<message key="xmlui.EPerson.LDAPLogin.password">Federal Password</message>
 	<message key="xmlui.EPerson.LDAPLogin.submit">Sign in</message>
 
 	<!-- org.dspace.app.xmlui.eperson.LoginChooser.java -->
@@ -788,7 +788,7 @@
     <message key="xmlui.Submission.submit.AccessStep.name_help">A short, descriptive name for the policy (up to 30 characters). May be shown to end users. Example: "Staff-only". Optional but recommended.</message>
     <message key="xmlui.Submission.submit.AccessStep.description">Description</message>
     <message key="xmlui.Submission.submit.AccessStep.reason">Embargo reason</message>
-    <message key="xmlui.Submission.submit.AccessStep.reason_help">The reason for the embargo, typically for internal use only. Optional.</message>
+    <message key="xmlui.Submission.submit.AccessStep.reason_help">Please outline your reasons for restricting access. Publicly funded data supporting journal articles should be made accessible by the publication date if possible. However, some data cannot be made open for legitimate reasons; any restrictions should be justified and justifiable. The right of the creators of research data to reasonable first use for a defined period is recognised by STFC.</message>
     <message key="xmlui.Submission.submit.AccessStep.submit_add_policy">Confirm Policy &amp; add another</message>
     <message key="xmlui.Submission.submit.AccessStep.list_assigned_groups">Group</message>
     <message key="xmlui.Submission.submit.AccessStep.error_format_date">Error format date</message>
@@ -827,7 +827,7 @@
 	<message key="xmlui.Submission.submit.UploadStep.virus_error">The file has not been uploaded as it appears to contain a virus. Please contact the system administrator.</message>
     <message key="xmlui.Submission.submit.UploadStep.virus_checker_error">A technical problem was encountered whilst attempting to scan the file for viruses. Please contact the system administrator.</message>
     <message key="xmlui.Submission.submit.UploadStep.description">File Description</message>
-	<message key="xmlui.Submission.submit.UploadStep.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>".</message>
+	<message key="xmlui.Submission.submit.UploadStep.description_help">You can help other researchers to navigate and understand your data by describing the type of files, the naming system and how the data is structured.</message>
 	<message key="xmlui.Submission.submit.UploadStep.submit_upload">Upload file &amp; add another</message>
 	<message key="xmlui.Submission.submit.UploadStep.head2">Files Uploaded</message>
 	<message key="xmlui.Submission.submit.UploadStep.column0">Primary</message>
@@ -856,7 +856,7 @@
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.virus_error">The file has not been uploaded as it appears to contain a virus. Please contact the system administrator.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.virus_checker_error">A technical problem was encountered whilst attempting to scan the file for viruses. Please contact the system administrator.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.description">File Description</message>
-    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>".</message>
+    <message key="xmlui.Submission.submit.UploadWithEmbargoStep.description_help">You can help other researchers to navigate and understand your data by describing the type of files, the naming system and how the data is structured.</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.submit_upload">Upload file &amp; add another</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.head2">Files Uploaded</message>
     <message key="xmlui.Submission.submit.UploadWithEmbargoStep.column0">Primary</message>
@@ -881,7 +881,7 @@
 	<message key="xmlui.Submission.submit.EditFileStep.head">Edit File</message>
 	<message key="xmlui.Submission.submit.EditFileStep.file">File</message>
 	<message key="xmlui.Submission.submit.EditFileStep.description">File Description</message>
-	<message key="xmlui.Submission.submit.EditFileStep.description_help">Optionally, provide a brief description of the contents; for example, "<i>Main article</i>", or "<i>Experiment data readings</i>".</message>
+	<message key="xmlui.Submission.submit.EditFileStep.description_help">You can help other researchers to navigate and understand your data by describing the type of files, the naming system and how the data is structured.</message>
 	<message key="xmlui.Submission.submit.EditFileStep.info1">Select the format of the file from the list below, for example "<i>Adobe PDF</i>" or "<i>Microsoft Word</i>." <strong>If the format is not in the list</strong>, please describe it in the input box below the list.</message>
 	<message key="xmlui.Submission.submit.EditFileStep.format_detected">Detected Format</message>
 	<message key="xmlui.Submission.submit.EditFileStep.format_selected">Selected Format</message>
@@ -1519,7 +1519,7 @@
 	<message key="xmlui.administrative.item.AddBitstreamForm.file_label">File</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.file_help">Please enter the name of the file on your computer corresponding to your item. If you click "Browse...", a new window will appear in which you can locate and select the file from your computer.</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.description_label">Description</message>
-	<message key="xmlui.administrative.item.AddBitstreamForm.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>".</message>
+	<message key="xmlui.administrative.item.AddBitstreamForm.description_help">You can help other researchers to navigate and understand your data by describing the type of files, the naming system and how the data is structured.</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.submit_upload">Submit</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.no_bundles">You need the ADD &amp; WRITE privilege on at least one bundle to be able to upload new bitstreams.</message>
 
@@ -1567,7 +1567,7 @@
 	<message key="xmlui.administrative.item.EditBitstreamForm.primary_option_yes">yes</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.primary_option_no">no</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.description_label">Description</message>
-	<message key="xmlui.administrative.item.EditBitstreamForm.description_help">Optionally, provide a brief description of the file, for example "<i>Main article</i>", or "<i>Experiment data readings</i>"."</message>
+	<message key="xmlui.administrative.item.EditBitstreamForm.description_help">You can help other researchers to navigate and understand your data by describing the type of files, the naming system and how the data is structured.</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.para1">Select the format of the file from the list below, for example "<i>Adobe PDF</i>" or "<i>Microsoft Word</i>", <b>OR</b> if the format is not in the list, please describe it in the box below.</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.format_label">Selected Format</message>
 	<message key="xmlui.administrative.item.EditBitstreamForm.format_default">Format not in list</message>
