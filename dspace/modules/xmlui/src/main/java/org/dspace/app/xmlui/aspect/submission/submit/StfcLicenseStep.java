@@ -63,6 +63,8 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 			radio.addOption(license, CcLicenses.getLicenseName(license));
 		}
 
+		radio.addOption(null, "Other. Please ensure you have uploaded a file containing the license.");
+
 		// add standard control/paging buttons
 		addControlButtons(form);
 	}
