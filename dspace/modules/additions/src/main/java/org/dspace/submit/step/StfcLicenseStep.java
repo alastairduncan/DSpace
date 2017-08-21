@@ -32,17 +32,21 @@ public class StfcLicenseStep extends AbstractProcessingStep
 
 		Item item = subInfo.getSubmissionItem().getItem();
 
-		// Set dc.rights
+		// Remove any existing license
 		item.clearMetadata("dc", "rights", null, null);
-		item.addMetadata("dc", "rights", null, null, CcLicenses.getLicenseName(license));
-
-		// Set dc.rights.uri
 		item.clearMetadata("dc", "rights", "uri", null);
-		item.addMetadata("dc", "rights", "uri", null, CcLicenses.getLicenseUri(license));
-
-		// Create license.txt
 		item.removeDSpaceLicense();
-		LicenseUtils.grantLicense(context, item, CcLicenses.getLicenseText(license));
+
+		if (!license.isEmpty()) {
+			// Set dc.rights
+			item.addMetadata("dc", "rights", null, null, CcLicenses.getLicenseName(license));
+
+			// Set dc.rights.uri
+			item.addMetadata("dc", "rights", "uri", null, CcLicenses.getLicenseUri(license));
+
+			// Create license.txt
+			LicenseUtils.grantLicense(context, item, CcLicenses.getLicenseText(license));
+		}
 
 		// Commit changes to the database
 		item.update();
