@@ -323,6 +323,10 @@ it, please enter the types and the actual numbers or codes.</hint>
        <stored-value>Image</stored-value>
      </pair>
      <pair>
+       <displayed-value>Software</displayed-value>
+       <stored-value>Software</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Sound</displayed-value>
        <stored-value>Sound</stored-value>
      </pair>
