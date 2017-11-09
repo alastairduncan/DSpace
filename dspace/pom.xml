@@ -22,7 +22,6 @@
     <properties>
         <!-- This is the path to the root [dspace-src] directory. -->
         <root.basedir>${basedir}/..</root.basedir>
-        <global.version>5.6</global.version>
     </properties>
 
     <build>
