@@ -10,10 +10,10 @@ package org.dspace.authority.orcid;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.AuthorityValueGenerator;
 import org.dspace.authority.PersonAuthorityValue;
+import org.dspace.authority.orcid.model.Bio;
 import org.dspace.authority.orcid.model.BioExternalIdentifier;
 import org.dspace.authority.orcid.model.BioName;
 import org.dspace.authority.orcid.model.BioResearcherUrl;
-import org.dspace.authority.orcid.model.Profile;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.common.SolrDocument;
@@ -120,19 +120,19 @@ public class OrcidAuthorityValue extends PersonAuthorityValue {
     /**
      * Create an authority based on a given orcid bio
      */
-    public static OrcidAuthorityValue create(Profile profile) {
+    public static OrcidAuthorityValue create(Bio bio) {
         OrcidAuthorityValue authority = OrcidAuthorityValue.create();
 
-        authority.setValues(profile);
+        authority.setValues(bio);
 
         return authority;
     }
 
-    public boolean setValues(Profile profile) {
-        BioName name = profile.getName();
+    public boolean setValues(Bio bio) {
+        BioName name = bio.getName();
 
-        if (updateValue(profile.getOrcid(), getOrcid_id())) {
-            setOrcid_id(profile.getOrcid());
+        if (updateValue(bio.getOrcid(), getOrcid_id())) {
+            setOrcid_id(bio.getOrcid());
         }
 
         if (updateValue(name.getFamilyName(), getLastName())) {
@@ -156,37 +156,37 @@ public class OrcidAuthorityValue extends PersonAuthorityValue {
             }
         }
 
-        if (updateOtherMetadata("country", profile.getCountry())) {
-            addOtherMetadata("country", profile.getCountry());
+        if (updateOtherMetadata("country", bio.getCountry())) {
+            addOtherMetadata("country", bio.getCountry());
         }
 
-        if (updateOtherMetadata("email", profile.getEmail())) {
-            addOtherMetadata("email", profile.getEmail());
+        if (updateOtherMetadata("email", bio.getEmail())) {
+            addOtherMetadata("email", bio.getEmail());
         }
 
-        for (String keyword : profile.getKeywords()) {
+        for (String keyword : bio.getKeywords()) {
             if (updateOtherMetadata("keyword", keyword)) {
                 addOtherMetadata("keyword", keyword);
             }
         }
 
-        for (BioExternalIdentifier externalIdentifier : profile.getBioExternalIdentifiers()) {
+        for (BioExternalIdentifier externalIdentifier : bio.getBioExternalIdentifiers()) {
             if (updateOtherMetadata("external_identifier", externalIdentifier.toString())) {
                 addOtherMetadata("external_identifier", externalIdentifier.toString());
             }
         }
 
-        for (BioResearcherUrl researcherUrl : profile.getResearcherUrls()) {
+        for (BioResearcherUrl researcherUrl : bio.getResearcherUrls()) {
             if (updateOtherMetadata("researcher_url", researcherUrl.toString())) {
                 addOtherMetadata("researcher_url", researcherUrl.toString());
             }
         }
 
-        if (updateOtherMetadata("biography", profile.getBiography())) {
-            addOtherMetadata("biography", profile.getBiography());
+        if (updateOtherMetadata("biography", bio.getBiography())) {
+            addOtherMetadata("biography", bio.getBiography());
         }
 
-        for (String affiliation : profile.getAffiliations()) {
+        for (String affiliation : bio.getAffiliations()) {
             if (updateOtherMetadata("affiliation", affiliation)) {
                 addOtherMetadata("affiliation", affiliation);
             }

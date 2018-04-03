@@ -18,9 +18,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathExpressionException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -29,51 +27,54 @@ import java.util.List;
  * @author Ben Bosman (ben at atmire dot com)
  * @author Mark Diggory (markd at atmire dot com)
  */
-public class XMLtoBio extends Converter {
+public class RecordConverter extends Converter {
 
     /**
      * log4j logger
      */
-    private static Logger log = Logger.getLogger(XMLtoBio.class);
+    private static Logger log = Logger.getLogger(RecordConverter.class);
 
     /**
      * orcid-message XPATHs
      */
 
-    protected String ORCID_BIO = "//orcid-bio";
+    // record
+    protected String RECORD = "/record";
 
-//    protected String ORCID = "parent::*/orcid";
-    protected String ORCID = "parent::*/orcid-identifier/path";
+    protected String ORCID = RECORD + "/orcid-identifier/path";
+    protected String PERSON = RECORD + "/person";
+    protected String ACTIVITIES = RECORD + "/activities-summary";
 
-    protected String PERSONAL_DETAILS = "personal-details";
-    protected String GIVEN_NAMES = PERSONAL_DETAILS + "/given-names";
-    protected String FAMILY_NAME = PERSONAL_DETAILS + "/family-name";
-    protected String CREDIT_NAME = PERSONAL_DETAILS + "/credit-name";
-    protected String OTHER_NAMES = PERSONAL_DETAILS + "/other-names";
-    protected String OTHER_NAME = OTHER_NAMES + "/other-name";
+    protected String PERSON_NAME = PERSON + "/name";
+    protected String OTHER_NAMES = PERSON + "/other-names";
+    protected String PERSON_BIOGRAPHY = PERSON + "/biography";
+    protected String RESEARCHER_URLS = PERSON + "/researcher-urls";
+    protected String EMAILS = PERSON + "/emails";
+    protected String ADDRESSES = PERSON + "/addresses";
+    protected String KEYWORDS = PERSON + "/keywords";
+    protected String EXTERNAL_IDENTIFIERS = PERSON + "/external-identifiers";
 
-    protected String CONTACT_DETAILS = "contact-details";
-    protected String COUNTRY = CONTACT_DETAILS + "/address/country";
-    protected String EMAIL = CONTACT_DETAILS + "/email[@primary='true']";
+    protected String GIVEN_NAMES = PERSON_NAME + "/given-names";
+    protected String FAMILY_NAME = PERSON_NAME + "/family-name";
+    protected String CREDIT_NAME = PERSON_NAME + "/credit-name";
+    protected String BIOGRAPHY = PERSON_BIOGRAPHY + "/content";
+    protected String OTHER_NAME = OTHER_NAMES + "/other-name/content";
 
-    protected String KEYWORDS = "keywords";
-    protected String KEYWORD = KEYWORDS + "/keyword";
+    protected String RESEARCHER_URL = RESEARCHER_URLS + "/researcher-url";
+    protected String URL_NAME = RESEARCHER_URL + "/url-name";
+    protected String URL = RESEARCHER_URL + "/url";
 
-    protected String EXTERNAL_IDENTIFIERS = "external-identifiers";
+    protected String EMAIL = EMAILS + "/email[@primary='true']/email";
+    protected String KEYWORD = KEYWORDS + "/keyword/content";
+    protected String COUNTRY = ADDRESSES + "/address/country";
+
     protected String EXTERNAL_IDENTIFIER = EXTERNAL_IDENTIFIERS + "/external-identifier";
-    protected String EXTERNAL_ID_ORCID = "external-id-orcid";
-    protected String EXTERNAL_ID_COMMNON_NAME = "external-id-common-name";
-    protected String EXTERNAL_ID_REFERENCE = "external-id-reference";
-    protected String EXTERNAL_ID_URL = "external-id-url";
+    protected String EXTERNAL_ID_TYPE = EXTERNAL_IDENTIFIERS + "/external-id-type";
+    protected String EXTERNAL_ID_VALUE = EXTERNAL_IDENTIFIERS + "/external-id-value";
+    protected String EXTERNAL_ID_URL = EXTERNAL_IDENTIFIERS + "/external-id-url";
 
-    protected String RESEARCHER_URLS = "researcher-urls";
-    protected String RESEARCHER_URL = "researcher-urls/researcher-url";
-    protected String URL_NAME = "url-name";
-    protected String URL = "url";
-
-    protected String BIOGRAPHY = ORCID_BIO + "/biography";
-
-    protected String AFFILIATIONS = ORCID_BIO + "/affiliation";
+    protected String EMPLOYMENTS = ACTIVITIES + "/employments/employment-summary";
+    protected String AFFILIATION = EMPLOYMENTS + "/organization/name";
 
     /**
      * Regex
@@ -82,16 +83,15 @@ public class XMLtoBio extends Converter {
     protected String ORCID_NOT_FOUND = "ORCID [\\d-]* not found";
 
 
-    public List<Bio> convert(Document xml) {
-        List<Bio> result = new ArrayList<Bio>();
+    public Bio convert(Document xml) {
+        Bio result = null;
 
         if (XMLErrors.check(xml)) {
 
             try {
-                Iterator<Node> iterator = XMLUtils.getNodeListIterator(xml, ORCID_BIO);
-                while (iterator.hasNext()) {
-                    Bio bio = convertBio(iterator.next());
-                    result.add(bio);
+                Iterator<Node> iterator = XMLUtils.getNodeListIterator(xml, RECORD);
+                if (iterator.hasNext()) {
+                    result = convertBio(iterator.next());
                 }
             } catch (XPathExpressionException e) {
                 log.error("Error in xpath syntax", e);
@@ -113,6 +113,7 @@ public class XMLtoBio extends Converter {
         setExternalIdentifiers(node, bio);
         setResearcherUrls(node, bio);
         setBiography(node, bio);
+        setAffiliations(node, bio);
 
         return bio;
     }
@@ -172,9 +173,9 @@ public class XMLtoBio extends Converter {
             Iterator<Node> iterator = XMLUtils.getNodeListIterator(xml, EXTERNAL_IDENTIFIER);
             while (iterator.hasNext()) {
                 Node external_identifier = iterator.next();
-                String id_orcid = XMLUtils.getTextContent(external_identifier, EXTERNAL_ID_ORCID);
-                String id_common_name = XMLUtils.getTextContent(external_identifier, EXTERNAL_ID_COMMNON_NAME);
-                String id_reference = XMLUtils.getTextContent(external_identifier, EXTERNAL_ID_REFERENCE);
+                String id_orcid = null; // No equivelent of 'external-id-orcid' in newer APIs
+                String id_common_name = XMLUtils.getTextContent(external_identifier, EXTERNAL_ID_TYPE);
+                String id_reference = XMLUtils.getTextContent(external_identifier, EXTERNAL_ID_VALUE);
                 String id_url = XMLUtils.getTextContent(external_identifier, EXTERNAL_ID_URL);
                 BioExternalIdentifier externalIdentifier = new BioExternalIdentifier(id_orcid, id_common_name, id_reference, id_url);
                 bio.addExternalIdentifier(externalIdentifier);
@@ -256,4 +257,15 @@ public class XMLtoBio extends Converter {
         }
     }
 
+    protected void setAffiliations(Node xml, Bio bio) {
+        try {
+            Iterator<Node> iterator = XMLUtils.getNodeListIterator(xml, AFFILIATION);
+            while (iterator.hasNext()) {
+                String affiliation = iterator.next().getTextContent();
+                bio.addAffiliation(affiliation);
+            }
+        } catch (XPathExpressionException e) {
+            log.error("Error in finding the affiliations in bio xml.", e);
+        }
+    }
 }

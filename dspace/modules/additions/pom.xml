@@ -156,7 +156,10 @@
          <artifactId>json</artifactId>
          <version>20151123</version>
       </dependency>
-
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpasyncclient</artifactId>
+      </dependency>
    </dependencies>
 
 </project>

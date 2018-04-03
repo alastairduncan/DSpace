@@ -36,11 +36,14 @@ public class Bio {
 
     protected String email;
 
+    protected Set<String> affiliations;
+
     public Bio() {
         this.name = new BioName();
         keywords = new LinkedHashSet<String>();
         bioExternalIdentifiers = new LinkedHashSet<BioExternalIdentifier>();
         researcherUrls = new LinkedHashSet<BioResearcherUrl>();
+        this.affiliations = new LinkedHashSet<String>();
     }
 
     public String getOrcid() {
@@ -107,6 +110,14 @@ public class Bio {
         this.email = email;
     }
 
+    public Set<String> getAffiliations() {
+        return affiliations;
+    }
+
+    public void addAffiliation(String affiliation) {
+        affiliations.add(affiliation);
+    }
+
     @Override
     public String toString() {
         return "Bio{" +
@@ -118,7 +129,7 @@ public class Bio {
                 ", researcherUrls=" + researcherUrls +
                 ", biography='" + biography + '\'' +
                 ", email='" + email + '\'' +
+                ", affiliations='" + affiliations + '\'' +
                 '}';
     }
 }
-
