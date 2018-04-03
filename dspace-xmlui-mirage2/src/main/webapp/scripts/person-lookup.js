@@ -77,6 +77,7 @@ function AuthorLookup(url, authorityInput, collectionID) {
         "bServerSide": true,
         "sAjaxSource": url,
         "sDom": '<"H"lfr><"clearfix"t<"vcard-wrapper col-xs-8">><"F"ip>',
+        "searchDelay": 0,
         "fnInitComplete": function() {
             content.find("table.dttable").show();
             content.find("div.vcard-wrapper").append(content.find('.no-vcard-selected')).append(content.find('ul.vcard'));
@@ -104,6 +105,22 @@ function AuthorLookup(url, authorityInput, collectionID) {
             content.find('.ui-corner-tr').removeClass('.ui-corner-tr');
             content.find('.ui-corner-tl').removeClass('.ui-corner-tl');
 
+            // https://stackoverflow.com/a/19259625
+            function makeDelay(ms) {
+                var timer = 0;
+                return function(callback) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            };
+            var delay = makeDelay(400);
+
+            searchFilter.unbind('keyup input');
+            searchFilter.bind('keyup input', function(e) {
+                delay(function() {
+                    datatable.api().search(searchFilter.val()).draw();
+                })
+            });
         },
         "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
           return "Showing "+ iEnd + " results. "+button;
