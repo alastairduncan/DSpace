@@ -180,13 +180,19 @@ public class Orcidv2 implements SolrAuthorityInterface {
             throw new IllegalArgumentException("The maximum number of results to retrieve cannot exceed 100.");
         }
 
+        List<Person> bios = new ArrayList<Person>();
+
+        // Check for the case of searching for a valid Orcid ID
+        if (this.isValid(text)) {
+            bios.add(getBio(text));
+            return bios;
+        }
+
         String searchPath = "search?q=" + URLEncoder.encode(text) + "&start=" + start + "&rows=" + rows;
         log.debug("queryBio searchPath=" + searchPath + " accessToken=" + accessToken);
         InputStream searchResult = restConnector.get(searchPath, accessToken);
         XMLtoBio converter = new XMLtoBio();
         List<String> orcids = converter.convertToOrcids(searchResult);
-        List<Person> bios = new ArrayList<Person>();
-
         List<HttpRequest> requests = new ArrayList<HttpRequest>();
         for (String orcid : orcids) {
             requests.add(restConnector.createHttpGet(orcid + "/person", accessToken));

@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.generation.AbstractGenerator;
+import org.apache.commons.lang.StringUtils;
 import org.dspace.content.authority.Choices;
 import org.dspace.content.authority.ChoiceAuthorityManager;
 import org.dspace.content.authority.ChoicesXMLGenerator;
@@ -68,7 +69,12 @@ public class AJAXMenuGenerator extends AbstractGenerator
         String locale = parameters.getParameter("locale",null);
         log.debug("AJAX menu generator: field="+field+", query="+query+", start="+sstart+", limit="+slimit+", format="+format+", field="+field+", query="+query+", start="+sstart+", limit="+slimit+", format="+format+", locale = "+locale);
 
-        Choices result = ChoiceAuthorityManager.getManager().getMatches(field, query, collection, start, limit, locale, true);
+        Choices result;
+        if (StringUtils.isNotBlank(query)) {
+            result = ChoiceAuthorityManager.getManager().getMatches(field, query, collection, start, limit, locale, true);
+        } else {
+            result = new Choices(true);
+        }
 
         log.debug("Result count = "+result.values.length+", default="+result.defaultSelected);
 
