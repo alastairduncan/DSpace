@@ -708,10 +708,6 @@
                 <div class="row">
                     <hr/>
                     <div class="col-xs-12 col-sm-12">
-                        <div>
-                            <a href="http://www.rcuk.ac.uk/" target="_blank"><img src="{$theme-path}/images/RCUK-logo.jpg" alt="Research Councils UK" /></a>
-                            <p>Science and Technology Facilities Council<br />Switchboard: 01793 442000</p>
-                        </div>
                         <div class="hidden-print">
                             <a href="http://www.stfc.ac.uk/about-us/contact-us/">Contact Us</a>
                             <xsl:text> | </xsl:text>
