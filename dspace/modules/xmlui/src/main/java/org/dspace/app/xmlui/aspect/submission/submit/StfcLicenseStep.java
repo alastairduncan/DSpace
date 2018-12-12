@@ -36,7 +36,8 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 	private static final Logger log = Logger.getLogger(StfcLicenseStep.class);
 
 	protected static final Message T_head = message("xmlui.Submission.submit.LicenseStep.head");
-	protected static final String T_text = "Please select a license under which the work will be distributed. The work can only be licensed by the copyright holder or under legal authority from the copyright holder. Co-creators must be consulted before a license is assigned. Once assigned, a Creative Commons License is permanent and cannot be revoked, nor can the content be changed. For more details on licensing see our guide on the library webpage.";
+	protected static final String T_text1 = "Please select a license under which the work will be distributed. The work can only be licensed by the copyright holder or under legal authority from the copyright holder. Co-creators must be consulted before a license is assigned. Once assigned, a license is permanent and cannot be revoked, nor can the content be changed.";
+	protected static final String T_text2 = "Creative Commons Licenses may not be suitable for software. If you are using a license not listed below, select “Other” and include license information with your software deposit.";
 
 	public StfcLicenseStep() {
 		this.requireSubmission = true;
@@ -53,7 +54,8 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 
 		List form = div.addList("select-license", List.TYPE_FORM);
 		form.setHead(T_head);
-		form.addItem(T_text);
+		form.addItem(T_text1);
+		form.addItem(T_text2);
 
 		Radio radio = form.addItem().addRadio("license");
 		radio.setLabel("Select license");
@@ -63,7 +65,7 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 			radio.addOption(license, CcLicenses.getLicenseName(license));
 		}
 
-		radio.addOption(null, "Other. Please ensure you have uploaded a file containing the license.");
+		radio.addOption(null, "Other");
 
 		// add standard control/paging buttons
 		addControlButtons(form);
