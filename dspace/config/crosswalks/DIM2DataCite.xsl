@@ -6,12 +6,12 @@
     Author     : pbecker, ffuerste
     Description: Converts metadata from DSpace Intermediat Format (DIM) into
                  metadata following the DataCite Schema for the Publication and
-                 Citation of Research Data, Version 2.2
+                 Citation of Research Data, Version 3.1
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dspace="http://www.dspace.org/xmlns/dspace/dim"
-                xmlns="http://datacite.org/schema/kernel-2.2"
-                version="1.0">
+                xmlns="http://datacite.org/schema/kernel-3"
+                version="2.0">
     
     <!-- CONFIGURATION -->
     <!-- The content of the following variable will be used as element publisher. -->
@@ -39,9 +39,9 @@
             properties are in the metadata of the item to export.
             The classe named above respects this.
         -->
-        <resource xmlns="http://datacite.org/schema/kernel-2.2"
+        <resource xmlns="http://datacite.org/schema/kernel-3"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://datacite.org/schema/kernel-2.2 http://schema.datacite.org/meta/kernel-2.2/metadata.xsd">
+                  xsi:schemaLocation="http://datacite.org/schema/kernel-3 http://schema.datacite.org/meta/kernel-3/metadata.xsd">
 
             <!-- 
                 MANDATORY PROPERTIES
@@ -103,7 +103,7 @@
                         <xsl:value-of select="substring(//dspace:field[@mdschema='dc' and @element='date' and @qualifier='issued'], 1, 4)" />
                     </xsl:when>
                     <xsl:when test="//dspace:field[@mdschema='dc' and @element='date' and @qualifier='available']">
-                        <xsl:value-of select="substring(//dspace:field[@mdschema='dc' and @element='date' and @qualifier='issued'], 1, 4)" />
+                        <xsl:value-of select="substring(//dspace:field[@mdschema='dc' and @element='date' and @qualifier='available'], 1, 4)" />
                     </xsl:when>
                     <xsl:when test="//dspace:field[@mdschema='dc' and @element='date']">
                         <xsl:value-of select="substring(//dspace:field[@mdschema='dc' and @element='date'], 1, 4)" />
@@ -193,8 +193,10 @@
             </xsl:if>
             -->
 
-            <!-- Add rights. -->
-            <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='rights']" />
+	    <!-- Add rights. -->
+            <xsl:element name="rightsList">
+                <xsl:apply-templates select="//dspace:field[@mdschema='dc' and @element='rights' and not(@qualifier)]" />
+            </xsl:element>
 
             <!-- Add descriptions. -->
             <xsl:if test="//dspace:field[@mdschema='dc' and @element='description'][not(@qualifier='provenance')]">
@@ -274,18 +276,7 @@
     <xsl:template match="//dspace:field[@mdschema='dc' and @element='date']">
             <xsl:element name="date">
                 <xsl:if test="@qualifier='accessioned'">
-                    <xsl:attribute name="dateType">Issued</xsl:attribute>
-                </xsl:if>
-                <xsl:if test="@qualifier='submitted'">
-                    <xsl:attribute name="dateType">Issued</xsl:attribute>
-                </xsl:if>
-                <!-- part of DublinCore DSpace to mapping but not part of DSpace default fields
-                <xsl:if test="@qualifier='dateAccepted'">
-                    <xsl:attribute name="dateType">Issued</xsl:attribute>
-                </xsl:if>
-                -->
-                <xsl:if test="@qualifier='issued'">
-                    <xsl:attribute name="dateType">Issued</xsl:attribute>
+                    <xsl:attribute name="dateType">Accepted</xsl:attribute>
                 </xsl:if>
                 <xsl:if test="@qualifier='available'">
                     <xsl:attribute name="dateType">Available</xsl:attribute>
@@ -295,6 +286,12 @@
                 </xsl:if>
                 <xsl:if test="@qualifier='created'">
                     <xsl:attribute name="dateType">Created</xsl:attribute>
+                </xsl:if>
+                <xsl:if test="@qualifier='issued'">
+                    <xsl:attribute name="dateType">Issued</xsl:attribute>
+                </xsl:if>
+                <xsl:if test="@qualifier='submitted'">
+                    <xsl:attribute name="dateType">Issued</xsl:attribute>
                 </xsl:if>
                 <xsl:if test="@qualifier='updated'">
                     <xsl:attribute name="dateType">Updated</xsl:attribute>
@@ -395,7 +392,7 @@
         Adds Size information
     -->
     <xsl:template match="//dspace:field[@mdschema='dc' and @element='format' and @qualifier='extent']">
-        <xsl:element name="format">
+        <xsl:element name="size">
             <xsl:value-of select="." />
         </xsl:element>
     </xsl:template>
@@ -404,7 +401,7 @@
         DataCite (14)
         Adds Format information
     -->
-    <xsl:template match="//dspace:field[@mdschema='dc' and @element='format']">
+    <xsl:template match="//dspace:field[@mdschema='dc' and @element='format'][not(@qualifier='extent')]">
         <xsl:element name="format">
             <xsl:value-of select="." />
         </xsl:element>
@@ -414,7 +411,7 @@
         DataCite (16)
         Adds Rights information
     -->
-    <xsl:template match="//dspace:field[@mdschema='dc' and @element='rights']">
+    <xsl:template match="//dspace:field[@mdschema='dc' and @element='rights' and not(@qualifier)]">
         <xsl:element name="rights">
             <xsl:value-of select="." />
         </xsl:element>
