@@ -130,6 +130,7 @@
                     <xsl:call-template name="itemSummaryView-DIM-funders"/>
                     <xsl:call-template name="itemSummaryView-DIM-referenced-by"/>
                     <xsl:call-template name="itemSummaryView-DIM-related"/>
+                    <xsl:call-template name="itemSummaryView-altmetric"/>
                 </div>
             </div>
         </div>
@@ -533,6 +534,24 @@
                     </xsl:if>
                 </xsl:for-each>
             </div>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="itemSummaryView-altmetric">
+        <xsl:if test="dim:field[@element='identifier' and @qualifier='uri' and descendant::text()]">
+            <xsl:for-each select="dim:field[@element='identifier' and @qualifier='uri']">
+                <xsl:if test="starts-with(., 'http://dx.doi.org/')">
+                    <xsl:element name="div">
+                        <xsl:attribute name="class">altmetric-embed</xsl:attribute>
+                        <xsl:attribute name="data-badge-type">medium-donut</xsl:attribute>
+                        <xsl:attribute name="data-badge-details">right</xsl:attribute>
+                        <xsl:attribute name="data-hide-no-mentions">true</xsl:attribute>
+                        <xsl:attribute name="data-link-target">_blank</xsl:attribute>
+                        <xsl:attribute name="data-doi"><xsl:copy-of select="substring(., 19, string-length(.))"/></xsl:attribute>
+                    </xsl:element>
+                    <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+                </xsl:if>
+            </xsl:for-each>
         </xsl:if>
     </xsl:template>
 
