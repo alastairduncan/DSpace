@@ -797,30 +797,29 @@
                     <div class="hero-unit">
                         <h1>Summary of Policies</h1>
                         <h2>Purpose and Scope</h2>
-                        <p>eData is an Institutional Repository for STFC researchers who have a responsibility or requirement to deposit data (including software), especially data and software that underpin research publications, and data and software where the funding body or publisher requires its registration, archiving and preservation.
-eData does not replace subject-based, national, or STFC Facility data repositories that STFC researchers use. Researchers should check with their Funder or Facility for any specific requirements on where to deposit data.</p>
+                        <p>eData is an Institutional Repository for STFC researchers who have a responsibility or requirement to deposit data (including software), especially data and software that underpin research publications, and data and software where the funding body or publisher requires its registration, archiving and preservation. eData does not replace subject-based, national, or STFC Facility data repositories that STFC researchers use. Researchers should check with their Funder or Facility for any specific requirements on where to deposit data.</p>
                         <p>Data deposit should be in line with any Data Management Plan associated with the research project.</p>
                         <p>Software deposit should be in line with any Software Management Plan associated with the research project.</p>
                         <p>eData offers a complete service for the deposit, registration, preservation, discovery, sharing and citation of data.</p>
                         <p>eData is not intended to store:
                             <ul>
-                                <li>data still in active (live) use by research projects</li>
-                                <li>data that is confidential or sensitive</li>
-                                <li>software that has been licensed by STFC for commercial use</li>
+                                <li>data still in active (live) use by research projects,</li>
+                                <li>data that is confidential or sensitive,</li>
+                                <li>software that has been licensed by STFC for commercial use.</li>
                             </ul>
                         </p>
                         <h2>Deposit</h2>
                         <ul>
                             <li>Depositors are required to accept and comply with deposit conditions.</li>
-                            <li>Any file format is accepted (advice is available on the best file formats for long-term preservation)</li>
-                            <li>Multiple files can be zipped up before deposit</li>
-                            <li>Researchers should ask for advice before submitting data files larger than 10GB</li>
-                            <li>Login to eData is authenticated by STFC federal id</li>
-                            <li>Permission to submit entries is approved and assigned by the eData Team</li>
-                            <li>Descriptive metadata to accepted standards for discovery, description, reporting and funder compliance must be assigned to each dataset</li>
-                            <li>A CC-BY licence is the default for deposited datasets </li>
-                            <li>There is an option to set an embargo period for datasets</li>
-                            <li>There are no charges to individual researchers for deposit or storage of datasets</li>
+                            <li>Any file format is accepted (advice is available on the best file formats for long-term preservation).</li>
+                            <li>Multiple files can be zipped up before deposit.</li>
+                            <li>Researchers should ask for advice before submitting data files larger than 10GB.</li>
+                            <li>Login to eData is authenticated by STFC federal id.</li>
+                            <li>Permission to submit entries is approved and assigned by the eData Team.</li>
+                            <li>Descriptive metadata to accepted standards for discovery, description, reporting and funder compliance must be assigned to each dataset.</li>
+                            <li>A CC-BY licence is the default for deposited datasets.</li>
+                            <li>There is an option to set an embargo period for datasets.</li>
+                            <li>There are no charges to individual researchers for deposit or storage of datasets.</li>
                         </ul>
                         <h2>Citation</h2>
                         <ul>
@@ -831,29 +830,31 @@ eData does not replace subject-based, national, or STFC Facility data repositori
                         </ul>
                         <h2>Discovery</h2>
                         <ul>
-                            <li>eData is indexed by Google and other search engines, maximising the global exposure of data deposited in eData.</li>
-                            <li>eData has a freely available public interface for searching and access to data</li>
+                            <li>eData is indexed by the Clarivate Data Citation Index, Google and other search engines, thus maximising the global exposure of data deposited in eData.</li>
+                            <li>eData has a freely available public interface for searching and access to data.</li>
                             <li>Access and download statistics are available for datasets.</li>
                         </ul>
                         <h2>User support</h2>
                         <ul>
-                            <li>A user guide to deposit is available and sent to each person when they register to deposit</li>
-                            <li>Online in-context help is available in the repository</li>
-                            <li>There is a dedicated email helpdesk <a href="mailto:edata@stfc.ac.uk">edata@stfc.ac.uk</a> for queries and feedback</li>
+                            <li>A user guide to deposit is available and sent to each person when they register to deposit.</li>
+                            <li>Online in-context help is available in the repository.</li>
+                            <li>There is a dedicated email helpdesk <a href="mailto:edata@stfc.ac.uk">edata@stfc.ac.uk</a> for queries and feedback.</li>
                         </ul>
+                        <h2>User Management</h2>
+                        <p>User records will be removed from eData within 10 days of receipt of leaver notification via the LDAP (Active Directory) system.  If a depositor leaves STFC their items will be retained in eData in accordance with our preservation policy.</p>
                         <h2>Retention and Preservation</h2>
                         <p>A Preservation Plan is in place.</p>
                         <h2>Withdrawal Policy</h2>
                         <p>If an uploaded dataset must later be withdrawn, the reason for the withdrawal will be indicated on a tombstone page, which will henceforth be served in its place. Withdrawal is considered an exceptional action, which normally should be requested and fully justified by the original uploader. In any other circumstance reasonable attempts will be made to contact the original uploader to obtain consent. The DOI and the URL of the original object are retained.</p>
                         <h2>Operational Policies</h2>
                         <ul>
-                            <li>eData is an ‘end-user’ self-service facility. Individuals are expected to enter their own data deposits</li>
-                            <li>The eData Team may engage in one-off projects to assist in ‘bulk’ or ‘retrospective’ deposits if the data is in scope for eData and funding and other required resources are provided</li>
-                            <li>“Communities” in eData are defined as STFC Departments. </li>
+                            <li>eData is an ‘end-user’ self-service facility. Individuals are expected to enter their own data deposits.</li>
+                            <li>The eData Team may engage in one-off projects to assist in ‘bulk’ or ‘retrospective’ deposits if the data is in scope for eData and funding and other required resources are provided.</li>
+                            <li>“Communities” in eData are defined as STFC Departments.</li>
                             <li>Technical management and development of eData is managed and resourced by the SCD Software Engineering Group.</li>
                             <li>Promotion and user support for eData is managed and resourced by the Chadwick &amp; RAL Libraries.</li>
                         </ul>
-                        <p class="text-right"><b><i>April 2018</i></b></p>
+                        <p class="text-right"><b><i>Updated March 2019</i></b></p>
                         <hr />
                         <h1>Responsibilities of Depositors</h1>
                         <ul>
