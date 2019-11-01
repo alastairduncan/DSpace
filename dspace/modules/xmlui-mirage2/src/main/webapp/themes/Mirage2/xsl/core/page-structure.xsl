@@ -340,7 +340,7 @@
                         </button>
 
                         <a href="http://www.stfc.ac.uk/" class="navbar-brand">
-                            <img src="{$theme-path}/images/STFC-Logo.png" />
+                            <img src="{$theme-path}/images/UKRI_STF_Council-Logo_Horiz-RGB[W].png" />
                         </a>
 
 
