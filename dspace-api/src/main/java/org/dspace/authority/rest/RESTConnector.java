@@ -37,9 +37,7 @@ public class RESTConnector {
         this.url = url;
     }
 
-    public InputStream get(String path, String accessToken) {
-
-        InputStream result = null;
+    public HttpGet createHttpGet(String path, String accessToken) {
         path = trimSlashes(path);
 
         String fullPath = url + '/' + path;
@@ -48,6 +46,14 @@ public class RESTConnector {
             httpGet.addHeader("Content-Type", "application/vnd.orcid+xml");
             httpGet.addHeader("Authorization","Bearer "+accessToken);
         }
+
+        return httpGet;
+    }
+
+    public InputStream get(String path, String accessToken) {
+
+        InputStream result = null;
+        HttpGet httpGet = createHttpGet(path, accessToken);
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
             HttpResponse getResponse = httpClient.execute(httpGet);
@@ -55,7 +61,7 @@ public class RESTConnector {
             result = getResponse.getEntity().getContent();
 
         } catch (Exception e) {
-            getGotError(e, fullPath);
+            getGotError(e, httpGet.getURI().toString());
         }
 
         return result;

@@ -8,10 +8,16 @@
 package org.dspace.authority.orcid;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.nio.client.CloseableHttpPipeliningClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.nio.client.util.HttpAsyncClientUtils;
 import org.apache.log4j.Logger;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.SolrAuthorityInterface;
@@ -24,9 +30,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Jonas Van Goolen (jonas at atmire dot com)
@@ -38,6 +48,8 @@ public class Orcidv2 implements SolrAuthorityInterface {
     private static Logger log = Logger.getLogger(Orcidv2.class);
 
     public RESTConnector restConnector;
+    private HttpHost httpHost;
+
     private String OAUTHUrl;
     private String clientId;
 
@@ -80,12 +92,22 @@ public class Orcidv2 implements SolrAuthorityInterface {
         }
     }
 
+    public HttpHost getHttpHost(String url) {
+        try {
+            return URIUtils.extractHost(new URI(url));
+        } catch (URISyntaxException e) {
+            log.error("Invalid URI: " + url);
+            return null;
+        }
+    }
+
     /**
      * Makes an instance of the Orcidv2 class based on the provided parameters.
      * This constructor is called through the spring bean initialization
      */
     private Orcidv2(String url, String OAUTHUrl, String clientId, String clientSecret) {
         this.restConnector = new RESTConnector(url);
+        this.httpHost = this.getHttpHost(url);
         this.OAUTHUrl = OAUTHUrl;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
@@ -97,6 +119,7 @@ public class Orcidv2 implements SolrAuthorityInterface {
      */
     private Orcidv2(String url) {
         this.restConnector = new RESTConnector(url);
+        this.httpHost = this.getHttpHost(url);
     }
 
     /**
@@ -159,9 +182,39 @@ public class Orcidv2 implements SolrAuthorityInterface {
 
         String searchPath = "search?q=" + URLEncoder.encode(text) + "&start=" + start + "&rows=" + rows;
         log.debug("queryBio searchPath=" + searchPath + " accessToken=" + accessToken);
-        InputStream bioDocument = restConnector.get(searchPath, accessToken);
+        InputStream searchResult = restConnector.get(searchPath, accessToken);
         XMLtoBio converter = new XMLtoBio();
-        List<Person> bios = converter.convert(bioDocument);
+        List<String> orcids = converter.convertToOrcids(searchResult);
+        List<Person> bios = new ArrayList<Person>();
+
+        List<HttpRequest> requests = new ArrayList<HttpRequest>();
+        for (String orcid : orcids) {
+            requests.add(restConnector.createHttpGet(orcid + "/person", accessToken));
+        }
+
+        CloseableHttpPipeliningClient httpclient = HttpAsyncClients.createPipelining();
+        try {
+            httpclient.start();
+
+            // Pipeline the requests then wait for the responses
+            Future<List<HttpResponse>> future = httpclient.execute(this.httpHost, requests, null);
+            List<HttpResponse> responses = future.get();
+
+            for (HttpResponse response : responses) {
+                InputStream bioDocument = response.getEntity().getContent();
+                bios.add(converter.convertSinglePerson(bioDocument));
+            }
+        } catch (InterruptedException e) {
+            log.debug(e);
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            HttpAsyncClientUtils.closeQuietly(httpclient);
+        }
+
         return bios;
     }
 

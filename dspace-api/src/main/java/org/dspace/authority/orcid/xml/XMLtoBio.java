@@ -35,6 +35,24 @@ public class XMLtoBio extends Converter {
      */
     private static Logger log = Logger.getLogger(XMLtoBio.class);
 
+    public List<String> convertToOrcids(InputStream xml) {
+        List<String> orcids = new ArrayList<String>();
+        try {
+            Search search = (Search) unmarshall(xml, Search.class);
+            for(Result result : search.getResult()){
+                OrcidId orcidIdentifier = result.getOrcidIdentifier();
+                if(orcidIdentifier!=null){
+                    log.debug("Found OrcidId=" + orcidIdentifier.toString());
+                    String orcid = orcidIdentifier.getUriPath();
+                    orcids.add(orcid);
+                }
+            }
+        } catch (SAXException | URISyntaxException e) {
+            log.error(e);
+        }
+        return orcids;
+    }
+
     @Override
     public List<Person> convert(InputStream xml) {
         List<Person> bios= new ArrayList<>();
