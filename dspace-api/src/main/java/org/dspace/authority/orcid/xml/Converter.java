@@ -15,6 +15,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -25,6 +27,8 @@ import java.net.URISyntaxException;
  */
 public abstract class Converter<T> {
 
+    private static Map<Class, JAXBContext> contextMap = new ConcurrentHashMap<Class, JAXBContext>();
+
     /**
      * log4j logger
      */
@@ -34,7 +38,12 @@ public abstract class Converter<T> {
 
     protected Object unmarshall(InputStream input, Class<?> type) throws SAXException, URISyntaxException {
         try {
-            JAXBContext context = JAXBContext.newInstance(type);
+            JAXBContext context = contextMap.get(type);
+            if (context == null) {
+                context = JAXBContext.newInstance(type);
+                contextMap.put(type, context);
+            }
+
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return unmarshaller.unmarshal(input);
         } catch (JAXBException e) {
