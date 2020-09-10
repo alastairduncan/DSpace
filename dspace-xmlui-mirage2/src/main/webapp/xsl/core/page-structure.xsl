@@ -824,7 +824,7 @@
                         <h2>Access</h2>
                         <ul>
                             <li>Datasets must only be used in line with the licence restrictions applied.</li>
-                            <li>If there is no licence specified, you are advised to contact edata@stfc.ac.uk to ensure your intended use is permitted.</li>
+                            <li>If there is no licence specified, you are advised to contact <a href="mailto:edata@stfc.ac.uk">edata@stfc.ac.uk</a> to ensure your intended use is permitted.</li>
                             <li>Metadata may be freely reused under a Creative Commons Public Domain Dedication licence (CC0).</li>
                         </ul>
                         <h2>Citation</h2>
