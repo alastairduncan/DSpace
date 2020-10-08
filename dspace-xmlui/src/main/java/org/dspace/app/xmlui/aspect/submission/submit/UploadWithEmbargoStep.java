@@ -237,11 +237,6 @@ public class UploadWithEmbargoStep extends UploadStep
             {
                 file.addError(T_virus_error);
             }
-	        	
-	        Text description = upload.addItem().addText("description");
-	        description.setLabel(T_description);
-	        description.setHelp(T_description_help);
-
 
             // if AdvancedAccessPolicy=false: add simpleForm in UploadWithEmbargoStep
             if(!isAdvancedFormEnabled){
