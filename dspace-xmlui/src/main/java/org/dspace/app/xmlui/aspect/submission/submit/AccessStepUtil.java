@@ -39,7 +39,7 @@ public class AccessStepUtil extends AbstractDSpaceTransformer {
     protected static final Message T_name =message("xmlui.Submission.submit.AccessStep.name");
 	protected static final Message T_name_help = message("xmlui.Submission.submit.AccessStep.name_help");
 	protected static final Message T_reason = message("xmlui.Submission.submit.AccessStep.reason");
-	protected static final Message T_reason_help = message("xmlui.Submission.submit.AccessStep.reason_help");
+    protected static String T_reason_help = "Please outline your reasons for restricting access. Publicly funded data supporting journal articles should be made accessible by the publication date if possible. However, some data cannot be made open for legitimate reasons; any restrictions should be justified and justifiable. The right of the data creators to reasonable first use (for a defined period) is recognised by STFC. For more advice see our guide on the <a href=\"https://stfc.ent.sirsidynix.net.uk/client/en_GB/library/?rm=MANAGING+YOUR+0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue\" target=\"_blank\">library webpage</a>.";
     protected static final Message T_radios_embargo = message("xmlui.Submission.submit.AccessStep.embargo_visible");
     protected static final Message T_groups = message("xmlui.Submission.submit.AccessStep.list_assigned_groups");
     protected static final Message T_item_will_be_visible = message("xmlui.Submission.submit.AccessStep.open_access");
@@ -92,7 +92,7 @@ public class AccessStepUtil extends AbstractDSpaceTransformer {
     public void addReason(String reason_, List form, int errorFlag) throws WingException {
         TextArea reason = form.addItem("reason", null).addTextArea("reason");
         reason.setLabel(T_reason);
-	    reason.setHelp(T_reason_help);
+        reason.setHelpHtml(T_reason_help);
 
         if(!isAdvancedFormEnabled){
             if(globalReason!=null)

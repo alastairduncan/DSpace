@@ -37,7 +37,8 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 
 	protected static final Message T_head = message("xmlui.Submission.submit.LicenseStep.head");
 	protected static final String T_text1 = "Please select a license under which the work will be distributed. The work can only be licensed by the copyright holder or under legal authority from the copyright holder. Co-creators must be consulted before a license is assigned. Once assigned, a license is permanent and cannot be revoked, nor can the content be changed.";
-	protected static final String T_text2 = "Creative Commons Licenses may not be suitable for software. If you are using a license not listed below, select “Other” and include license information with your software deposit.";
+	protected static final String T_text2 = "<a href=\"https://creativecommons.org/about/cclicenses/\" target=\"_blank\">Creative Commons Licenses</a> are <u><b>not suitable</b></u> for software. When submitting software: Please select “Other” and include a plain text file detailing the license information with your software deposit. You should also seek Line Management approval before submitting.";
+	protected static final String T_text3 = "Software with commercial potential or that has been licensed by STFC for commercial use, <u><b>must not</b></u> be deposited in eData. If you are unsure about commercial potential or appropriate software licences, please contact <a href=\"mailto:edata@stfc.ac.uk\">eData@stfc.ac.uk</a> or use the <a href=\"https://stfc.inteum.com/stfc/inventorportal/login.aspx\" target=\"_blank\">STFC Inventor portal</a> to request a licence from the Intellectual Property team. For more advice see our guide on the <a href=\"https://stfc.ent.sirsidynix.net.uk/client/en_GB/library/?rm=MANAGING+YOUR+0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue\" target=\"blank\">library webpage</a>.";
 
 	public StfcLicenseStep() {
 		this.requireSubmission = true;
@@ -54,8 +55,9 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 
 		List form = div.addList("select-license", List.TYPE_FORM);
 		form.setHead(T_head);
-		form.addItem(T_text1);
-		form.addItem(T_text2);
+		form.addHtml(T_text1);
+		form.addHtml(T_text2);
+		form.addHtml(T_text3);
 
 		Radio radio = form.addItem().addRadio("license");
 		radio.setLabel("Select license");

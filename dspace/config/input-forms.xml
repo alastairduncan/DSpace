@@ -46,7 +46,7 @@
          <repeatable>false</repeatable>
          <label>Dataset Title</label>
          <input-type>onebox</input-type>
-         <hint>Make the title of your dataset meaningful and distinctive, especially if you are archiving a number of similar datasets.</hint>
+         <hint>Make the title of your dataset meaningful and distinctive, especially if you are archiving a number of similar datasets. For more advice see our guide on the &lt;a href="https://stfc.ent.sirsidynix.net.uk/client/en_GB/library/?rm=MANAGING+YOUR+0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue" target="_blank"&gt;library webpage&lt;/a&gt;.</hint>
          <required>You must enter a title for this item.</required>
        </field>
 
@@ -68,8 +68,7 @@
          <repeatable>true</repeatable>
          <label>Creators</label>
          <input-type>name</input-type>
-         <hint>Enter the names of the creators of the dataset.
-               Use the 'Lookup' button to find people registered in ORCID. Use the 'Add' button for people not registered in ORCID. You can search by name or ORCID ID.</hint>
+         <hint>Enter the names of the creators of the dataset. Use the 'Lookup' button to find people registered in ORCID. Use the 'Add' button for people not registered in ORCID. You can search by name or ORCID ID.</hint>
          <required>Enter the creators of the dataset.</required>
        </field>
 
@@ -81,7 +80,9 @@
          <input-type>textarea</input-type>
          <label>Description of dataset</label>
          <hint>Enter the abstract of the item. </hint>
-         <hint>It is important to describe your dataset as thoroughly as possible. Consider the following when describing your data: how, why, when and using what software/equipment were the data created? What do the data mean? What is the content and structure of the data? For more advice see our guide on the library webpage.</hint>
+         <hint>It is important to describe your dataset as thoroughly as possible so that others can interpret and understand your research. Where possible you should try to include details of: the methodology, how the data was analysed, any software or equipment used to collect or analyse the data, the structure and content of the files included in the dataset. 
+
+Your description should be between 50 and 250 words in length. Detailed descriptions can be included within a ‘readme’ file – preferably in plain text format. For more advice see our guide on the &lt;a href="https://stfc.ent.sirsidynix.net.uk/client/en_GB/library/?rm=MANAGING+YOUR+0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue" target="_blank"&gt;library webpage&lt;/a&gt;.</hint>
          <required>Enter a description of the dataset.</required>
        </field>
 
@@ -93,7 +94,7 @@
          <repeatable>true</repeatable>
          <label>Subject Keywords</label>
          <input-type>twobox</input-type>
-         <hint>Enter appropriate subject keywords or phrases. </hint>
+         <hint>Add appropriate subject keywords or phrases that will help make your research more discoverable.</hint>
          <required></required>
        </field>
 
@@ -104,9 +105,11 @@
          <repeatable>false</repeatable>
          <label>Date of Issue</label>
          <input-type>date</input-type>
-         <hint>Please give the date of publication or public distribution.
-               You can leave out the day and/or month if they aren't
-               applicable. You must enter at least the year.</hint>
+         <hint>Please give the date of publication or public distribution. You must enter the year at minimum. However, the day and/or month can be left blank if they are not applicable. 
+
+For datasets that are under embargo, please enter the date the embargo will end and the dataset will become publicly available. If you are entering legacy data, please enter the date the dataset first became publicly available. 
+
+ &lt;b&gt;Please Note:&lt;/b&gt; entering a future date into this field &lt;b&gt;will not apply an embargo&lt;/b&gt; to your dataset. This must be done on page 3 of the submission form.  For more advice see our guide on the &lt;a href="https://stfc.ent.sirsidynix.net.uk/client/en_GB/library/?rm=MANAGING+YOUR+0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue" target="_blank"&gt;library webpage&lt;/a&gt;.</hint>
          <required>You must enter at least the year.</required>
        </field>
 
@@ -117,7 +120,9 @@
          <repeatable>false</repeatable>
          <label>Type</label>
          <input-type value-pairs-name="common_types">dropdown</input-type>
-         <hint>Select the type(s) of content of the item. To select more than one value in the list, you may have to hold down the "CTRL" or "Shift" key.</hint>
+         <hint>Select the type of content of the item(s) uploaded. If more than one type applies, please select &lt;b&gt;collection&lt;/b&gt;.
+
+For definitions of each resource type and more advice see our guide on the &lt;a href="https://stfc.ent.sirsidynix.net.uk/client/en_GB/library/?rm=MANAGING+YOUR+0%7C%7C%7C1%7C%7C%7C0%7C%7C%7Ctrue" target="_blank"&gt;library webpage&lt;/a&gt;.</hint>
          <required></required>
        </field>
 
@@ -135,7 +140,7 @@
      </page>
      <page number="2">
 
-       <field>
+<!--   <field>
          <dc-schema>dc</dc-schema>
          <dc-element>publisher</dc-element>
          <dc-qualifier></dc-qualifier>
@@ -157,7 +162,7 @@
          <required></required>
        </field>
 
-     <!--<field>
+       <field>
          <dc-schema>dc</dc-schema>
          <dc-element>relation</dc-element>
          <dc-qualifier>ispartofseries</dc-qualifier>
@@ -166,7 +171,7 @@
          <input-type>series</input-type>
          <hint>Enter the series and number assigned to this item by your community.</hint>
          <required></required>
-       </field>--> 
+       </field> -->
 
        <field>
          <dc-schema>dc</dc-schema>
@@ -175,7 +180,9 @@
          <repeatable>true</repeatable>
          <label>Related publication persistent URL</label>
          <input-type>onebox</input-type>
-         <hint>Enter the persistent id of any publications that references this data; e.g. http://purl.org/net/epubs/work/23647412 or a DOI</hint>
+         <hint>Please enter the persistent id of any publications that references this data as either a PURL or DOI. E.g. http://purl.org/net/epubs/xxx. Please enter DOI’s in the following format: https://doi.org/10.xxxx/xxxx
+
+If you do not currently know the persistent id at time of submission, please send details to &lt;a href="mailto:edata@stfc.ac.uk"&gt;edata@stfc.ac.uk&lt;/a&gt; once known.</hint>
          <required></required>
        </field>
 
@@ -311,6 +318,10 @@ it, please enter the types and the actual numbers or codes.</hint>
 
    <value-pairs value-pairs-name="common_types" dc-term="type">
      <pair>
+       <displayed-value>Audiovisual</displayed-value>
+       <stored-value>Audiovisual</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Collection</displayed-value>
        <stored-value>Collection</stored-value>
      </pair>
@@ -323,12 +334,20 @@ it, please enter the types and the actual numbers or codes.</hint>
        <stored-value>Image</stored-value>
      </pair>
      <pair>
+       <displayed-value>Model</displayed-value>
+       <stored-value>Model</stored-value>
+     </pair>
+     <pair>
        <displayed-value>Software</displayed-value>
        <stored-value>Software</stored-value>
      </pair>
      <pair>
        <displayed-value>Sound</displayed-value>
        <stored-value>Sound</stored-value>
+     </pair>
+     <pair>
+       <displayed-value>Workflow</displayed-value>
+       <stored-value>Workflow</stored-value>
      </pair>
    </value-pairs>
    
