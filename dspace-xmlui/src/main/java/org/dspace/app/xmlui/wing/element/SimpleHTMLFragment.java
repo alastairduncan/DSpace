@@ -372,8 +372,9 @@ public class SimpleHTMLFragment extends AbstractWingElement {
 				} else if ("a".equals(name)) {
 					// The HTML <a> tag is translated into the DRI
 					// <xref> tag.
+					moveAttribute(element, "target", "html_target");
 					moveAttribute(element, "href", "target");
-					limitAttributes(element, "target");
+					limitAttributes(element, "target", "html_target");
 					element.setName("xref");
 
 					translate(element);
@@ -432,7 +433,7 @@ public class SimpleHTMLFragment extends AbstractWingElement {
 
 					translate(element);
 				} else if ("xref".equals(name)) {
-					limitAttributes(element, "target");
+					limitAttributes(element, "target", "html_target");
 
 					translate(element);
 				} else if ("figure".equals(name)) {

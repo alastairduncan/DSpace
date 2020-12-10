@@ -517,6 +517,10 @@
                 <xsl:attribute name="onclick"><xsl:value-of select="@onclick"/></xsl:attribute>
             </xsl:if>
 
+            <xsl:if test="@html_target">
+                <xsl:attribute name="target"><xsl:value-of select="@html_target"/></xsl:attribute>
+            </xsl:if>
+
             <xsl:apply-templates />
         </a>
     </xsl:template>
