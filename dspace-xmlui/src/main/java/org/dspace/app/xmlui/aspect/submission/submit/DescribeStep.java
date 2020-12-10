@@ -434,7 +434,7 @@ public class DescribeStep extends AbstractSubmissionStep
 
                 // Setup the full name
                 fullName.setLabel(dcInput.getLabel());
-                fullName.setHelp(cleanHints(dcInput.getHints()));
+                fullName.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 if (dcInput.isRequired())
                 {
                     fullName.setRequired();
@@ -553,7 +553,7 @@ public class DescribeStep extends AbstractSubmissionStep
 
                 // Set up the full field
                 fullDate.setLabel(dcInput.getLabel());
-                fullDate.setHelp(cleanHints(dcInput.getHints()));
+                fullDate.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 if (dcInput.isRequired())
                 {
                     fullDate.setRequired();
@@ -661,7 +661,7 @@ public class DescribeStep extends AbstractSubmissionStep
 
                 // Setup the full field.
                 fullSeries.setLabel(dcInput.getLabel());
-                fullSeries.setHelp(cleanHints(dcInput.getHints()));
+                fullSeries.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 if (dcInput.isRequired())
                 {
                     fullSeries.setRequired();
@@ -742,7 +742,7 @@ public class DescribeStep extends AbstractSubmissionStep
 
                 // Setup the full field.
                 qualdrop.setLabel(dcInput.getLabel());
-                qualdrop.setHelp(cleanHints(dcInput.getHints()));
+                qualdrop.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 if (dcInput.isRequired())
                 {
                     qualdrop.setRequired();
@@ -822,7 +822,7 @@ public class DescribeStep extends AbstractSubmissionStep
 
                 // Setup the text area
                 textArea.setLabel(dcInput.getLabel());
-                textArea.setHelp(cleanHints(dcInput.getHints()));
+                textArea.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 String fieldKey = MetadataAuthorityManager.makeFieldKey(dcInput.getSchema(), dcInput.getElement(), dcInput.getQualifier());
                 boolean isAuth = MetadataAuthorityManager.getManager().isAuthorityControlled(fieldKey);
                 if (isAuth)
@@ -929,7 +929,7 @@ public class DescribeStep extends AbstractSubmissionStep
 
                 //Setup the select field
                 select.setLabel(dcInput.getLabel());
-                select.setHelp(cleanHints(dcInput.getHints()));
+                select.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 if (dcInput.isRequired())
                 {
                     select.setRequired();
@@ -999,7 +999,7 @@ public class DescribeStep extends AbstractSubmissionStep
 
                 //Setup the select field
                 select.setLabel(dcInput.getLabel());
-                select.setHelp(cleanHints(dcInput.getHints()));
+                select.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 if (dcInput.isRequired())
                 {
                     select.setRequired();
@@ -1084,7 +1084,7 @@ public class DescribeStep extends AbstractSubmissionStep
                 
                 //      Setup the field
                 listField.setLabel(dcInput.getLabel());
-                listField.setHelp(cleanHints(dcInput.getHints()));
+                listField.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 if (dcInput.isRequired())
                 {
                     listField.setRequired();
@@ -1166,7 +1166,7 @@ public class DescribeStep extends AbstractSubmissionStep
             
                 // Setup the select field
                 text.setLabel(dcInput.getLabel());
-                text.setHelp(cleanHints(dcInput.getHints()));
+                text.setHelpHtml(unescape_xml(cleanHints(dcInput.getHints())));
                 String fieldKey = MetadataAuthorityManager.makeFieldKey(dcInput.getSchema(), dcInput.getElement(), dcInput.getQualifier());
                 boolean isAuth = MetadataAuthorityManager.getManager().isAuthorityControlled(fieldKey);
                 if (isAuth)
@@ -1291,5 +1291,9 @@ public class DescribeStep extends AbstractSubmissionStep
                 }
 
                 return clean;
+        }
+
+        private static String unescape_xml(String s) {
+            return s.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&");
         }
 }

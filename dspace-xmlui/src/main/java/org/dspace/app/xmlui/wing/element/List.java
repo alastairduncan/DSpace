@@ -296,6 +296,11 @@ public class List extends AbstractWingElement implements WingMergeableElement,
         item.addContent(characters);
     }
 
+    // Added to allow HTML on license page
+    public void addHtml(String html) throws WingException {
+        contents.add(new SimpleHTMLFragment(context, true, html));
+    }
+
     /**
      * Add an item element that contains only translated content.
      * 

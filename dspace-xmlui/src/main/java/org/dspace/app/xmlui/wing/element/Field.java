@@ -370,6 +370,12 @@ public abstract class Field extends AbstractWingElement implements
         this.help.addContent(message);
     }
 
+    // Added to allow HTML in help text
+    public void setHelpHtml(String html) throws WingException {
+        this.help = new Help(context);
+        this.help.addContent(new SimpleHTMLFragment(context, true, html));
+    }
+
     /** ******************************************************************** */
     /** Errors * */
     /** ******************************************************************** */

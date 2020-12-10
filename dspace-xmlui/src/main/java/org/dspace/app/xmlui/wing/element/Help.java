@@ -35,6 +35,11 @@ public class Help extends TextContainer implements StructuralElement
         super(context);
     }
 
+    // Added to allow HTML in help text
+    public void addContent(SimpleHTMLFragment fragment) throws WingException {
+        contents.add(fragment);
+    }
+
     /**
      * Translate this element and all contained elements into SAX events. The
      * events should be routed to the contentHandler found in the WingContext.
