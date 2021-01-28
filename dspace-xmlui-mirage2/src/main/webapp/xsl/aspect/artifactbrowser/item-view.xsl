@@ -106,6 +106,7 @@
     <xsl:template match="dim:dim" mode="itemSummaryView-DIM">
         <div class="item-summary-view-metadata">
             <xsl:call-template name="itemSummaryView-DIM-title"/>
+            <xsl:call-template name="itemSummaryView-DIM-authors"/>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="row">
@@ -117,7 +118,6 @@
                         </div>
                     </div>
                     <xsl:call-template name="itemSummaryView-DIM-date"/>
-                    <xsl:call-template name="itemSummaryView-DIM-authors"/>
                     <xsl:if test="$ds_item_view_toggle_url != ''">
                         <xsl:call-template name="itemSummaryView-show-full"/>
                     </xsl:if>
@@ -129,6 +129,7 @@
                     <xsl:call-template name="itemSummaryView-DIM-funders"/>
                     <xsl:call-template name="itemSummaryView-DIM-referenced-by"/>
                     <xsl:call-template name="itemSummaryView-DIM-related"/>
+                    <xsl:call-template name="itemSummaryView-DIM-license"/>
                     <xsl:call-template name="itemSummaryView-altmetric"/>
                 </div>
             </div>
@@ -170,9 +171,9 @@
     </xsl:template>
 
     <xsl:template name="itemSummaryView-DIM-thumbnail">
-        <div class="thumbnail">
-            <xsl:choose>
-                <xsl:when test="//mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']">
+        <xsl:choose>
+            <xsl:when test="//mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']">
+                <div class="thumbnail">
                     <xsl:variable name="src">
                         <xsl:choose>
                             <xsl:when test="/mets:METS/mets:fileSec/mets:fileGrp[@USE='THUMBNAIL']/mets:file[@GROUPID=../../mets:fileGrp[@USE='CONTENT']/mets:file[@GROUPID=../../mets:fileGrp[@USE='THUMBNAIL']/mets:file/@GROUPID][1]/@GROUPID]">
@@ -190,18 +191,10 @@
                             <xsl:value-of select="$src"/>
                         </xsl:attribute>
                     </img>
-                </xsl:when>
-                <xsl:otherwise>
-                    <img alt="Thumbnail">
-                        <xsl:attribute name="data-src">
-                            <xsl:text>holder.js/100%x</xsl:text>
-                            <xsl:value-of select="$thumbnail.maxheight"/>
-                            <xsl:text>/text:No Thumbnail</xsl:text>
-                        </xsl:attribute>
-                    </img>
-                </xsl:otherwise>
-            </xsl:choose>
-        </div>
+                </div>
+            </xsl:when>
+            <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="itemSummaryView-DIM-abstract">
@@ -232,8 +225,7 @@
 
     <xsl:template name="itemSummaryView-DIM-authors">
         <xsl:if test="dim:field[@element='contributor'][@qualifier='author' and descendant::text()] or dim:field[@element='creator' and descendant::text()] or dim:field[@element='contributor' and descendant::text()]">
-            <div class="simple-item-view-authors item-page-field-wrapper table">
-                <h5><i18n:text>xmlui.dri2xhtml.METS-1.0.item-author</i18n:text></h5>
+            <ol class="simple-item-view-authors item-page-field-wrapper table" style="list-style-type: none; padding: 0px 10px;">
                 <xsl:choose>
                     <xsl:when test="dim:field[@element='contributor'][@qualifier='author']">
                         <xsl:for-each select="dim:field[@element='contributor'][@qualifier='author']">
@@ -254,12 +246,12 @@
                         <i18n:text>xmlui.dri2xhtml.METS-1.0.no-author</i18n:text>
                     </xsl:otherwise>
                 </xsl:choose>
-            </div>
+            </ol>
         </xsl:if>
     </xsl:template>
 
     <xsl:template name="itemSummaryView-DIM-authors-entry">
-        <div>
+        <li style="display: inline; padding: 0px 10px; white-space: nowrap;">
             <xsl:if test="@authority">
                 <xsl:attribute name="class"><xsl:text>ds-dc_contributor_author-authority</xsl:text></xsl:attribute>
             </xsl:if>
@@ -268,7 +260,7 @@
                 <xsl:text> </xsl:text>
                 <a href="https://orcid.org/{@orcid_id}" target="_blank"><img src="{$theme-path}/images/orcid_16x16.png" alt="ORCID" /></a>
             </xsl:if>
-        </div>
+        </li>
     </xsl:template>
 
     <xsl:template name="itemSummaryView-DIM-URI">
@@ -508,6 +500,17 @@
                     <xsl:if test="count(following-sibling::dim:field[@element='relation'][not(@qualifier)]) != 0">
                         <br/>
                     </xsl:if>
+                </xsl:for-each>
+            </div>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="itemSummaryView-DIM-license">
+        <xsl:if test="dim:field[@element='rights'][not(@qualifier) and descendant::text()]">
+            <div class="simple-item-view-funders item-page-field-wrapper table">
+                <h5>License</h5>
+                <xsl:for-each select="dim:field[@element='rights'][not(@qualifier)]">
+                    <xsl:copy-of select="./node()"/>
                 </xsl:for-each>
             </div>
         </xsl:if>
