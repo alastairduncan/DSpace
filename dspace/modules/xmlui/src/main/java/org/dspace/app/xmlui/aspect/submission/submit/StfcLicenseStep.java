@@ -24,6 +24,7 @@ import org.dspace.app.xmlui.wing.element.CheckBox;
 import org.dspace.app.xmlui.wing.element.Division;
 import org.dspace.app.xmlui.wing.element.List;
 import org.dspace.app.xmlui.wing.element.Radio;
+import org.dspace.app.xmlui.wing.element.Text;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.Collection;
 import org.dspace.content.Item;
@@ -53,6 +54,25 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 		div.setHead(T_submission_head);
 		addSubmissionProgressList(div);
 
+		// Default values
+		String selected_license = "BY";
+		String license_freetext = "";
+
+		Item item = submission.getItem();
+		for (Metadatum m : item.getMetadataByMetadataString("dc.rights")) {
+			// If it already has a license, put it in the license_freetext field
+			selected_license = "other";
+			license_freetext = m.value;
+		}
+		for (String license : CcLicenses.getLicenses()) {
+			if (CcLicenses.getLicenseName(license).equals(license_freetext)) {
+				// If the selected license is a CC license, select it and clear the license_freetext field
+				selected_license = license;
+				license_freetext = "";
+				break;
+			}
+		}
+
 		List form = div.addList("select-license", List.TYPE_FORM);
 		form.setHead(T_head);
 		form.addHtml(T_text1);
@@ -61,13 +81,17 @@ public class StfcLicenseStep extends AbstractSubmissionStep
 
 		Radio radio = form.addItem().addRadio("license");
 		radio.setLabel("Select license");
-		radio.setOptionSelected("BY");
+		radio.setOptionSelected(selected_license);
 
 		for (String license : CcLicenses.getLicenses()) {
 			radio.addOption(license, CcLicenses.getLicenseName(license));
 		}
 
-		radio.addOption(null, "Other");
+		radio.addOption("other", "Other");
+
+		form.addHtml("If you selected 'other', please provide the name of the license e.g. 'Apache License 2.0':");
+		Text text = form.addItem().addText("license_freetext");
+		text.setValue(license_freetext);
 
 		// add standard control/paging buttons
 		addControlButtons(form);

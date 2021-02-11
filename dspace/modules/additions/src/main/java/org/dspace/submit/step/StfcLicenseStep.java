@@ -26,9 +26,12 @@ import org.dspace.submit.AbstractProcessingStep;
 public class StfcLicenseStep extends AbstractProcessingStep
 {
 	private static Logger log = Logger.getLogger(StfcLicenseStep.class);
+	private static final int STATUS_FREETEXT_REQUIRED = 1;
+	private static final int STATUS_FREETEXT_AND_NOT_OTHER = 2;
 
 	public int doProcessing(Context context, HttpServletRequest request, HttpServletResponse response, SubmissionInfo subInfo) throws AuthorizeException, IOException, SQLException {
 		String license = request.getParameter("license");
+		String license_freetext = request.getParameter("license_freetext").trim();
 
 		Item item = subInfo.getSubmissionItem().getItem();
 
@@ -37,7 +40,7 @@ public class StfcLicenseStep extends AbstractProcessingStep
 		item.clearMetadata("dc", "rights", "uri", null);
 		item.removeDSpaceLicense();
 
-		if (!license.isEmpty()) {
+		if (!license.isEmpty() && !license.equals("other")) {
 			// Set dc.rights
 			item.addMetadata("dc", "rights", null, null, CcLicenses.getLicenseName(license));
 
@@ -46,11 +49,25 @@ public class StfcLicenseStep extends AbstractProcessingStep
 
 			// Create license.txt
 			LicenseUtils.grantLicense(context, item, CcLicenses.getLicenseText(license));
+		} else if (!license_freetext.isEmpty()) {
+			// 'other' selected: use the freetext field
+			item.addMetadata("dc", "rights", null, null, license_freetext);
+			LicenseUtils.grantLicense(context, item, license_freetext);
 		}
 
 		// Commit changes to the database
 		item.update();
 		context.commit();
+
+		// Don't proceed if 'other' is selected without the freetext field
+		if (!license.equals("other") && !license_freetext.isEmpty()) {
+			return STATUS_FREETEXT_REQUIRED;
+		}
+
+		// Don't proceed if a CC license is selected and the freetext field is used
+		if (license.equals("other") && license_freetext.isEmpty()) {
+			return STATUS_FREETEXT_AND_NOT_OTHER;
+		}
 
 		return STATUS_COMPLETE;
 	}
