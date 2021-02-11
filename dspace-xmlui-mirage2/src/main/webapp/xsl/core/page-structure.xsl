@@ -845,6 +845,7 @@
                             <li>A user guide to deposit is available and sent to each person when they register to deposit.</li>
                             <li>Online in-context help is available in the repository.</li>
                             <li>There is a dedicated email helpdesk <a href="mailto:edata@stfc.ac.uk">edata@stfc.ac.uk</a> for queries and feedback.</li>
+                            <li>We endeavour to reply to all queries within 5 working days.</li>
                         </ul>
                         <h2>User Management</h2>
                         <p>User records will be removed from eData within 10 days of receipt of leaver notification via the LDAP (Active Directory) system.  If a depositor leaves STFC their items will be retained in eData in accordance with our preservation policy.</p>
@@ -852,15 +853,22 @@
                         <p>A Preservation Plan is in place.</p>
                         <h2>Withdrawal Policy</h2>
                         <p>If an uploaded dataset must later be withdrawn, the reason for the withdrawal will be indicated on a tombstone page, which will henceforth be served in its place. Withdrawal is considered an exceptional action, which normally should be requested and fully justified by the original uploader. In any other circumstance reasonable attempts will be made to contact the original uploader to obtain consent. The DOI and the URL of the original object are retained.</p>
+                        <h2>Takedown Policy</h2>
+                        <ul>
+                            <li>The validity and authenticity of the content of submissions is the sole responsibility of the depositor.</li>
+                            <li>Any copyright or Intellectual Property infringements are entirely the responsibility of the creators/depositors.</li>
+                            <li>If eData receives proof of Intellectual Property infringement, the relevant item will be withdrawn in line with the eData withdrawal policy (paragraph above).</li>
+                        </ul>
+                        <p>If you have a query or complaint about material in eData please send the following information to <a href="mailto:edata@stfc.ac.uk">edata@stfc.ac.uk</a>: Your contact details, details of the item (title, author, URL and/or DOI) and the nature of your complaint, including any evidence or proof.</p>
                         <h2>Operational Policies</h2>
                         <ul>
                             <li>eData is an ‘end-user’ self-service facility. Individuals are expected to enter their own data deposits.</li>
                             <li>The eData Team may engage in one-off projects to assist in ‘bulk’ or ‘retrospective’ deposits if the data is in scope for eData and funding and other required resources are provided.</li>
                             <li>“Communities” in eData are defined as STFC Departments.</li>
                             <li>Technical management and development of eData is managed and resourced by the SCD Software Engineering Group.</li>
-                            <li>Promotion and user support for eData is managed and resourced by the Chadwick &amp; RAL Libraries.</li>
+                            <li>Promotion and user support for eData is managed and resourced by the Open Science Services Group.</li>
                         </ul>
-                        <p class="text-right"><b><i>Updated September 2020</i></b></p>
+                        <p class="text-right"><b><i>Updated February 2021</i></b></p>
                         <hr />
                         <h1>Responsibilities of Depositors</h1>
                         <ul>
